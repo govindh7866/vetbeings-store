@@ -1,6 +1,6 @@
 const express=require("express"),fs=require("fs"),path=require("path"),crypto=require("crypto"),Razorpay=require("razorpay");
 const app=express(); app.use(express.json()); app.use(express.static("public"));app.get("/",(req,res)=>res.sendFile(path.join(__dirname,"index.html")));
-const PF=path.join(__dirname,"data/products.json"),OF=path.join(__dirname,"data/orders.json");
+const PF=path.join(__dirname,"products.json"),OF=path.join(__dirname,"orders.json");
 const read=f=>JSON.parse(fs.readFileSync(f)); const write=(f,d)=>fs.writeFileSync(f,JSON.stringify(d,null,2));
 app.get("/api/products",(req,res)=>res.json(read(PF)));
 app.post("/api/admin/products",(req,res)=>{let p=read(PF),x=req.body;if(x.id){let i=p.findIndex(v=>v.id==x.id);if(i<0)return res.status(404).json({error:"Not found"});p[i]={...p[i],...x}}else{x.id=Date.now();p.push(x)}write(PF,p);res.json({ok:true,products:p})});
