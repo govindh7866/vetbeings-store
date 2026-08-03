@@ -1,20 +1,130 @@
 const express=require("express"),fs=require("fs"),path=require("path"),crypto=require("crypto"),Razorpay=require("razorpay");
-const app=express(); app.use(express.json()); app.use(express.static(__dirname)); ;app.get("/",(req,res)=>res.sendFile(path.join(__dirname,"index.html")));
+
+const app=express();
+app.use(express.json());
+app.use(express.static(__dirname));
+app.get("/",(req,res)=>res.sendFile(path.join(__dirname,"index.html")));
+
 const PF=path.join(__dirname,"products.json"),OF=path.join(__dirname,"orders.json");
-const read=f=>JSON.parse(fs.readFileSync(f)); const write=(f,d)=>fs.writeFileSync(f,JSON.stringify(d,null,2));
+const read=f=>JSON.parse(fs.readFileSync(f));
+const write=(f,d)=>fs.writeFileSync(f,JSON.stringify(d,null,2));
+
 app.get("/api/products",(req,res)=>res.json(read(PF)));
-app.post("/api/admin/products",(req,res)=>{let p=read(PF),x=req.body;if(x.id){let i=p.findIndex(v=>v.id==x.id);if(i<0)return res.status(404).json({error:"Not found"});p[i]={...p[i],...x}}else{x.id=Date.now();p.push(x)}write(PF,p);res.json({ok:true,products:p})});
-app.delete("/api/admin/products/:id",(req,res)=>{let p=read(PF).filter(x=>x.id!=req.params.id);write(PF,p);res.json({ok:true})});
-app.get("/api/admin/orders",(req,res)=>res.json(read(OF)));
-app.post("/api/orders",(req,res)=>{let o=read(OF),x={id:"VB"+Date.now(),time:new Date().toISOString(),status:"pending",payment:"COD",...req.body};o.unshift(x);write(OF,o);res.json(x)});
-app.post("/api/payment/order",async(req,res)=>{try{
- if(!process.env.RAZORPAY_KEY_ID||!process.env.RAZORPAY_KEY_SECRET)return res.status(503).json({error:"Razorpay keys not configured. Use COD or configure server environment variables."});
- const rz=new Razorpay({key_id:process.env.RAZORPAY_KEY_ID,key_secret:process.env.RAZORPAY_KEY_SECRET});
- const order=await rz.orders.create({amount:Math.round(req.body.amount*100),currency:"INR",receipt:"vb_"+Date.now()});
- res.json({order,key:process.env.RAZORPAY_KEY_ID});
-}catch(e){res.status(500).json({error:e.message})}});
-app.post("/api/payment/verify",(req,res)=>{let {razorpay_order_id,razorpay_payment_id,razorpay_signature,customer,items,total}=req.body;
- let expected=crypto.createHmac("sha256",process.env.RAZORPAY_KEY_SECRET||"").update(razorpay_order_id+"|"+razorpay_payment_id).digest("hex");
- if(!crypto.timingSafeEqual(Buffer.from(expected),Buffer.from(razorpay_signature)))return res.status(400).json({error:"Invalid signature"});
- let o=read(OF),x={id:"VB"+Date.now(),time:new Date().toISOString(),status:"paid",payment:"Razorpay",paymentId:razorpay_payment_id,customer,items,total};o.unshift(x);write(OF,o);res.json({ok:true,order:x})});
-app.listen(process.env.PORT||3000,()=>console.log("VetBeings running on port "+(process.env.PORT||3000)));
+
+/* ADMIN SECURITY */
+const adminAuth=(req,res,next)=>{
+  if(!process.env.ADMIN_PASSWORD){
+    return res.status(503).json({error:"ADMIN_PASSWORD not configured"});
+  }
+
+  if(req.headers.authorization!=="Bearer "+process.env.ADMIN_PASSWORD){
+    return res.status(401).json({error:"Unauthorized"});
+  }
+
+  next();
+};
+
+app.post("/api/admin/products",adminAuth,(req,res)=>{
+  let p=read(PF),x=req.body;
+
+  if(x.id){
+    let i=p.findIndex(v=>v.id==x.id);
+    if(i<0)return res.status(404).json({error:"Not found"});
+    p[i]={...p[i],...x};
+  }else{
+    x.id=Date.now();
+    p.push(x);
+  }
+
+  write(PF,p);
+  res.json({ok:true,products:p});
+});
+
+app.delete("/api/admin/products/:id",adminAuth,(req,res)=>{
+  let p=read(PF).filter(x=>x.id!=req.params.id);
+  write(PF,p);
+  res.json({ok:true});
+});
+
+app.get("/api/admin/orders",adminAuth,(req,res)=>res.json(read(OF)));
+
+app.post("/api/orders",(req,res)=>{
+  let o=read(OF),x={
+    id:"VB"+Date.now(),
+    time:new Date().toISOString(),
+    status:"pending",
+    payment:"COD",
+    ...req.body
+  };
+
+  o.unshift(x);
+  write(OF,o);
+  res.json(x);
+});
+
+app.post("/api/payment/order",async(req,res)=>{
+  try{
+    if(!process.env.RAZORPAY_KEY_ID||!process.env.RAZORPAY_KEY_SECRET)
+      return res.status(503).json({
+        error:"Razorpay keys not configured. Use COD or configure server environment variables."
+      });
+
+    const rz=new Razorpay({
+      key_id:process.env.RAZORPAY_KEY_ID,
+      key_secret:process.env.RAZORPAY_KEY_SECRET
+    });
+
+    const order=await rz.orders.create({
+      amount:Math.round(req.body.amount*100),
+      currency:"INR",
+      receipt:"vb_"+Date.now()
+    });
+
+    res.json({order,key:process.env.RAZORPAY_KEY_ID});
+
+  }catch(e){
+    res.status(500).json({error:e.message});
+  }
+});
+
+app.post("/api/payment/verify",(req,res)=>{
+  let {
+    razorpay_order_id,
+    razorpay_payment_id,
+    razorpay_signature,
+    customer,
+    items,
+    total
+  }=req.body;
+
+  let expected=crypto
+    .createHmac("sha256",process.env.RAZORPAY_KEY_SECRET||"")
+    .update(razorpay_order_id+"|"+razorpay_payment_id)
+    .digest("hex");
+
+  if(!crypto.timingSafeEqual(
+    Buffer.from(expected),
+    Buffer.from(razorpay_signature)
+  ))
+    return res.status(400).json({error:"Invalid signature"});
+
+  let o=read(OF),x={
+    id:"VB"+Date.now(),
+    time:new Date().toISOString(),
+    status:"paid",
+    payment:"Razorpay",
+    paymentId:razorpay_payment_id,
+    customer,
+    items,
+    total
+  };
+
+  o.unshift(x);
+  write(OF,o);
+  res.json({ok:true,order:x});
+});
+
+app.listen(
+  process.env.PORT||3000,
+  ()=>console.log("VetBeings running on port "+(process.env.PORT||3000))
+);
