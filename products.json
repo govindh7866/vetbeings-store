@@ -1,0 +1,142 @@
+[
+  {
+    "id": 1,
+    "name": "Portable Cow Milking Machine",
+    "category": "Dairy Equipment",
+    "price": 35000,
+    "stock": 8
+  },
+  {
+    "id": 2,
+    "name": "Double Bucket Milking Machine",
+    "category": "Dairy Equipment",
+    "price": 62999,
+    "stock": 4
+  },
+  {
+    "id": 3,
+    "name": "Cream Separator 100 LPH",
+    "category": "Dairy Equipment",
+    "price": 17999,
+    "stock": 6
+  },
+  {
+    "id": 4,
+    "name": "40L Stainless Steel Milk Can",
+    "category": "Milk Handling",
+    "price": 3850,
+    "stock": 25
+  },
+  {
+    "id": 5,
+    "name": "Heavy Duty Chaff Cutter",
+    "category": "Farm Machinery",
+    "price": 21000,
+    "stock": 5
+  },
+  {
+    "id": 6,
+    "name": "Electric Fodder Cutter",
+    "category": "Farm Machinery",
+    "price": 19500,
+    "stock": 7
+  },
+  {
+    "id": 7,
+    "name": "Milking Machine Service Kit",
+    "category": "Dairy Accessories",
+    "price": 2190,
+    "stock": 30
+  },
+  {
+    "id": 8,
+    "name": "Milk Collection Kit",
+    "category": "Dairy Accessories",
+    "price": 4500,
+    "stock": 18
+  },
+  {
+    "id": 9,
+    "name": "Calcium Feed Supplement",
+    "category": "Animal Nutrition",
+    "price": 575,
+    "stock": 50
+  },
+  {
+    "id": 10,
+    "name": "Chelated Mineral Mixture 1kg",
+    "category": "Animal Nutrition",
+    "price": 315,
+    "stock": 60
+  },
+  {
+    "id": 11,
+    "name": "Probiotic Feed Supplement",
+    "category": "Animal Nutrition",
+    "price": 269,
+    "stock": 45
+  },
+  {
+    "id": 12,
+    "name": "Rumen Support Supplement",
+    "category": "Animal Nutrition",
+    "price": 275,
+    "stock": 40
+  },
+  {
+    "id": 13,
+    "name": "Vitamin Mineral Premix",
+    "category": "Animal Nutrition",
+    "price": 550,
+    "stock": 35
+  },
+  {
+    "id": 14,
+    "name": "Lactation Support Supplement",
+    "category": "Animal Nutrition",
+    "price": 690,
+    "stock": 25
+  },
+  {
+    "id": 15,
+    "name": "Calf Growth Mineral Mix",
+    "category": "Animal Nutrition",
+    "price": 349,
+    "stock": 30
+  },
+  {
+    "id": 16,
+    "name": "High Yield Dairy Mineral Mix",
+    "category": "Animal Nutrition",
+    "price": 799,
+    "stock": 20
+  },
+  {
+    "id": 17,
+    "name": "Dairy Rubber Cow Mat",
+    "category": "Farm Essentials",
+    "price": 3200,
+    "stock": 20
+  },
+  {
+    "id": 18,
+    "name": "Calf Feeding Kit",
+    "category": "Farm Essentials",
+    "price": 899,
+    "stock": 35
+  },
+  {
+    "id": 19,
+    "name": "Milk Testing Analyzer",
+    "category": "Dairy Equipment",
+    "price": 30000,
+    "stock": 3
+  },
+  {
+    "id": 20,
+    "name": "Stainless Steel Milking Bucket",
+    "category": "Milk Handling",
+    "price": 5200,
+    "stock": 14
+  }
+]
