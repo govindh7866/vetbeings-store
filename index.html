@@ -3,30 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>VetBeings Store</title>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <style>
-*{
-  box-sizing:border-box
-}
-
+*{box-sizing:border-box}
 body{
   margin:0;
   font-family:Arial,sans-serif;
   background:#f6f8f6;
   color:#172018
 }
-
 .top{
   background:#08633a;
   color:#fff;
   padding:9px;
   text-align:center
 }
-
 .nav{
   background:#fff;
   padding:12px 5%;
@@ -38,18 +32,13 @@ body{
   z-index:10;
   box-shadow:0 2px 12px #0001
 }
-
-.nav img{
-  width:145px
-}
-
+.nav img{width:145px}
 .search{
   flex:1;
   padding:13px;
   border:1px solid #ddd;
   border-radius:8px
 }
-
 .btn{
   background:#08753f;
   color:#fff;
@@ -59,79 +48,65 @@ body{
   font-weight:bold;
   cursor:pointer
 }
-
 .hero{
   background:linear-gradient(110deg,#eef7f1,#d8eee0);
   padding:55px 6%
 }
-
 .hero h1{
   font-size:48px;
   max-width:750px;
   margin:5px 0
 }
-
 .hero p{
   font-size:18px;
   max-width:700px;
   line-height:1.6
 }
-
 .wrap{
   max-width:1300px;
   margin:auto;
   padding:38px 18px
 }
-
 .grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:15px
 }
-
 .card{
   background:#fff;
   border:1px solid #e1e6e2;
   border-radius:12px;
   padding:15px
 }
-
 .photo{
-  height:180px;
+  height:170px;
   background:linear-gradient(135deg,#e9f5ed,#fff);
   display:flex;
   align-items:center;
   justify-content:center;
   border-radius:9px;
-  font-size:48px;
-  overflow:hidden
+  overflow:hidden;
+  font-size:48px
 }
-
 .photo img{
   width:100%;
   height:100%;
-  object-fit:contain;
-  display:block;
-  border-radius:9px
+  object-fit:contain
 }
-
 .cat{
   color:#08753f;
   font-size:11px;
   font-weight:bold;
   margin-top:10px
 }
-
 .price{
   font-size:21px;
   font-weight:900
 }
-
 .card button{
   width:100%;
   margin-top:10px
 }
-
 .cartbox{
   position:fixed;
   right:-430px;
@@ -146,16 +121,11 @@ body{
   box-shadow:-5px 0 30px #0003;
   transition:.25s
 }
-
-.cartbox.open{
-  right:0
-}
-
+.cartbox.open{right:0}
 .row{
   padding:10px 0;
   border-bottom:1px solid #eee
 }
-
 .field{
   width:100%;
   padding:11px;
@@ -163,55 +133,45 @@ body{
   border:1px solid #ddd;
   border-radius:6px
 }
-
 .notice{
   background:#fff3ce;
   padding:10px;
   text-align:center
 }
-
 .foot{
   background:#073d27;
   color:#fff;
   padding:35px;
   text-align:center
 }
+.status{
+  padding:12px;
+  margin:8px 0;
+  border-radius:7px;
+  display:none
+}
+.success{
+  background:#e5f6eb;
+  color:#08753f
+}
+.failed{
+  background:#ffe5e5;
+  color:#b00020
+}
 
 @media(max-width:700px){
-
-  .nav{
-    gap:7px;
-    padding:10px
-  }
-
-  .nav img{
-    width:85px
-  }
-
-  .search{
-    min-width:0
-  }
-
-  .hero{
-    padding:35px 20px
-  }
-
-  .hero h1{
-    font-size:35px
-  }
-
+  .nav{padding:10px 3%;gap:7px}
+  .nav img{width:90px}
+  .search{min-width:0}
+  .btn{padding:10px 11px;font-size:11px}
+  .hero{padding:40px 6%}
+  .hero h1{font-size:34px}
   .grid{
     grid-template-columns:repeat(2,1fr);
     gap:8px
   }
-
-  .card{
-    padding:10px
-  }
-
-  .photo{
-    height:145px
-  }
+  .card{padding:10px}
+  .photo{height:140px}
 }
 </style>
 </head>
@@ -298,22 +258,25 @@ Total ₹<span id="total">0</span>
 </h3>
 
 <input
- id="name"
+ id="customerName"
  class="field"
  placeholder="Customer name"
 >
 
 <input
- id="mobile"
+ id="customerMobile"
  class="field"
- placeholder="Mobile number"
+ type="tel"
+ placeholder="10 digit mobile number"
 >
 
 <textarea
- id="address"
+ id="customerAddress"
  class="field"
- placeholder="Delivery address"
+ placeholder="Complete delivery address"
 ></textarea>
+
+<div id="orderStatus" class="status"></div>
 
 <button
  class="btn"
@@ -324,6 +287,7 @@ PAY ONLINE — UPI / CARD / NETBANKING
 </button>
 
 <button
+ id="codBtn"
  class="btn"
  style="width:100%"
  onclick="cod()"
@@ -336,144 +300,150 @@ CASH ON DELIVERY
 
 <script>
 
-let P=[];
+let P = [];
 
-let C=JSON.parse(
+let C = JSON.parse(
   localStorage.getItem("vbcart") || "[]"
 );
 
-
-/* LOAD PRODUCTS */
 
 async function load(){
 
   try{
 
-    const r=await fetch("/api/products");
+    const response = await fetch("/api/products");
 
-    P=await r.json();
+    if(!response.ok){
+      throw new Error("Products load nahi hue");
+    }
+
+    P = await response.json();
 
     render();
-
     cartRender();
 
-  }catch(e){
+  }catch(error){
 
-    console.error(e);
+    console.error(error);
 
-    grid.innerHTML="<p>Unable to load products.</p>";
+    document.getElementById("grid").innerHTML =
+      "<p>Products load karne me problem aa rahi hai.</p>";
   }
 }
 
 
-/* DISPLAY PRODUCTS */
-
 function render(){
 
-  const q=document
-    .getElementById("q")
+  const q =
+    document.getElementById("q")
     .value
     .toLowerCase();
 
-  const products=P.filter(x=>
+  const products = P.filter(x =>
     (x.name || "")
-      .toLowerCase()
-      .includes(q)
+    .toLowerCase()
+    .includes(q)
   );
 
-  grid.innerHTML=products.map(x=>{
+  document.getElementById("grid").innerHTML =
+    products.map(x => {
 
-    let productPhoto;
+      let photo;
 
-    if(x.image){
+      if(x.image){
 
-      productPhoto=`
-        <img
-          src="${x.image}"
-          alt="${x.name || "Product"}"
-          loading="lazy"
+        photo = `
+          <img
+            src="${x.image}"
+            alt="${x.name || "Product"}"
+          >
+        `;
+
+      }else{
+
+        photo =
+          (x.category || "")
+          .includes("Nutrition")
+          ? "🧴"
+          : "⚙️";
+      }
+
+      return `
+
+      <div class="card">
+
+        <div class="photo">
+          ${photo}
+        </div>
+
+        <div class="cat">
+          ${x.category || ""}
+          • Stock ${x.stock || 0}
+        </div>
+
+        <h3>
+          ${x.name || ""}
+        </h3>
+
+        <div class="price">
+          ₹${Number(x.price || 0).toLocaleString("en-IN")}
+        </div>
+
+        <button
+          class="btn"
+          onclick="add(${x.id})"
         >
+          ADD TO CART
+        </button>
+
+      </div>
+
       `;
 
-    }else{
-
-      productPhoto=`
-        <span>
-          ${
-            (x.category || "")
-            .includes("Nutrition")
-            ? "🧴"
-            : "⚙️"
-          }
-        </span>
-      `;
-    }
-
-    return `
-
-    <div class="card">
-
-      <div class="photo">
-        ${productPhoto}
-      </div>
-
-      <div class="cat">
-        ${x.category || ""}
-        • Stock ${x.stock || 0}
-      </div>
-
-      <h3>
-        ${x.name || ""}
-      </h3>
-
-      <div class="price">
-        ₹${Number(x.price || 0)
-          .toLocaleString("en-IN")}
-      </div>
-
-      <button
-        class="btn"
-        onclick="add(${x.id})"
-      >
-        ADD TO CART
-      </button>
-
-    </div>
-
-    `;
-
-  }).join("");
-
+    }).join("");
 }
 
 
-/* ADD TO CART */
+function add(productId){
 
-function add(id){
+  const product =
+    P.find(v => v.id == productId);
 
-  let x=C.find(v=>v.id==id);
+  if(!product){
+    alert("Product nahi mila.");
+    return;
+  }
 
-  if(x){
+  const existing =
+    C.find(v => v.id == productId);
 
-    x.qty++;
+  if(existing){
+
+    if(existing.qty >= Number(product.stock || 0)){
+      alert("Itna stock available nahi hai.");
+      return;
+    }
+
+    existing.qty++;
 
   }else{
 
     C.push({
-      id:id,
+      id:productId,
       qty:1
     });
+
   }
 
-  save();
+  saveCart();
 
-  cart.classList.add("open");
+  document
+    .getElementById("cart")
+    .classList.add("open");
 }
 
 
-/* SAVE CART */
-
-function save(){
+function saveCart(){
 
   localStorage.setItem(
     "vbcart",
@@ -484,211 +454,347 @@ function save(){
 }
 
 
-/* CART DISPLAY */
-
 function cartRender(){
 
-  let t=0;
+  let totalAmount = 0;
 
-  cnt.innerText=C.reduce(
-    (a,b)=>a+b.qty,
-    0
-  );
+  document.getElementById("cnt").innerText =
+    C.reduce(
+      (sum,item) => sum + item.qty,
+      0
+    );
 
-  rows.innerHTML=C.map((x,i)=>{
+  document.getElementById("rows").innerHTML =
+    C.map((item,index) => {
 
-    let p=P.find(v=>v.id==x.id);
+      const product =
+        P.find(v => v.id == item.id);
 
-    if(!p) return "";
+      if(!product){
+        return "";
+      }
 
-    t+=Number(p.price)*x.qty;
+      totalAmount +=
+        Number(product.price || 0) *
+        item.qty;
 
-    return `
+      return `
 
-    <div class="row">
+      <div class="row">
 
-      <b>${p.name}</b>
+        <b>${product.name}</b>
 
-      <br>
+        <br>
 
-      ₹${Number(p.price)
-        .toLocaleString("en-IN")}
-      × ${x.qty}
+        ₹${Number(product.price).toLocaleString("en-IN")}
+        × ${item.qty}
 
-      <button onclick="qty(${i},-1)">
-        −
-      </button>
+        <button
+          onclick="qty(${index},-1)"
+        >
+          −
+        </button>
 
-      <button onclick="qty(${i},1)">
-        +
-      </button>
+        <button
+          onclick="qty(${index},1)"
+        >
+          +
+        </button>
 
-    </div>
+      </div>
 
-    `;
+      `;
 
-  }).join("");
+    }).join("");
 
-  total.innerText=t.toLocaleString("en-IN");
+  document.getElementById("total").innerText =
+    totalAmount.toLocaleString("en-IN");
 
-  return t;
+  return totalAmount;
 }
 
 
-/* QUANTITY */
+function qty(index,change){
 
-function qty(i,d){
+  const item = C[index];
 
-  C[i].qty+=d;
+  if(!item) return;
 
-  if(C[i].qty<1){
+  if(change > 0){
 
-    C.splice(i,1);
+    const product =
+      P.find(v => v.id == item.id);
+
+    if(
+      product &&
+      item.qty >= Number(product.stock || 0)
+    ){
+      alert("Stock limit reached.");
+      return;
+    }
+
   }
 
-  save();
+  item.qty += change;
+
+  if(item.qty < 1){
+    C.splice(index,1);
+  }
+
+  saveCart();
 }
 
-
-/* CART OPEN CLOSE */
 
 function toggle(){
 
-  cart.classList.toggle("open");
+  document
+    .getElementById("cart")
+    .classList
+    .toggle("open");
 }
 
 
-/* CUSTOMER DETAILS */
-
 function customer(){
 
-  return{
+  return {
 
-    name:name.value.trim(),
+    name:
+      document
+      .getElementById("customerName")
+      .value
+      .trim(),
 
-    mobile:mobile.value.trim(),
+    mobile:
+      document
+      .getElementById("customerMobile")
+      .value
+      .trim(),
 
-    address:address.value.trim()
+    address:
+      document
+      .getElementById("customerAddress")
+      .value
+      .trim()
 
   };
 }
 
 
-/* VALIDATE ORDER */
-
 function valid(){
 
-  let x=customer();
+  const x = customer();
 
-  if(
-    !x.name ||
-    !x.mobile ||
-    !x.address
-  ){
+  if(!x.name){
 
-    alert(
-      "Please fill customer name, mobile number and delivery address."
-    );
-
+    alert("Customer name enter karo.");
     return false;
+
+  }
+
+  if(!/^[0-9]{10}$/.test(x.mobile)){
+
+    alert("Sahi 10 digit mobile number enter karo.");
+    return false;
+
+  }
+
+  if(!x.address){
+
+    alert("Delivery address enter karo.");
+    return false;
+
   }
 
   if(!C.length){
 
-    alert("Cart is empty.");
-
+    alert("Cart empty hai.");
     return false;
+
   }
 
   return true;
 }
 
 
-/* ORDER ITEMS */
-
 function items(){
 
-  return C.map(x=>{
+  return C.map(item => {
 
-    let p=P.find(v=>v.id==x.id);
+    const product =
+      P.find(v => v.id == item.id);
 
-    return{
+    if(!product) return null;
 
-      id:p.id,
+    return {
 
-      name:p.name,
-
-      price:p.price,
-
-      qty:x.qty
+      id:product.id,
+      name:product.name,
+      price:Number(product.price),
+      qty:item.qty
 
     };
 
-  });
+  }).filter(Boolean);
 }
 
 
-/* CASH ON DELIVERY */
+function showStatus(message,type){
+
+  const box =
+    document.getElementById("orderStatus");
+
+  box.style.display = "block";
+
+  box.className =
+    "status " +
+    (type === "success"
+      ? "success"
+      : "failed");
+
+  box.innerText = message;
+}
+
+
+/* =====================
+   CASH ON DELIVERY
+===================== */
 
 async function cod(){
 
   if(!valid()) return;
 
+  const button =
+    document.getElementById("codBtn");
+
+  button.disabled = true;
+  button.innerText = "PLACING ORDER...";
+
+  showStatus(
+    "Order create ho raha hai...",
+    "success"
+  );
+
   try{
 
-    let r=await fetch(
-      "/api/orders",
-      {
-        method:"POST",
+    const orderData = {
 
-        headers:{
-          "Content-Type":
-          "application/json"
-        },
+      customer:customer(),
 
-        body:JSON.stringify({
+      items:items(),
 
-          customer:customer(),
+      total:cartRender(),
 
-          items:items(),
+      payment:"COD"
 
-          total:cartRender(),
+    };
 
-          payment:"COD"
 
-        })
-      }
-    );
+    const response =
+      await fetch(
+        "/api/orders",
+        {
 
-    let result=await r.json();
+          method:"POST",
 
-    if(!r.ok){
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify(orderData)
+
+        }
+      );
+
+
+    let data;
+
+    try{
+
+      data = await response.json();
+
+    }catch(e){
 
       throw new Error(
-        result.error ||
-        "Order failed"
+        "Server ka response invalid hai."
       );
+
     }
 
-    alert(
-      "Order created successfully: "+
-      result.id
+
+    if(!response.ok){
+
+      throw new Error(
+        data.error ||
+        "Order create nahi hua."
+      );
+
+    }
+
+
+    showStatus(
+      "✅ Order successfully placed! Order ID: " +
+      data.id,
+      "success"
     );
 
-    C=[];
 
-    save();
+    alert(
+      "✅ ORDER SUCCESSFUL\n\n" +
+      "Order ID: " +
+      data.id +
+      "\n\nCash on Delivery order confirmed."
+    );
 
-    toggle();
 
-  }catch(e){
+    C = [];
 
-    alert(e.message);
+    saveCart();
+
+
+    document
+      .getElementById("customerName")
+      .value = "";
+
+    document
+      .getElementById("customerMobile")
+      .value = "";
+
+    document
+      .getElementById("customerAddress")
+      .value = "";
+
+
+  }catch(error){
+
+    console.error(error);
+
+    showStatus(
+      "❌ " + error.message,
+      "failed"
+    );
+
+    alert(
+      "❌ ORDER FAILED\n\n" +
+      error.message
+    );
+
+  }finally{
+
+    button.disabled = false;
+
+    button.innerText =
+      "CASH ON DELIVERY";
+
   }
+
 }
 
 
-/* ONLINE PAYMENT */
+/* =====================
+   ONLINE PAYMENT
+===================== */
 
 async function payOnline(){
 
@@ -696,129 +802,166 @@ async function payOnline(){
 
   try{
 
-    let amount=cartRender();
+    const amount =
+      cartRender();
 
-    let r=await fetch(
-      "/api/payment/order",
-      {
-        method:"POST",
 
-        headers:{
-          "Content-Type":
-          "application/json"
-        },
+    const response =
+      await fetch(
+        "/api/payment/order",
+        {
 
-        body:JSON.stringify({
-          amount:amount
-        })
-      }
-    );
+          method:"POST",
 
-    let d=await r.json();
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
 
-    if(!r.ok){
+          body:
+            JSON.stringify({
+              amount:amount
+            })
 
-      return alert(
-        d.error ||
-        "Payment unavailable"
+        }
       );
+
+
+    const data =
+      await response.json();
+
+
+    if(!response.ok){
+
+      throw new Error(
+        data.error ||
+        "Payment start nahi hua."
+      );
+
     }
 
 
-    new Razorpay({
+    const options = {
 
-      key:d.key,
+      key:data.key,
 
-      amount:d.order.amount,
+      amount:data.order.amount,
 
       currency:"INR",
 
       name:"VetBeings",
 
       description:
-      "VetBeings Order",
+        "VetBeings Order",
 
-      order_id:d.order.id,
+      order_id:
+        data.order.id,
 
       prefill:{
 
-        name:customer().name,
+        name:
+          customer().name,
 
         contact:
-        "+91"+customer().mobile
+          "+91" +
+          customer().mobile
 
       },
 
-      handler:async function(resp){
 
-        try{
+      handler:
+        async function(responseData){
 
-          let vr=await fetch(
-            "/api/payment/verify",
-            {
-              method:"POST",
+          try{
 
-              headers:{
-                "Content-Type":
-                "application/json"
-              },
+            const verifyResponse =
+              await fetch(
+                "/api/payment/verify",
+                {
 
-              body:JSON.stringify({
+                  method:"POST",
 
-                ...resp,
+                  headers:{
+                    "Content-Type":
+                      "application/json"
+                  },
 
-                customer:
-                customer(),
+                  body:
+                    JSON.stringify({
 
-                items:
-                items(),
+                      ...responseData,
 
-                total:
-                amount
+                      customer:
+                        customer(),
 
-              })
+                      items:
+                        items(),
+
+                      total:
+                        amount
+
+                    })
+
+                }
+              );
+
+
+            const verify =
+              await verifyResponse.json();
+
+
+            if(
+              verifyResponse.ok &&
+              verify.ok
+            ){
+
+              alert(
+                "✅ Payment successful!\nOrder ID: " +
+                verify.order.id
+              );
+
+              C = [];
+
+              saveCart();
+
+            }else{
+
+              throw new Error(
+                verify.error ||
+                "Payment verification failed."
+              );
+
             }
-          );
 
-          let v=await vr.json();
-
-          if(v.ok){
+          }catch(error){
 
             alert(
-              "Payment successful. Order "+
-              v.order.id+
-              " confirmed."
+              "Payment verification error: " +
+              error.message
             );
 
-            C=[];
-
-            save();
-
-            toggle();
-
-          }else{
-
-            alert(
-              v.error ||
-              "Payment verification failed."
-            );
           }
 
-        }catch(e){
-
-          alert(
-            "Payment verification error."
-          );
         }
 
-      }
+    };
 
-    }).open();
 
-  }catch(e){
+    const razorpay =
+      new Razorpay(options);
 
-    alert(e.message);
+    razorpay.open();
+
+
+  }catch(error){
+
+    alert(
+      "❌ Online payment error:\n" +
+      error.message
+    );
+
   }
+
 }
 
 
