@@ -1,268 +1,773 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>VetBeings | Veterinary Medicines & Animal Healthcare</title>
-<meta name="description" content="VetBeings veterinary medicines, animal healthcare, nutrition and wellness products.">
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <style>
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f7faf8;color:#14231a}
-button,input,textarea{font:inherit}
-button{cursor:pointer}
-a{text-decoration:none}
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f7faf8;
+  color:#14251c;
+}
+
+button,input,textarea{
+  font-family:inherit;
+}
+
+a{
+  text-decoration:none;
+}
 
 .topbar{
- background:#053c27;color:#fff;padding:9px 5%;
- display:flex;justify-content:space-between;gap:15px;font-size:12px
+  background:#003d2b;
+  color:white;
+  padding:8px 5%;
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  font-size:13px;
 }
-.nav{
- position:sticky;top:0;z-index:30;background:#fff;
- display:flex;align-items:center;gap:13px;padding:11px 5%;
- box-shadow:0 3px 18px #00000012
+
+.navbar{
+  background:white;
+  padding:13px 5%;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  position:sticky;
+  top:0;
+  z-index:20;
+  box-shadow:0 3px 18px rgba(0,0,0,.07);
 }
-.logo{width:125px;max-height:65px;object-fit:contain}
+
+.logo{
+  width:115px;
+  height:60px;
+  object-fit:contain;
+}
+
 .search{
- flex:1;min-width:0;padding:13px 15px;border:1px solid #dbe5de;
- border-radius:10px;outline:none
+  flex:1;
+  padding:14px 17px;
+  border:1px solid #dfe6e2;
+  border-radius:10px;
+  outline:none;
+  font-size:14px;
 }
-.cart-btn,.green-btn{
- border:0;background:#08753f;color:#fff;padding:12px 16px;
- border-radius:9px;font-weight:800
+
+.btn{
+  border:0;
+  cursor:pointer;
+  border-radius:8px;
+  background:#087b48;
+  color:white;
+  padding:13px 18px;
+  font-weight:700;
+}
+
+.btn:hover{
+  background:#05663b;
 }
 
 .hero{
- min-height:570px;display:flex;align-items:center;
- background:
- linear-gradient(90deg,rgba(2,43,26,.96) 0%,rgba(3,61,35,.88) 43%,rgba(3,45,28,.32) 75%),
- url("https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=1800&q=90")
- center/cover no-repeat;
+  min-height:500px;
+  padding:70px 5%;
+  display:flex;
+  align-items:center;
+  color:white;
+  background:
+    linear-gradient(90deg,rgba(0,62,41,.95),rgba(0,62,41,.68),rgba(0,0,0,.20)),
+    url("https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=1800&q=90");
+  background-size:cover;
+  background-position:center;
 }
-.hero-inner{width:90%;max-width:1250px;margin:auto;color:#fff}
-.eyebrow{
- display:inline-block;border:1px solid #ffffff55;background:#ffffff15;
- padding:8px 13px;border-radius:30px;font-size:11px;font-weight:bold;
- letter-spacing:.8px
+
+.hero-content{
+  max-width:760px;
 }
-.hero h1{font-size:58px;line-height:1.04;max-width:760px;margin:18px 0}
-.hero p{font-size:18px;line-height:1.7;max-width:650px;color:#e1f0e6}
-.hero-actions{display:flex;gap:11px;flex-wrap:wrap;margin-top:25px}
+
+.badge{
+  display:inline-block;
+  border:1px solid rgba(255,255,255,.35);
+  background:rgba(255,255,255,.12);
+  padding:9px 13px;
+  border-radius:30px;
+  font-size:12px;
+  font-weight:bold;
+}
+
+.hero h1{
+  font-size:54px;
+  line-height:1.02;
+  margin:20px 0;
+  letter-spacing:-1.5px;
+}
+
+.hero p{
+  font-size:17px;
+  line-height:1.7;
+  max-width:650px;
+}
+
+.hero-buttons{
+  display:flex;
+  gap:12px;
+  margin-top:28px;
+  flex-wrap:wrap;
+}
+
 .white-btn{
- border:0;background:#fff;color:#07633a;padding:14px 20px;
- border-radius:8px;font-weight:900
+  background:white;
+  color:#05633c;
+  padding:14px 20px;
+  border-radius:8px;
+  font-weight:bold;
 }
+
 .outline-btn{
- border:1px solid #ffffffaa;color:#fff;padding:13px 20px;
- border-radius:8px;font-weight:bold
+  border:1px solid rgba(255,255,255,.55);
+  color:white;
+  padding:14px 20px;
+  border-radius:8px;
+  font-weight:bold;
+}
+
+.trust-wrap{
+  max-width:1250px;
+  margin:-35px auto 0;
+  position:relative;
+  z-index:3;
+  padding:0 18px;
 }
 
 .trust{
- width:90%;max-width:1150px;margin:-35px auto 0;position:relative;z-index:5;
- display:grid;grid-template-columns:repeat(4,1fr);background:#fff;
- border-radius:15px;box-shadow:0 10px 35px #0002;padding:15px
+  background:white;
+  border-radius:14px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  box-shadow:0 15px 35px rgba(0,0,0,.10);
+  overflow:hidden;
 }
-.trust div{padding:13px 17px;border-right:1px solid #e5ebe7}
-.trust div:last-child{border-right:0}
-.trust b{display:block;font-size:14px;margin-bottom:5px}
-.trust span{font-size:11px;color:#69766e}
 
-.section{max-width:1250px;margin:auto;padding:65px 18px}
-.center{text-align:center;max-width:720px;margin:0 auto 35px}
-.label{
- color:#08753f;font-size:11px;font-weight:900;letter-spacing:1px;
- text-transform:uppercase
+.trust-item{
+  padding:24px;
+  border-right:1px solid #eee;
 }
-.center h2,.section-title{font-size:38px;margin:8px 0}
-.center p{color:#68756d;line-height:1.7}
 
-.categories{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.trust-item:last-child{
+  border:0;
+}
+
+.trust-item b{
+  display:block;
+  margin-bottom:6px;
+}
+
+.trust-item small{
+  color:#718078;
+  line-height:1.5;
+}
+
+.section{
+  max-width:1250px;
+  margin:auto;
+  padding:75px 18px;
+}
+
+.center{
+  text-align:center;
+}
+
+.eyebrow{
+  color:#087b48;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+
+.section h2{
+  font-size:38px;
+  margin:9px 0 12px;
+}
+
+.subtitle{
+  color:#68766e;
+  line-height:1.6;
+  max-width:720px;
+  margin:0 auto 35px;
+}
+
+.categories{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+}
+
 .category{
- background:#fff;border:1px solid #e0e8e2;border-radius:15px;overflow:hidden;
- box-shadow:0 4px 18px #00000008
+  background:white;
+  border:1px solid #e2e9e5;
+  border-radius:14px;
+  overflow:hidden;
 }
-.category img{width:100%;height:185px;object-fit:cover;display:block}
-.category div{padding:15px}
-.category h3{margin:0 0 7px}
-.category p{margin:0;color:#6b776f;font-size:12px;line-height:1.55}
 
-.products-bg{background:#eef5f0}
+.category img{
+  width:100%;
+  height:190px;
+  object-fit:cover;
+}
+
+.category-content{
+  padding:17px;
+}
+
+.category h3{
+  margin:0 0 7px;
+}
+
+.category p{
+  margin:0;
+  color:#718078;
+  font-size:13px;
+  line-height:1.5;
+}
+
+/* PRODUCTS */
+
+.products-section{
+  background:#eef7f2;
+}
+
 .products-head{
- display:flex;justify-content:space-between;align-items:end;
- gap:15px;margin-bottom:25px
+  max-width:1250px;
+  margin:auto;
+  padding:65px 18px 20px;
 }
-.products-head h2{font-size:37px;margin:6px 0 0}
-#productCount{color:#68756d;font-size:12px}
 
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.card{
- background:#fff;border:1px solid #dfe7e1;border-radius:15px;padding:11px;
- display:flex;flex-direction:column;box-shadow:0 4px 18px #00000009;
- transition:.2s
+.products-head h2{
+  font-size:38px;
+  margin:8px 0;
 }
-.card:hover{transform:translateY(-3px);box-shadow:0 9px 25px #00000012}
-.product-photo{
- height:220px;background:#f5f8f6;border-radius:11px;overflow:hidden;
- display:flex;align-items:center;justify-content:center
-}
-.product-photo img{width:100%;height:100%;object-fit:contain;padding:5px}
-.no-photo{font-size:55px}
-.category-name{
- color:#08753f;font-size:10px;font-weight:900;text-transform:uppercase;
- margin-top:12px
-}
-.card h3{font-size:16px;line-height:1.35;margin:7px 0}
-.desc{
- color:#68756d;font-size:12px;line-height:1.5;height:55px;overflow:hidden
-}
-.stock{font-size:11px;color:#647168;margin:8px 0}
-.in-stock{color:#08753f;font-weight:bold}
-.out-stock{color:#b42318;font-weight:bold}
-.price{font-size:22px;font-weight:900;margin-top:auto}
-.card-buttons{display:grid;grid-template-columns:1fr 1.4fr;gap:7px;margin-top:11px}
-.details-btn{
- border:1px solid #08753f;background:#fff;color:#08753f;
- padding:10px 5px;border-radius:7px;font-weight:bold;font-size:11px
-}
-.add-btn{
- border:0;background:#08753f;color:#fff;padding:10px 5px;
- border-radius:7px;font-weight:bold;font-size:11px
-}
-.add-btn:disabled{background:#aeb8b1;cursor:not-allowed}
 
-.about{display:grid;grid-template-columns:1fr 1fr;gap:45px;align-items:center}
-.about img{width:100%;height:430px;object-fit:cover;border-radius:20px}
-.about h2{font-size:40px;margin:8px 0 15px}
-.about p{color:#657269;line-height:1.75}
-.checks{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:20px}
-.check{background:#edf6f0;padding:12px;border-radius:8px;font-size:12px;font-weight:bold}
-
-.dark{background:#053b27;color:#fff}
-.benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-top:30px}
-.benefit{background:#ffffff0e;border:1px solid #ffffff1e;padding:25px;border-radius:14px}
-.benefit span{font-size:38px}
-.benefit p{color:#c6dacd;font-size:13px;line-height:1.6}
-
-.cta{
- max-width:1180px;margin:55px auto;background:linear-gradient(110deg,#08753f,#06472d);
- color:#fff;border-radius:18px;padding:35px;display:flex;align-items:center;
- justify-content:space-between;gap:20px
+#productMessage{
+  color:#69776f;
+  margin-top:8px;
 }
-.cta h2{font-size:30px;margin:0 0 7px}
-.cta p{margin:0;color:#d2e7d9}
+
+.product-grid{
+  max-width:1250px;
+  margin:auto;
+  padding:20px 18px 75px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+}
+
+.product-card{
+  background:white;
+  border:1px solid #e1e8e4;
+  border-radius:15px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  transition:.2s;
+}
+
+.product-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 30px rgba(0,0,0,.08);
+}
+
+.product-image{
+  height:220px;
+  background:#f2f7f4;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.product-image img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  padding:10px;
+}
+
+.placeholder{
+  font-size:60px;
+}
+
+.product-info{
+  padding:17px;
+  display:flex;
+  flex-direction:column;
+  flex:1;
+}
+
+.product-category{
+  color:#087b48;
+  font-size:11px;
+  font-weight:bold;
+  text-transform:uppercase;
+}
+
+.product-info h3{
+  margin:9px 0;
+  font-size:18px;
+  line-height:1.25;
+}
+
+.description{
+  color:#6e7a73;
+  font-size:13px;
+  line-height:1.5;
+  min-height:40px;
+}
+
+.stock{
+  font-size:12px;
+  margin:10px 0;
+  color:#526158;
+}
+
+.price{
+  font-size:23px;
+  font-weight:900;
+  margin-top:auto;
+}
+
+.product-card .btn{
+  width:100%;
+  margin-top:13px;
+}
+
+/* ABOUT */
+
+.about{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:50px;
+  align-items:center;
+}
+
+.about img{
+  width:100%;
+  height:440px;
+  object-fit:cover;
+  border-radius:18px;
+}
+
+.about h2{
+  font-size:40px;
+}
+
+.about p{
+  color:#65746b;
+  line-height:1.7;
+}
+
+.checks{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:20px;
+}
+
+.check{
+  background:#eef8f2;
+  padding:13px;
+  border-radius:8px;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.health{
+  background:#004b35;
+  color:white;
+  padding:70px 5%;
+  text-align:center;
+}
+
+.health h2{
+  font-size:38px;
+}
+
+.health p{
+  color:#cce0d6;
+}
+
+.health-grid{
+  max-width:1200px;
+  margin:35px auto 0;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.health-card{
+  text-align:left;
+  background:rgba(255,255,255,.08);
+  padding:25px;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:13px;
+}
+
+.help{
+  max-width:1250px;
+  margin:55px auto;
+  padding:32px;
+  background:#087b48;
+  color:white;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+
+.help h2{
+  margin:0 0 7px;
+}
+
+.help p{
+  margin:0;
+}
+
 .whatsapp{
- background:#fff;color:#08633a;padding:14px 20px;border-radius:8px;
- font-weight:900;white-space:nowrap
+  background:white;
+  color:#087b48;
+  padding:14px 20px;
+  border-radius:8px;
+  font-weight:bold;
 }
 
-.footer{background:#032a1b;color:#fff;padding:45px 6% 20px}
-.footer-grid{
- max-width:1200px;margin:auto;display:grid;
- grid-template-columns:2fr 1fr 1fr 1.2fr;gap:30px
+footer{
+  background:#003b2a;
+  color:white;
+  padding:50px 5% 25px;
 }
-.footer img{width:120px;background:#fff;border-radius:7px;padding:4px}
-.footer p,.footer a{color:#b9cec1;font-size:12px;line-height:1.7}
-.footer a{display:block;margin:6px 0}
-.copy{
- max-width:1200px;margin:28px auto 0;border-top:1px solid #ffffff18;
- padding-top:18px;text-align:center;color:#8fa89a;font-size:11px
+
+.footer-grid{
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:35px;
+}
+
+footer p,
+footer a{
+  color:#c4d8ce;
+  font-size:13px;
+  line-height:1.8;
+}
+
+.footer-logo{
+  width:120px;
+  background:white;
+  border-radius:8px;
+  padding:6px;
+}
+
+.copyright{
+  max-width:1200px;
+  margin:35px auto 0;
+  padding-top:20px;
+  border-top:1px solid rgba(255,255,255,.12);
+  text-align:center;
+  color:#a9c3b7;
+  font-size:12px;
 }
 
 /* CART */
-.overlay{
- position:fixed;inset:0;background:#0008;z-index:49;display:none
+
+.cart-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  z-index:98;
+  display:none;
 }
-.overlay.show{display:block}
+
+.cart-overlay.show{
+  display:block;
+}
+
 .cart{
- position:fixed;right:-470px;top:0;width:440px;max-width:100%;
- height:100%;background:#fff;z-index:50;padding:20px;overflow:auto;
- transition:.25s;box-shadow:-8px 0 35px #0004
+  position:fixed;
+  right:-470px;
+  top:0;
+  width:450px;
+  max-width:100%;
+  height:100vh;
+  background:white;
+  z-index:99;
+  padding:25px;
+  overflow:auto;
+  transition:.25s;
+  box-shadow:-10px 0 30px rgba(0,0,0,.20);
 }
-.cart.open{right:0}
-.cart-head{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee}
-.close-btn{border:0;background:#edf2ee;width:36px;height:36px;border-radius:50%}
-.cart-row{padding:14px 0;border-bottom:1px solid #e7ece8}
+
+.cart.open{
+  right:0;
+}
+
+.cart-close{
+  float:right;
+  border:0;
+  background:#eee;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  font-size:18px;
+}
+
+.cart-row{
+  padding:15px 0;
+  border-bottom:1px solid #e7ece9;
+}
+
+.cart-row-title{
+  font-weight:bold;
+  margin-bottom:6px;
+}
+
 .qty-btn{
- width:30px;height:30px;background:#fff;border:1px solid #d5ded8;border-radius:5px
+  width:29px;
+  height:29px;
+  border:1px solid #ccd6d0;
+  background:white;
+  border-radius:5px;
+  cursor:pointer;
 }
-.total{
- background:#edf6f0;border-radius:9px;padding:14px;margin:15px 0;
- font-size:24px;font-weight:900
+
+.remove{
+  color:#b42424;
+  border:0;
+  background:none;
+  cursor:pointer;
+  margin-left:10px;
 }
+
+.cart-total{
+  font-size:24px;
+  font-weight:900;
+  margin:22px 0;
+}
+
 .field{
- width:100%;padding:12px;border:1px solid #d6e0d9;border-radius:8px;
- margin:5px 0;outline:none
+  width:100%;
+  padding:13px;
+  border:1px solid #d6ded9;
+  border-radius:8px;
+  margin-bottom:10px;
+  font-size:14px;
 }
-.checkout{
- width:100%;border:0;color:#fff;background:#08753f;padding:14px;
- border-radius:8px;margin-top:7px;font-weight:900
-}
-.cod{background:#174d36}
-#orderStatus{display:none;padding:10px;border-radius:7px;margin:8px 0;font-size:12px}
 
-/* PRODUCT MODAL */
-.modal{
- position:fixed;inset:0;background:#0009;z-index:70;display:none;
- align-items:center;justify-content:center;padding:18px
+textarea.field{
+  min-height:90px;
+  resize:vertical;
 }
-.modal-box{
- width:850px;max-width:100%;max-height:92vh;overflow:auto;background:#fff;
- border-radius:18px;padding:22px;position:relative
-}
-.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center}
-.modal-image{
- height:370px;background:#f5f8f6;border-radius:14px;
- display:flex;align-items:center;justify-content:center;overflow:hidden
-}
-.modal-image img{width:100%;height:100%;object-fit:contain;padding:10px}
-.modal-box h2{font-size:30px;margin:8px 0}
-.modal-desc{color:#657269;line-height:1.7}
-.modal-close{position:absolute;right:15px;top:15px;z-index:2}
 
-/* SUCCESS */
+.payment-btn{
+  width:100%;
+  margin-top:8px;
+}
+
+.cod{
+  background:#075c38;
+}
+
+.status{
+  padding:12px;
+  margin:10px 0;
+  border-radius:7px;
+  display:none;
+  font-size:13px;
+}
+
+.status.show{
+  display:block;
+}
+
 .success{
- position:fixed;inset:0;background:#0009;z-index:90;display:none;
- align-items:center;justify-content:center;padding:20px
+  background:#e8f8ee;
+  color:#086634;
 }
-.success-box{
- width:430px;max-width:100%;background:#fff;border-radius:18px;
- padding:32px;text-align:center
+
+.error{
+  background:#ffeaea;
+  color:#9a2020;
 }
-.tick{
- width:72px;height:72px;border-radius:50%;background:#e4f5ea;color:#08753f;
- display:flex;align-items:center;justify-content:center;font-size:38px;
- font-weight:bold;margin:auto
-}
-.order-id-box{background:#f0f5f2;padding:12px;border-radius:8px;margin:15px 0;font-weight:bold}
+
+/* MOBILE */
 
 @media(max-width:900px){
- .trust{grid-template-columns:1fr 1fr}
- .trust div:nth-child(2){border-right:0}
- .categories,.grid{grid-template-columns:repeat(2,1fr)}
- .about,.modal-grid{grid-template-columns:1fr}
- .benefits{grid-template-columns:1fr}
- .footer-grid{grid-template-columns:1fr 1fr}
+
+  .hero h1{
+    font-size:43px;
+  }
+
+  .trust{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .categories,
+  .product-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .about{
+    grid-template-columns:1fr;
+  }
+
+  .health-grid{
+    grid-template-columns:1fr;
+  }
+
+  .footer-grid{
+    grid-template-columns:1fr 1fr;
+  }
 }
+
 @media(max-width:600px){
- .topbar{justify-content:center}.topbar span:last-child{display:none}
- .nav{padding:9px;gap:7px}.logo{width:82px}
- .search{font-size:11px;padding:10px}.cart-btn{font-size:11px;padding:10px}
- .hero{min-height:500px}
- .hero h1{font-size:38px}.hero p{font-size:15px}
- .trust{width:94%;padding:7px}.trust div{padding:10px}
- .section{padding:50px 9px}.center h2,.section-title{font-size:29px}
- .categories{gap:8px}.category img{height:130px}
- .category div{padding:10px}.category h3{font-size:13px}.category p{font-size:10px}
- .grid{gap:8px}.card{padding:7px}.product-photo{height:145px}
- .card h3{font-size:13px}.desc{font-size:10px;height:46px}
- .price{font-size:18px}.card-buttons{grid-template-columns:1fr}
- .about img{height:300px}.about h2{font-size:31px}.checks{grid-template-columns:1fr}
- .cta{margin:40px 9px;padding:24px 18px;flex-direction:column;align-items:flex-start}
- .footer-grid{grid-template-columns:1fr}.cart{width:100%}
- .modal-box{padding:15px}.modal-image{height:250px}.modal-box h2{font-size:24px}
+
+  .topbar{
+    font-size:10px;
+  }
+
+  .topbar span:first-child{
+    display:none;
+  }
+
+  .navbar{
+    padding:10px 4%;
+    gap:8px;
+  }
+
+  .logo{
+    width:78px;
+    height:48px;
+  }
+
+  .search{
+    padding:11px;
+    min-width:0;
+  }
+
+  .navbar .btn{
+    padding:11px 12px;
+    white-space:nowrap;
+  }
+
+  .hero{
+    min-height:450px;
+    padding:55px 5%;
+    background-position:center;
+  }
+
+  .hero h1{
+    font-size:38px;
+  }
+
+  .hero p{
+    font-size:15px;
+  }
+
+  .trust-wrap{
+    margin:-20px auto 0;
+  }
+
+  .trust-item{
+    padding:16px;
+  }
+
+  .section{
+    padding:55px 13px;
+  }
+
+  .section h2,
+  .products-head h2,
+  .about h2,
+  .health h2{
+    font-size:30px;
+  }
+
+  .categories{
+    gap:10px;
+  }
+
+  .category img{
+    height:135px;
+  }
+
+  .category-content{
+    padding:12px;
+  }
+
+  .product-grid{
+    gap:10px;
+    padding:15px 10px 55px;
+  }
+
+  .product-image{
+    height:165px;
+  }
+
+  .product-info{
+    padding:12px;
+  }
+
+  .product-info h3{
+    font-size:15px;
+  }
+
+  .description{
+    font-size:11px;
+    min-height:48px;
+  }
+
+  .price{
+    font-size:19px;
+  }
+
+  .product-card .btn{
+    font-size:11px;
+    padding:11px 6px;
+  }
+
+  .about img{
+    height:320px;
+  }
+
+  .checks{
+    grid-template-columns:1fr;
+  }
+
+  .help{
+    margin:35px 10px;
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .footer-grid{
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
@@ -270,315 +775,486 @@ a{text-decoration:none}
 <body>
 
 <div class="topbar">
- <span>🐾 VetBeings • Veterinary Medicines & Animal Healthcare</span>
- <span>Customer Support: +91 88290 53040</span>
+  <span>VetBeings • Veterinary Medicines & Animal Healthcare</span>
+  <span>Customer Support: +91 88290 53040</span>
 </div>
 
-<header class="nav">
- <img src="logo.png" class="logo" alt="VetBeings">
- <input id="searchBox" class="search" placeholder="Search medicines & healthcare products...">
- <button class="cart-btn" onclick="openCart()">🛒 Cart <span id="cartCount">0</span></button>
-</header>
+<nav class="navbar">
+
+  <img src="logo.png" class="logo" alt="VetBeings">
+
+  <input
+    id="search"
+    class="search"
+    placeholder="Search medicines & healthcare products..."
+    oninput="renderProducts()"
+  >
+
+  <button class="btn" onclick="openCart()">
+    🛒 Cart <span id="cartCount">0</span>
+  </button>
+
+</nav>
 
 <section class="hero">
- <div class="hero-inner">
-  <span class="eyebrow">COMPASSION • CARE • CURE</span>
-  <h1>Trusted Healthcare for the Animals You Care About.</h1>
-  <p>
-   Discover veterinary medicines, nutritional supplements and animal
-   healthcare products for cattle, calves, livestock and pets — with
-   convenient ordering and dedicated customer support.
-  </p>
-  <div class="hero-actions">
-   <button class="white-btn" onclick="document.getElementById('products').scrollIntoView()">SHOP PRODUCTS</button>
-   <a class="outline-btn" href="tel:+918829053040">☎ Call VetBeings</a>
+
+  <div class="hero-content">
+
+    <span class="badge">
+      COMPASSION • CARE • CURE
+    </span>
+
+    <h1>
+      Trusted Healthcare for the Animals You Care About.
+    </h1>
+
+    <p>
+      Discover veterinary medicines, nutritional supplements and animal
+      healthcare products for cattle, calves, livestock and pets — with
+      convenient ordering and dedicated customer support.
+    </p>
+
+    <div class="hero-buttons">
+
+      <a href="#products" class="white-btn">
+        SHOP PRODUCTS
+      </a>
+
+      <a href="tel:+918829053040" class="outline-btn">
+        ☎ Call VetBeings
+      </a>
+
+    </div>
+
   </div>
- </div>
+
 </section>
 
-<div class="trust">
- <div><b>✓ Quality Products</b><span>Animal healthcare focused catalogue</span></div>
- <div><b>🐄 Veterinary Care</b><span>Cattle, livestock and animal wellness</span></div>
- <div><b>🔒 Secure Ordering</b><span>COD and secure online checkout</span></div>
- <div><b>☎ Customer Support</b><span>Help with products and ordering</span></div>
+<div class="trust-wrap">
+
+  <div class="trust">
+
+    <div class="trust-item">
+      <b>✓ Quality Products</b>
+      <small>Animal healthcare focused product catalogue</small>
+    </div>
+
+    <div class="trust-item">
+      <b>🐄 Veterinary Care</b>
+      <small>Cattle, livestock and animal wellness</small>
+    </div>
+
+    <div class="trust-item">
+      <b>🔒 Secure Ordering</b>
+      <small>COD and secure online checkout</small>
+    </div>
+
+    <div class="trust-item">
+      <b>☎ Customer Support</b>
+      <small>Help with products and ordering</small>
+    </div>
+
+  </div>
+
 </div>
 
-<section class="section">
- <div class="center">
-  <div class="label">Animal Healthcare</div>
+<section class="section center">
+
+  <span class="eyebrow">Animal Healthcare</span>
+
   <h2>Care for Every Stage of Animal Health</h2>
-  <p>Explore healthcare, nutrition and wellness solutions designed around the everyday needs of animals.</p>
- </div>
 
- <div class="categories">
-  <div class="category">
-   <img src="https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?auto=format&fit=crop&w=800&q=85" alt="Cattle">
-   <div><h3>🐄 Cattle Care</h3><p>Healthcare and wellness products for cattle and dairy animals.</p></div>
+  <p class="subtitle">
+    Explore healthcare, nutrition and wellness solutions designed around
+    the everyday needs of animals.
+  </p>
+
+  <div class="categories">
+
+    <div class="category">
+      <img
+        src="https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?auto=format&fit=crop&w=800&q=85"
+        alt="Cattle care"
+      >
+      <div class="category-content">
+        <h3>🐄 Cattle Care</h3>
+        <p>Veterinary healthcare and wellness products for cattle.</p>
+      </div>
+    </div>
+
+    <div class="category">
+      <img
+        src="https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=800&q=85"
+        alt="Animal nutrition"
+      >
+      <div class="category-content">
+        <h3>🌿 Nutrition</h3>
+        <p>Nutrition and supplementation supporting animal wellbeing.</p>
+      </div>
+    </div>
+
+    <div class="category">
+      <img
+        src="https://images.unsplash.com/photo-1560493676-04071c5f467b?auto=format&fit=crop&w=800&q=85"
+        alt="Calf care"
+      >
+      <div class="category-content">
+        <h3>🐮 Calf Care</h3>
+        <p>Products supporting healthy growth and young animal care.</p>
+      </div>
+    </div>
+
+    <div class="category">
+      <img
+        src="https://images.unsplash.com/photo-1558788353-f76d92427f16?auto=format&fit=crop&w=800&q=85"
+        alt="General animal care"
+      >
+      <div class="category-content">
+        <h3>🐾 General Care</h3>
+        <p>Everyday health and wellness products for animals.</p>
+      </div>
+    </div>
+
   </div>
 
-  <div class="category">
-   <img src="https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=800&q=85" alt="Nutrition">
-   <div><h3>🌿 Nutrition</h3><p>Nutrition and supplementation supporting animal wellbeing.</p></div>
-  </div>
-
-  <div class="category">
-   <img src="https://images.unsplash.com/photo-1545468800-85cc9bc6ecf7?auto=format&fit=crop&w=800&q=85" alt="Calf">
-   <div><h3>🐮 Calf Care</h3><p>Products supporting healthy growth and young animal care.</p></div>
-  </div>
-
-  <div class="category">
-   <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=800&q=85" alt="Animal care">
-   <div><h3>🐾 General Care</h3><p>Everyday health and wellness products for animals.</p></div>
-  </div>
- </div>
 </section>
 
-<section id="products" class="products-bg">
- <div class="section">
+<section class="products-section" id="products">
+
   <div class="products-head">
-   <div>
-    <div class="label">VetBeings Store</div>
+
+    <span class="eyebrow">VetBeings Store</span>
+
     <h2>Veterinary Products</h2>
-   </div>
-   <div id="productCount">Loading products...</div>
+
+    <div id="productMessage">
+      Loading products...
+    </div>
+
   </div>
 
-  <div id="productGrid" class="grid">
-   <div style="grid-column:1/-1;text-align:center;padding:30px">Loading products...</div>
-  </div>
- </div>
+  <div id="productGrid" class="product-grid"></div>
+
 </section>
 
-<section class="section">
- <div class="about">
-  <img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=1200&q=90" alt="Animal healthcare">
+<section class="section about">
+
+  <img
+    src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=1000&q=90"
+    alt="Animal healthcare"
+  >
 
   <div>
-   <div class="label">Why VetBeings</div>
-   <h2>Professional Animal Healthcare, Made Easier.</h2>
-   <p>
-    VetBeings brings veterinary medicines, nutrition and animal wellness
-    products together in one convenient online store.
-   </p>
-   <p>
-    Our aim is to make product discovery and ordering simpler for farmers,
-    livestock owners and animal caregivers.
-   </p>
 
-   <div class="checks">
-    <div class="check">✓ Veterinary Healthcare Focus</div>
-    <div class="check">✓ Product Information</div>
-    <div class="check">✓ Cash on Delivery</div>
-    <div class="check">✓ Customer Assistance</div>
-   </div>
+    <span class="eyebrow">Why VetBeings</span>
+
+    <h2>
+      Professional Animal Healthcare, Made Easier.
+    </h2>
+
+    <p>
+      VetBeings brings veterinary medicines, nutrition and animal wellness
+      products together in one convenient online store.
+    </p>
+
+    <p>
+      Our aim is to make product discovery and ordering simpler for farmers,
+      livestock owners and animal caregivers.
+    </p>
+
+    <div class="checks">
+
+      <div class="check">✓ Veterinary Healthcare Focus</div>
+      <div class="check">✓ Convenient Online Ordering</div>
+      <div class="check">✓ Customer Assistance</div>
+      <div class="check">✓ COD & Secure Checkout</div>
+
+    </div>
+
   </div>
- </div>
+
 </section>
 
-<section class="dark">
- <div class="section">
-  <div class="center">
-   <div class="label" style="color:#8edbab">HEALTH • NUTRITION • WELLNESS</div>
-   <h2>Supporting Healthier Animals</h2>
-   <p style="color:#c6dacd">A professional shopping experience for veterinary and animal healthcare products.</p>
+<section class="health">
+
+  <span class="eyebrow" style="color:#9dd8bb">
+    CARE • HEALTH • WELLNESS
+  </span>
+
+  <h2>Supporting Healthier Animals</h2>
+
+  <p>
+    Dependable animal healthcare products made easier to discover and order.
+  </p>
+
+  <div class="health-grid">
+
+    <div class="health-card">
+      <h3>🐄 Cattle Healthcare</h3>
+      <p>
+        Products supporting everyday cattle health and wellness.
+      </p>
+    </div>
+
+    <div class="health-card">
+      <h3>🌿 Nutrition Support</h3>
+      <p>
+        Nutrition and supplementation for healthier animals.
+      </p>
+    </div>
+
+    <div class="health-card">
+      <h3>🐾 Animal Wellness</h3>
+      <p>
+        Healthcare products for animals that depend on you.
+      </p>
+    </div>
+
   </div>
 
-  <div class="benefits">
-   <div class="benefit"><span>🐄</span><h3>Cattle Healthcare</h3><p>Products supporting cattle health, care and everyday wellness.</p></div>
-   <div class="benefit"><span>🌿</span><h3>Nutrition Support</h3><p>Nutrition and supplementation for healthier animals.</p></div>
-   <div class="benefit"><span>📦</span><h3>Convenient Ordering</h3><p>Browse products, add to cart and place your order online.</p></div>
-  </div>
- </div>
 </section>
 
-<div class="cta">
- <div>
-  <h2>Need Help With a Product?</h2>
-  <p>Contact VetBeings for product and ordering assistance.</p>
- </div>
- <a class="whatsapp" href="https://wa.me/918829053040">WhatsApp VetBeings</a>
-</div>
-
-<footer class="footer">
- <div class="footer-grid">
-  <div>
-   <img src="logo.png" alt="VetBeings">
-   <p>Veterinary medicines, animal healthcare, nutrition and wellness products.</p>
-  </div>
+<section class="help">
 
   <div>
-   <h4>Shop</h4>
-   <a href="#products">All Products</a>
-   <a href="#products">Cattle Care</a>
-   <a href="#products">Nutrition</a>
+    <h2>Need Help With Your Order?</h2>
+    <p>Contact VetBeings for product and ordering assistance.</p>
   </div>
 
-  <div>
-   <h4>Customer Care</h4>
-   <a href="tel:+918829053040">Call Us</a>
-   <a href="https://wa.me/918829053040">WhatsApp</a>
+  <a
+    class="whatsapp"
+    href="https://wa.me/918829053040"
+  >
+    WhatsApp VetBeings
+  </a>
+
+</section>
+
+<footer>
+
+  <div class="footer-grid">
+
+    <div>
+      <img src="logo.png" class="footer-logo" alt="VetBeings">
+      <p>
+        Veterinary medicines, animal healthcare, nutrition and wellness
+        products.
+      </p>
+    </div>
+
+    <div>
+      <h4>Shop</h4>
+      <p>
+        Veterinary Products<br>
+        Cattle Care<br>
+        Nutrition<br>
+        Animal Wellness
+      </p>
+    </div>
+
+    <div>
+      <h4>Support</h4>
+      <p>
+        Call Us<br>
+        WhatsApp<br>
+        Order Assistance
+      </p>
+    </div>
+
+    <div>
+      <h4>VetBeings</h4>
+      <p>
+        Phone / WhatsApp<br>
+        <b>+91 88290 53040</b>
+      </p>
+    </div>
+
   </div>
 
-  <div>
-   <h4>Contact</h4>
-   <p>Phone / WhatsApp<br><b>+91 88290 53040</b></p>
+  <div class="copyright">
+    © 2026 VetBeings. All rights reserved.
   </div>
- </div>
 
- <div class="copy">© 2026 VetBeings. All rights reserved.</div>
 </footer>
 
-<!-- CART -->
-<div id="overlay" class="overlay" onclick="closeCart()"></div>
+<div
+  id="cartOverlay"
+  class="cart-overlay"
+  onclick="closeCart()"
+></div>
 
-<aside id="cartPanel" class="cart">
- <div class="cart-head">
+<aside id="cart" class="cart">
+
+  <button class="cart-close" onclick="closeCart()">✕</button>
+
   <h2>Your Cart</h2>
-  <button class="close-btn" onclick="closeCart()">✕</button>
- </div>
 
- <div id="cartRows"></div>
+  <div id="cartRows"></div>
 
- <div class="total">Total ₹<span id="cartTotal">0</span></div>
+  <div class="cart-total">
+    Total ₹<span id="cartTotal">0</span>
+  </div>
 
- <h3>Delivery Details</h3>
+  <h3>Delivery Details</h3>
 
- <input id="customerName" class="field" placeholder="Customer name">
- <input id="customerMobile" class="field" type="tel" maxlength="10" placeholder="10-digit mobile number">
- <textarea id="customerAddress" class="field" rows="4" placeholder="Complete delivery address"></textarea>
+  <input
+    id="customerName"
+    class="field"
+    placeholder="Customer name"
+  >
 
- <div id="orderStatus"></div>
+  <input
+    id="customerMobile"
+    class="field"
+    type="tel"
+    placeholder="10-digit mobile number"
+  >
 
- <button class="checkout" onclick="payOnline()">PAY ONLINE — UPI / CARD</button>
- <button class="checkout cod" onclick="placeCOD()">CASH ON DELIVERY</button>
+  <textarea
+    id="customerAddress"
+    class="field"
+    placeholder="Complete delivery address"
+  ></textarea>
+
+  <div id="status" class="status"></div>
+
+  <button
+    class="btn payment-btn"
+    onclick="payOnline()"
+  >
+    PAY ONLINE — UPI / CARD / NETBANKING
+  </button>
+
+  <button
+    class="btn payment-btn cod"
+    onclick="placeCOD()"
+  >
+    CASH ON DELIVERY
+  </button>
+
 </aside>
 
-<!-- PRODUCT DETAILS -->
-<div id="productModal" class="modal">
- <div class="modal-box">
-  <button class="close-btn modal-close" onclick="closeProduct()">✕</button>
-  <div id="modalContent"></div>
- </div>
-</div>
-
-<!-- SUCCESS -->
-<div id="successModal" class="success">
- <div class="success-box">
-  <div class="tick">✓</div>
-  <h2>Order Confirmed!</h2>
-  <p>Your VetBeings order has been received successfully.</p>
-  <div id="successOrderId" class="order-id-box"></div>
-  <button class="green-btn" onclick="closeSuccess()">Continue Shopping</button>
- </div>
-</div>
-
 <script>
-let PRODUCTS=[];
-let CART=[];
+
+let products = [];
+let cartItems = [];
 
 try{
- CART=JSON.parse(localStorage.getItem("vbcart")||"[]");
- if(!Array.isArray(CART)) CART=[];
+  cartItems =
+    JSON.parse(localStorage.getItem("vbcart") || "[]");
+
+  if(!Array.isArray(cartItems)){
+    cartItems = [];
+  }
 }catch(e){
- CART=[];
+  cartItems = [];
 }
 
-const money=n=>Number(n||0).toLocaleString("en-IN");
-
-function esc(v){
- return String(v??"")
-  .replace(/&/g,"&amp;")
-  .replace(/</g,"&lt;")
-  .replace(/>/g,"&gt;")
-  .replace(/"/g,"&quot;")
-  .replace(/'/g,"&#039;");
-}
+/* ==========================
+   LOAD PRODUCTS
+========================== */
 
 async function loadProducts(){
- const grid=document.getElementById("productGrid");
 
- try{
-  const response=await fetch("/api/products?time="+Date.now(),{
-   cache:"no-store"
-  });
+  const message =
+    document.getElementById("productMessage");
 
-  if(!response.ok){
-   throw new Error("Products could not be loaded.");
+  try{
+
+    message.textContent = "Loading products...";
+
+    const response =
+      await fetch("/api/products",{
+        cache:"no-store"
+      });
+
+    if(!response.ok){
+      throw new Error(
+        "Server returned " + response.status
+      );
+    }
+
+    const data = await response.json();
+
+    if(!Array.isArray(data)){
+      throw new Error(
+        "Invalid product data received"
+      );
+    }
+
+    products = data;
+
+    message.textContent =
+      products.length
+        ? products.length + " products available"
+        : "No products available.";
+
+    renderProducts();
+    renderCart();
+
+  }catch(error){
+
+    console.error(
+      "Product loading error:",
+      error
+    );
+
+    message.textContent =
+      "Products could not load. Please refresh the page.";
+
+    document.getElementById(
+      "productGrid"
+    ).innerHTML =
+      '<div style="grid-column:1/-1;background:white;padding:25px;border-radius:12px">Unable to load products right now.</div>';
+
   }
-
-  const data=await response.json();
-
-  if(!Array.isArray(data)){
-   throw new Error("Invalid products data.");
-  }
-
-  PRODUCTS=data;
-
-  renderProducts();
-  renderCart();
-
- }catch(error){
-  console.error(error);
-
-  document.getElementById("productCount").textContent="Products unavailable";
-
-  grid.innerHTML=`
-   <div style="grid-column:1/-1;background:white;padding:35px;border-radius:12px;text-align:center">
-    <h3>Products could not be loaded.</h3>
-    <p>Please refresh the page.</p>
-    <button class="green-btn" onclick="loadProducts()">Retry</button>
-   </div>
-  `;
- }
 }
 
+/* ==========================
+   PRODUCT DESCRIPTION
+========================== */
+
+function descriptionFor(product){
+
+  const category =
+    (product.category || "").toLowerCase();
+
+  if(category.includes("nutrition")){
+    return "Nutritional support formulated for everyday animal health, growth and wellbeing.";
+  }
+
+  if(category.includes("dairy")){
+    return "Reliable dairy and animal-care product designed for professional farm use.";
+  }
+
+  if(category.includes("milk")){
+    return "Practical milk handling solution for dairy farms and livestock owners.";
+  }
+
+  if(category.includes("farm")){
+    return "Useful farm-care product designed to support efficient livestock management.";
+  }
+
+  return "Quality veterinary and animal healthcare product from the VetBeings catalogue.";
+}
+
+/* ==========================
+   RENDER PRODUCTS
+========================== */
+
 function renderProducts(){
- const search=document.getElementById("searchBox").value.toLowerCase().trim();
 
- const filtered=PRODUCTS.filter(p=>{
-  return String(p.name||"").toLowerCase().includes(search) ||
-         String(p.category||"").toLowerCase().includes(search) ||
-         String(p.description||"").toLowerCase().includes(search);
- });
+  const grid =
+    document.getElementById("productGrid");
 
- document.getElementById("productCount").textContent=
-  `${filtered.length} product${filtered.length===1?"":"s"}`;
+  const search =
+    (
+      document.getElementById("search").value || ""
+    ).toLowerCase().trim();
 
- if(!filtered.length){
-  document.getElementById("productGrid").innerHTML=`
-   <div style="grid-column:1/-1;background:#fff;padding:35px;border-radius:12px;text-align:center">
-    No products found.
-   </div>
-  `;
-  return;
- }
+  const filtered =
+    products.filter(product => {
 
- document.getElementById("productGrid").innerHTML=filtered.map(p=>{
-  const stock=Number(p.stock||0);
-  const image=p.image
-   ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy">`
-   : `<div class="no-photo">💊</div>`;
-
-  return `
-   <article class="card">
-    <div class="product-photo">${image}</div>
-
-    <div class="category-name">${esc(p.category||"Veterinary Healthcare")}</div>
-
-    <h3>${esc(p.name||"Product")}</h3>
-
-    <div class="desc">
-     ${esc(p.description||"Veterinary healthcare product from VetBeings.")}
-    </div>
-
-    <div class="stock">
-     ${stock>0
-      ? `<span class="in-stock">● In Stock (${stock})</span>`
-      : `<span class="out-stock">● Out of Stock</span>`
-     }
-    </div>
-
-    <div class="price">₹${money(p.price)}</div>
-
-    <div class="card-buttons">
-     <but
+      const text =
+        (
+          (product.n
