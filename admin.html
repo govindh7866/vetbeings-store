@@ -6,93 +6,25 @@
 <title>VetBeings Admin</title>
 
 <style>
-body{
-  font-family:Arial,sans-serif;
-  background:#f5f7f5;
-  margin:0;
-  padding:25px;
-}
-.box{
-  max-width:1100px;
-  margin:auto;
-  background:#fff;
-  padding:22px;
-  border-radius:12px;
-}
-.form-area{
-  display:flex;
-  flex-wrap:wrap;
-  gap:7px;
-  margin:15px 0;
-}
-input{
-  padding:10px;
-  border:1px solid #ccc;
-  border-radius:5px;
-  box-sizing:border-box;
-}
-.form-area input{
-  flex:1;
-  min-width:150px;
-}
-button{
-  padding:10px;
-  background:#08753f;
-  color:white;
-  border:0;
-  border-radius:5px;
-  cursor:pointer;
-}
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:20px;
-}
-td,th{
-  padding:9px;
-  border-bottom:1px solid #ddd;
-  text-align:left;
-}
-.product-img{
-  width:55px;
-  height:55px;
-  object-fit:cover;
-  border-radius:6px;
-  border:1px solid #ddd;
-}
-#loginBox{
-  max-width:400px;
-  margin:80px auto;
-  background:white;
-  padding:25px;
-  border-radius:12px;
-  text-align:center;
-}
-#loginBox input{
-  width:90%;
-  margin-bottom:12px;
-}
-#error{
-  color:#c62828;
-}
-#imagePreview{
-  width:100px;
-  height:100px;
-  object-fit:cover;
-  border-radius:8px;
-  border:1px solid #ddd;
-  display:none;
-  margin:10px 0;
-}
+body{font-family:Arial,sans-serif;background:#f5f7f5;margin:0;padding:20px}
+.box{max-width:1100px;margin:auto;background:#fff;padding:20px;border-radius:12px}
+input{padding:11px;margin:5px;border:1px solid #ccc;border-radius:6px;box-sizing:border-box}
+button{padding:11px 14px;margin:4px;background:#08753f;color:#fff;border:0;border-radius:6px;cursor:pointer}
+table{width:100%;border-collapse:collapse;margin-top:20px}
+td,th{padding:9px;border-bottom:1px solid #ddd;text-align:left}
+#loginBox{max-width:400px;margin:80px auto;background:#fff;padding:25px;border-radius:12px;text-align:center}
+#loginBox input{width:95%}
+#error{color:#c62828}
+.form{display:flex;flex-wrap:wrap;gap:5px;margin-top:15px}
+.form input{flex:1;min-width:150px}
+.product-img{width:55px;height:55px;object-fit:cover;border-radius:7px;border:1px solid #ddd}
+#preview{width:140px;height:140px;object-fit:cover;border-radius:10px;border:1px solid #ddd;display:none;margin:12px 5px}
+#uploadStatus{font-weight:bold;margin:8px 5px}
 @media(max-width:700px){
-  body{padding:10px}
-  table{font-size:11px}
-  .box{padding:10px}
-  td,th{padding:6px}
-  .product-img{
-    width:42px;
-    height:42px;
-  }
+ body{padding:8px}
+ .box{padding:10px}
+ table{font-size:11px}
+ td,th{padding:6px}
 }
 </style>
 </head>
@@ -100,23 +32,18 @@ td,th{
 <body>
 
 <div id="loginBox">
-  <h2>🔐 VetBeings Admin Login</h2>
-  <p>Enter admin password to continue.</p>
-
-  <input id="password" type="password" placeholder="Admin Password">
-
-  <br>
-
-  <button onclick="login()">Login</button>
-
-  <p id="error"></p>
+<h2>🔐 VetBeings Admin Login</h2>
+<p>Enter admin password to continue.</p>
+<input id="password" type="password" placeholder="Admin Password">
+<br>
+<button onclick="login()">Login</button>
+<p id="error"></p>
 </div>
-
 
 <div class="box" id="dashboard" style="display:none">
 
 <h1>VetBeings Admin Dashboard</h1>
-<p>Manage products, product images, prices, stock and orders.</p>
+<p>Manage product photos, details, stock and orders.</p>
 
 <button onclick="logout()">Logout</button>
 
@@ -126,36 +53,35 @@ td,th{
 
 <input id="id" type="hidden">
 
-<div class="form-area">
-
+<div class="form">
 <input id="name" placeholder="Product name">
-
 <input id="category" placeholder="Category">
-
 <input id="price" type="number" placeholder="Price">
-
 <input id="stock" type="number" placeholder="Stock">
-
-<input
-  id="image"
-  type="text"
-  placeholder="Product Image URL"
-  oninput="previewImage()"
->
-
-<button onclick="save()">Save Product</button>
-
 </div>
 
-<img id="imagePreview" alt="Product preview">
+<h3>Product Photo</h3>
 
+<input
+ id="imageFile"
+ type="file"
+ accept="image/jpeg,image/png,image/webp"
+ onchange="showPreview()"
+>
+
+<br>
+
+<img id="preview" alt="Product Preview">
+
+<p id="uploadStatus"></p>
+
+<button id="saveBtn" onclick="save()">Save Product</button>
+<button onclick="clearForm()">Clear</button>
 
 <h2>Products</h2>
 
 <div style="overflow-x:auto">
-
 <table>
-
 <thead>
 <tr>
 <th>Photo</th>
@@ -166,351 +92,274 @@ td,th{
 <th>Action</th>
 </tr>
 </thead>
-
 <tbody id="body"></tbody>
-
 </table>
-
 </div>
 
-
 <h2>Orders</h2>
-
 <div id="orders"></div>
 
 </div>
-
 
 <script>
 
 let P=[];
 let adminPassword="";
-
+let oldImage="";
 
 function authHeaders(extra={}){
-
-  return {
-    ...extra,
-    "Authorization":"Bearer "+adminPassword
-  };
-
+ return {
+   ...extra,
+   "Authorization":"Bearer "+adminPassword
+ };
 }
-
 
 async function login(){
 
-  const pass=document.getElementById("password").value;
+ const pass=document.getElementById("password").value;
 
-  if(!pass){
+ if(!pass){
+   error.innerText="Please enter password.";
+   return;
+ }
 
-    document.getElementById("error").innerText=
-      "Please enter password.";
+ try{
 
-    return;
+   const r=await fetch("/api/admin/orders",{
+     headers:{
+       "Authorization":"Bearer "+pass
+     }
+   });
 
-  }
+   if(!r.ok){
+     error.innerText="❌ Wrong password";
+     return;
+   }
 
-  try{
+   adminPassword=pass;
 
-    const r=await fetch("/api/admin/orders",{
+   loginBox.style.display="none";
+   dashboard.style.display="block";
+   error.innerText="";
 
-      headers:{
-        "Authorization":"Bearer "+pass
-      }
+   await load();
 
-    });
-
-    if(!r.ok){
-
-      document.getElementById("error").innerText=
-        "❌ Wrong password";
-
-      return;
-
-    }
-
-    adminPassword=pass;
-
-    document.getElementById("loginBox").style.display="none";
-
-    document.getElementById("dashboard").style.display="block";
-
-    document.getElementById("error").innerText="";
-
-    load();
-
-  }
-
-  catch(e){
-
-    document.getElementById("error").innerText=
-      "Server connection error.";
-
-  }
-
+ }catch(e){
+   error.innerText="Server connection error.";
+ }
 }
-
 
 async function load(){
 
-  P=await fetch("/api/products")
-    .then(r=>r.json());
+ try{
 
-  document.getElementById("body").innerHTML=
-    P.map(x=>`
+   P=await fetch("/api/products").then(r=>r.json());
 
-    <tr>
+   body.innerHTML=P.map(x=>`
+   <tr>
 
-      <td>
-        ${
-          x.image
-          ? `<img class="product-img"
-               src="${x.image}"
-               onerror="this.style.display='none'">`
-          : "No photo"
-        }
-      </td>
+   <td>
+   ${
+     x.image
+     ? `<img class="product-img" src="${x.image}" alt="">`
+     : "No photo"
+   }
+   </td>
 
-      <td>${x.name || ""}</td>
+   <td>${x.name || ""}</td>
+   <td>${x.category || ""}</td>
+   <td>₹${x.price || 0}</td>
+   <td>${x.stock || 0}</td>
 
-      <td>${x.category || ""}</td>
+   <td>
+   <button onclick="editProduct(${x.id})">Edit</button>
+   <button onclick="delProduct(${x.id})">Delete</button>
+   </td>
 
-      <td>₹${x.price || 0}</td>
+   </tr>
+   `).join("");
 
-      <td>${x.stock || 0}</td>
+   const r=await fetch("/api/admin/orders",{
+     headers:authHeaders()
+   });
 
-      <td>
+   if(!r.ok){
+     logout();
+     return;
+   }
 
-        <button onclick="edit(${x.id})">
-          Edit
-        </button>
+   const o=await r.json();
 
-        <button onclick="del(${x.id})">
-          Delete
-        </button>
+   orders.innerHTML=o.map(x=>`
+   <p>
+   <b>${x.id}</b> —
+   ${x.status} —
+   ${x.payment} —
+   ₹${x.total || 0} —
+   ${x.customer?.name || ""}
+   </p>
+   `).join("") || "No orders yet";
 
-      </td>
-
-    </tr>
-
-  `).join("");
-
-
-  const r=await fetch("/api/admin/orders",{
-
-    headers:authHeaders()
-
-  });
-
-
-  if(r.status===401 || r.status===503){
-
-    logout();
-
-    return;
-
-  }
-
-
-  const o=await r.json();
-
-
-  document.getElementById("orders").innerHTML=
-
-    o.map(x=>`
-
-      <p>
-
-        <b>${x.id}</b> —
-
-        ${x.status} —
-
-        ${x.payment} —
-
-        ₹${x.total || 0} —
-
-        ${x.customer?.name || ""}
-
-      </p>
-
-    `).join("")
-
-    || "No orders yet";
-
+ }catch(e){
+   console.error(e);
+ }
 }
 
+function showPreview(){
 
-function edit(i){
+ const file=imageFile.files[0];
 
-  const x=P.find(v=>v.id==i);
+ if(!file) return;
 
-  if(!x) return;
+ if(file.size > 5*1024*1024){
+   alert("Photo maximum 5 MB honi chahiye.");
+   imageFile.value="";
+   return;
+ }
 
-  document.getElementById("id").value=x.id;
-
-  document.getElementById("name").value=x.name || "";
-
-  document.getElementById("category").value=x.category || "";
-
-  document.getElementById("price").value=x.price || "";
-
-  document.getElementById("stock").value=x.stock || "";
-
-  document.getElementById("image").value=x.image || "";
-
-  previewImage();
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
+ preview.src=URL.createObjectURL(file);
+ preview.style.display="block";
 }
 
+function editProduct(i){
 
-function previewImage(){
+ const x=P.find(v=>v.id==i);
 
-  const url=document.getElementById("image").value.trim();
+ if(!x) return;
 
-  const preview=document.getElementById("imagePreview");
+ id.value=x.id;
+ name.value=x.name || "";
+ category.value=x.category || "";
+ price.value=x.price || "";
+ stock.value=x.stock || "";
 
-  if(url){
+ oldImage=x.image || "";
 
-    preview.src=url;
+ imageFile.value="";
 
-    preview.style.display="block";
+ if(oldImage){
+   preview.src=oldImage;
+   preview.style.display="block";
+ }else{
+   preview.style.display="none";
+ }
 
-  }else{
-
-    preview.removeAttribute("src");
-
-    preview.style.display="none";
-
-  }
-
+ window.scrollTo({
+   top:0,
+   behavior:"smooth"
+ });
 }
 
+function clearForm(){
+
+ id.value="";
+ name.value="";
+ category.value="";
+ price.value="";
+ stock.value="";
+ imageFile.value="";
+ oldImage="";
+ preview.removeAttribute("src");
+ preview.style.display="none";
+ uploadStatus.innerText="";
+}
 
 async function save(){
 
-  const productName=
-    document.getElementById("name").value.trim();
+ const productName=name.value.trim();
 
-  if(!productName){
+ if(!productName){
+   alert("Product name enter karo.");
+   return;
+ }
 
-    alert("Product name enter karo.");
+ const fd=new FormData();
 
-    return;
+ if(id.value){
+   fd.append("id",id.value);
+ }
 
-  }
+ fd.append("name",name.value.trim());
+ fd.append("category",category.value.trim());
+ fd.append("price",price.value || 0);
+ fd.append("stock",stock.value || 0);
 
+ if(imageFile.files[0]){
+   fd.append("image",imageFile.files[0]);
+ }
 
-  const r=await fetch("/api/admin/products",{
+ saveBtn.disabled=true;
+ uploadStatus.innerText="⏳ Saving product / uploading photo...";
 
-    method:"POST",
+ try{
 
-    headers:authHeaders({
+   const r=await fetch("/api/admin/products",{
+     method:"POST",
+     headers:{
+       "Authorization":"Bearer "+adminPassword
+     },
+     body:fd
+   });
 
-      "Content-Type":"application/json"
+   const result=await r.json();
 
-    }),
+   if(!r.ok){
+     throw new Error(result.error || "Unable to save");
+   }
 
-    body:JSON.stringify({
+   uploadStatus.innerText="✅ Product saved successfully";
 
-      id:
-        document.getElementById("id").value
-        ? Number(document.getElementById("id").value)
-        : undefined,
+   clearForm();
 
-      name:
-        document.getElementById("name").value.trim(),
+   await load();
 
-      category:
-        document.getElementById("category").value.trim(),
+ }catch(e){
 
-      price:
-        Number(document.getElementById("price").value),
+   uploadStatus.innerText="❌ "+e.message;
 
-      stock:
-        Number(document.getElementById("stock").value),
+ }finally{
 
-      image:
-        document.getElementById("image").value.trim()
-
-    })
-
-  });
-
-
-  if(!r.ok){
-
-    alert("Unauthorized or unable to save product.");
-
-    return;
-
-  }
-
-
-  alert("✅ Product saved successfully");
-
-  location.reload();
-
+   saveBtn.disabled=false;
+ }
 }
 
+async function delProduct(i){
 
-async function del(i){
+ if(!confirm("Delete product?")) return;
 
-  if(!confirm("Delete product?")) return;
+ try{
 
+   const r=await fetch("/api/admin/products/"+i,{
+     method:"DELETE",
+     headers:authHeaders()
+   });
 
-  const r=await fetch(
+   const result=await r.json();
 
-    "/api/admin/products/"+i,
+   if(!r.ok){
+     throw new Error(result.error || "Delete failed");
+   }
 
-    {
+   await load();
 
-      method:"DELETE",
-
-      headers:authHeaders()
-
-    }
-
-  );
-
-
-  if(!r.ok){
-
-    alert("Unauthorized or unable to delete product.");
-
-    return;
-
-  }
-
-
-  load();
-
+ }catch(e){
+   alert(e.message);
+ }
 }
-
 
 function logout(){
 
-  adminPassword="";
+ adminPassword="";
 
-  document.getElementById("dashboard").style.display="none";
+ dashboard.style.display="none";
+ loginBox.style.display="block";
 
-  document.getElementById("loginBox").style.display="block";
-
-  document.getElementById("password").value="";
-
+ password.value="";
+ clearForm();
 }
 
-
-document
-.getElementById("password")
-.addEventListener("keydown",function(e){
-
-  if(e.key==="Enter") login();
-
+password.addEventListener("keydown",function(e){
+ if(e.key==="Enter") login();
 });
 
 </script>
