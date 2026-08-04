@@ -7,23 +7,33 @@
 
 <style>
 body{
-  font-family:Arial;
+  font-family:Arial,sans-serif;
   background:#f5f7f5;
   margin:0;
-  padding:25px
+  padding:25px;
 }
 .box{
   max-width:1100px;
   margin:auto;
   background:#fff;
   padding:22px;
-  border-radius:12px
+  border-radius:12px;
+}
+.form-area{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin:15px 0;
 }
 input{
   padding:10px;
-  margin:4px;
   border:1px solid #ccc;
-  border-radius:5px
+  border-radius:5px;
+  box-sizing:border-box;
+}
+.form-area input{
+  flex:1;
+  min-width:150px;
 }
 button{
   padding:10px;
@@ -31,17 +41,24 @@ button{
   color:white;
   border:0;
   border-radius:5px;
-  cursor:pointer
+  cursor:pointer;
 }
 table{
   width:100%;
   border-collapse:collapse;
-  margin-top:20px
+  margin-top:20px;
 }
 td,th{
   padding:9px;
   border-bottom:1px solid #ddd;
-  text-align:left
+  text-align:left;
+}
+.product-img{
+  width:55px;
+  height:55px;
+  object-fit:cover;
+  border-radius:6px;
+  border:1px solid #ddd;
 }
 #loginBox{
   max-width:400px;
@@ -49,19 +66,33 @@ td,th{
   background:white;
   padding:25px;
   border-radius:12px;
-  text-align:center
+  text-align:center;
 }
 #loginBox input{
   width:90%;
-  box-sizing:border-box;
-  margin-bottom:12px
+  margin-bottom:12px;
 }
 #error{
   color:#c62828;
 }
+#imagePreview{
+  width:100px;
+  height:100px;
+  object-fit:cover;
+  border-radius:8px;
+  border:1px solid #ddd;
+  display:none;
+  margin:10px 0;
+}
 @media(max-width:700px){
-  table{font-size:12px}
+  body{padding:10px}
+  table{font-size:11px}
   .box{padding:10px}
+  td,th{padding:6px}
+  .product-img{
+    width:42px;
+    height:42px;
+  }
 }
 </style>
 </head>
@@ -71,34 +102,63 @@ td,th{
 <div id="loginBox">
   <h2>🔐 VetBeings Admin Login</h2>
   <p>Enter admin password to continue.</p>
+
   <input id="password" type="password" placeholder="Admin Password">
+
   <br>
+
   <button onclick="login()">Login</button>
+
   <p id="error"></p>
 </div>
+
 
 <div class="box" id="dashboard" style="display:none">
 
 <h1>VetBeings Admin Dashboard</h1>
-<p>Secure administration panel for products and orders.</p>
+<p>Manage products, product images, prices, stock and orders.</p>
 
 <button onclick="logout()">Logout</button>
 
 <hr>
 
+<h2>Add / Edit Product</h2>
+
 <input id="id" type="hidden">
+
+<div class="form-area">
+
 <input id="name" placeholder="Product name">
+
 <input id="category" placeholder="Category">
+
 <input id="price" type="number" placeholder="Price">
+
 <input id="stock" type="number" placeholder="Stock">
+
+<input
+  id="image"
+  type="text"
+  placeholder="Product Image URL"
+  oninput="previewImage()"
+>
 
 <button onclick="save()">Save Product</button>
 
+</div>
+
+<img id="imagePreview" alt="Product preview">
+
+
 <h2>Products</h2>
 
+<div style="overflow-x:auto">
+
 <table>
+
 <thead>
 <tr>
+<th>Photo</th>
 <th>Name</th>
 <th>Category</th>
 <th>Price</th>
@@ -108,161 +168,349 @@ td,th{
 </thead>
 
 <tbody id="body"></tbody>
+
 </table>
 
+</div>
+
+
 <h2>Orders</h2>
+
 <div id="orders"></div>
 
 </div>
+
 
 <script>
 
 let P=[];
 let adminPassword="";
 
+
 function authHeaders(extra={}){
+
   return {
     ...extra,
     "Authorization":"Bearer "+adminPassword
   };
+
 }
+
 
 async function login(){
 
   const pass=document.getElementById("password").value;
 
   if(!pass){
-    document.getElementById("error").innerText="Please enter password.";
+
+    document.getElementById("error").innerText=
+      "Please enter password.";
+
     return;
+
   }
 
   try{
 
     const r=await fetch("/api/admin/orders",{
+
       headers:{
         "Authorization":"Bearer "+pass
       }
+
     });
 
     if(!r.ok){
-      document.getElementById("error").innerText="❌ Wrong password";
+
+      document.getElementById("error").innerText=
+        "❌ Wrong password";
+
       return;
+
     }
 
     adminPassword=pass;
 
     document.getElementById("loginBox").style.display="none";
+
     document.getElementById("dashboard").style.display="block";
+
+    document.getElementById("error").innerText="";
 
     load();
 
-  }catch(e){
-    document.getElementById("error").innerText="Server connection error.";
   }
+
+  catch(e){
+
+    document.getElementById("error").innerText=
+      "Server connection error.";
+
+  }
+
 }
+
 
 async function load(){
 
-  P=await fetch("/api/products").then(r=>r.json());
+  P=await fetch("/api/products")
+    .then(r=>r.json());
 
-  document.getElementById("body").innerHTML=P.map(x=>`
-  <tr>
-  <td>${x.name}</td>
-  <td>${x.category}</td>
-  <td>₹${x.price}</td>
-  <td>${x.stock}</td>
-  <td>
-  <button onclick="edit(${x.id})">Edit</button>
-  <button onclick="del(${x.id})">Delete</button>
-  </td>
-  </tr>
+  document.getElementById("body").innerHTML=
+    P.map(x=>`
+
+    <tr>
+
+      <td>
+        ${
+          x.image
+          ? `<img class="product-img"
+               src="${x.image}"
+               onerror="this.style.display='none'">`
+          : "No photo"
+        }
+      </td>
+
+      <td>${x.name || ""}</td>
+
+      <td>${x.category || ""}</td>
+
+      <td>₹${x.price || 0}</td>
+
+      <td>${x.stock || 0}</td>
+
+      <td>
+
+        <button onclick="edit(${x.id})">
+          Edit
+        </button>
+
+        <button onclick="del(${x.id})">
+          Delete
+        </button>
+
+      </td>
+
+    </tr>
+
   `).join("");
 
+
   const r=await fetch("/api/admin/orders",{
+
     headers:authHeaders()
+
   });
 
+
   if(r.status===401 || r.status===503){
+
     logout();
+
     return;
+
   }
+
 
   const o=await r.json();
 
-  document.getElementById("orders").innerHTML=o.map(x=>`
-  <p>
-  <b>${x.id}</b> —
-  ${x.status} —
-  ${x.payment} —
-  ₹${x.total||0} —
-  ${x.customer?.name||""}
-  </p>
-  `).join("") || "No orders yet";
+
+  document.getElementById("orders").innerHTML=
+
+    o.map(x=>`
+
+      <p>
+
+        <b>${x.id}</b> —
+
+        ${x.status} —
+
+        ${x.payment} —
+
+        ₹${x.total || 0} —
+
+        ${x.customer?.name || ""}
+
+      </p>
+
+    `).join("")
+
+    || "No orders yet";
+
 }
+
 
 function edit(i){
 
-  let x=P.find(v=>v.id==i);
+  const x=P.find(v=>v.id==i);
+
+  if(!x) return;
 
   document.getElementById("id").value=x.id;
-  document.getElementById("name").value=x.name;
-  document.getElementById("category").value=x.category;
-  document.getElementById("price").value=x.price;
-  document.getElementById("stock").value=x.stock;
+
+  document.getElementById("name").value=x.name || "";
+
+  document.getElementById("category").value=x.category || "";
+
+  document.getElementById("price").value=x.price || "";
+
+  document.getElementById("stock").value=x.stock || "";
+
+  document.getElementById("image").value=x.image || "";
+
+  previewImage();
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
 }
+
+
+function previewImage(){
+
+  const url=document.getElementById("image").value.trim();
+
+  const preview=document.getElementById("imagePreview");
+
+  if(url){
+
+    preview.src=url;
+
+    preview.style.display="block";
+
+  }else{
+
+    preview.removeAttribute("src");
+
+    preview.style.display="none";
+
+  }
+
+}
+
 
 async function save(){
 
-  const r=await fetch("/api/admin/products",{
-    method:"POST",
-    headers:authHeaders({
-      "Content-Type":"application/json"
-    }),
-    body:JSON.stringify({
-      id:document.getElementById("id").value
-        ? Number(document.getElementById("id").value)
-        : undefined,
-      name:document.getElementById("name").value,
-      category:document.getElementById("category").value,
-      price:Number(document.getElementById("price").value),
-      stock:Number(document.getElementById("stock").value)
-    })
-  });
+  const productName=
+    document.getElementById("name").value.trim();
 
-  if(!r.ok){
-    alert("Unauthorized or unable to save product.");
+  if(!productName){
+
+    alert("Product name enter karo.");
+
     return;
+
   }
 
+
+  const r=await fetch("/api/admin/products",{
+
+    method:"POST",
+
+    headers:authHeaders({
+
+      "Content-Type":"application/json"
+
+    }),
+
+    body:JSON.stringify({
+
+      id:
+        document.getElementById("id").value
+        ? Number(document.getElementById("id").value)
+        : undefined,
+
+      name:
+        document.getElementById("name").value.trim(),
+
+      category:
+        document.getElementById("category").value.trim(),
+
+      price:
+        Number(document.getElementById("price").value),
+
+      stock:
+        Number(document.getElementById("stock").value),
+
+      image:
+        document.getElementById("image").value.trim()
+
+    })
+
+  });
+
+
+  if(!r.ok){
+
+    alert("Unauthorized or unable to save product.");
+
+    return;
+
+  }
+
+
+  alert("✅ Product saved successfully");
+
   location.reload();
+
 }
+
 
 async function del(i){
 
   if(!confirm("Delete product?")) return;
 
-  const r=await fetch("/api/admin/products/"+i,{
-    method:"DELETE",
-    headers:authHeaders()
-  });
+
+  const r=await fetch(
+
+    "/api/admin/products/"+i,
+
+    {
+
+      method:"DELETE",
+
+      headers:authHeaders()
+
+    }
+
+  );
+
 
   if(!r.ok){
+
     alert("Unauthorized or unable to delete product.");
+
     return;
+
   }
 
-  location.reload();
+
+  load();
+
 }
+
 
 function logout(){
+
   adminPassword="";
+
   document.getElementById("dashboard").style.display="none";
+
   document.getElementById("loginBox").style.display="block";
+
   document.getElementById("password").value="";
+
 }
 
-document.getElementById("password").addEventListener("keydown",function(e){
+
+document
+.getElementById("password")
+.addEventListener("keydown",function(e){
+
   if(e.key==="Enter") login();
+
 });
 
 </script>
