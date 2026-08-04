@@ -3,1339 +3,417 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VetBeings | Veterinary Medicines & Animal Healthcare</title>
-<meta name="description" content="VetBeings veterinary medicines, animal nutrition and healthcare products.">
-
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<title>VetBeings Admin Dashboard</title>
 
 <style>
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-
-body{
-margin:0;
-font-family:Arial,Helvetica,sans-serif;
-background:#f7faf8;
-color:#14251c
-}
-
-button,input,textarea{font:inherit}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f7f5;color:#173025}
+button,input,textarea,select{font:inherit}
 button{cursor:pointer}
-a{text-decoration:none}
 
-.top{
-background:#043d2b;
-color:#fff;
-padding:8px 5%;
-display:flex;
-justify-content:space-between;
-gap:15px;
-font-size:12px
+.header{
+background:#063f2b;color:white;padding:16px 5%;
+display:flex;justify-content:space-between;align-items:center
 }
-
-.nav{
-height:78px;
-background:#fff;
-padding:9px 5%;
-display:flex;
-align-items:center;
-gap:14px;
-position:sticky;
-top:0;
-z-index:30;
-box-shadow:0 3px 18px #00000012
-}
-
-.logo{
-width:115px;
-height:58px;
-object-fit:contain
-}
-
-.search{
-flex:1;
-padding:13px 15px;
-border:1px solid #d9e2dd;
-border-radius:9px;
-outline:none
-}
-
-.btn{
-border:0;
-background:#087847;
-color:#fff;
-padding:12px 16px;
-border-radius:8px;
-font-weight:800
-}
-
-.btn:hover{background:#05663b}
-
-/* =========================
-   PREMIUM HERO
-========================= */
-
-.hero{
-min-height:520px;
-padding:75px 6%;
-display:flex;
-align-items:center;
-color:#fff;
-
-background:
-linear-gradient(
-90deg,
-rgba(1,55,37,.96),
-rgba(1,55,37,.72),
-rgba(0,0,0,.15)
-),
-url("vet-doctor-hero.png");
-
-background-size:cover;
-background-position:center;
-background-repeat:no-repeat
-}
-
-.heroIn{max-width:720px}
-
-.badge{
-display:inline-block;
-padding:8px 13px;
-border:1px solid #ffffff55;
-border-radius:30px;
-background:#ffffff16;
-font-size:11px;
-font-weight:bold;
-letter-spacing:1px
-}
-
-.hero h1{
-font-size:55px;
-line-height:1.02;
-margin:20px 0 18px;
-letter-spacing:-1.5px
-}
-
-.hero p{
-font-size:17px;
-line-height:1.7;
-color:#e3f1ea;
-max-width:650px
-}
-
-.heroBtns{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-top:28px
-}
-
-.white{
-background:#fff;
-color:#076b42;
-padding:14px 19px;
-border-radius:8px;
-font-weight:bold
-}
-
-.outline{
-border:1px solid #ffffff77;
-color:#fff;
-padding:14px 19px;
-border-radius:8px;
-font-weight:bold
-}
-
-/* =========================
-   TRUST
-========================= */
-
-.trustWrap{
-max-width:1250px;
-margin:-35px auto 0;
-padding:0 15px;
-position:relative;
-z-index:5
-}
-
-.trust{
-background:#fff;
-display:grid;
-grid-template-columns:repeat(4,1fr);
-border-radius:14px;
-overflow:hidden;
-box-shadow:0 15px 35px #00000018
-}
-
-.trust div{
-padding:23px;
-border-right:1px solid #e7ece9
-}
-
-.trust div:last-child{border:0}
-
-.trust b{
-display:block;
-margin-bottom:6px
-}
-
-.trust small{
-color:#6d7a72;
-line-height:1.5
-}
-
-/* =========================
-   SECTIONS
-========================= */
-
-.section{
-max-width:1250px;
-margin:auto;
-padding:70px 16px
-}
-
-.center{text-align:center}
-
-.green{
-color:#087847;
-font-size:11px;
-font-weight:900;
-letter-spacing:1.2px;
-text-transform:uppercase
-}
-
-.title{
-font-size:39px;
-margin:9px 0 12px
-}
-
-.sub{
-max-width:700px;
-margin:0 auto 32px;
-color:#68766e;
-line-height:1.7
-}
-
-/* =========================
-   CATEGORIES
-========================= */
-
-.cats{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:16px
-}
-
-.cat{
-background:#fff;
-border:1px solid #e0e8e3;
-border-radius:14px;
-overflow:hidden
-}
-
-.cat img{
-width:100%;
-height:185px;
-object-fit:cover
-}
-
-.catText{padding:15px}
-
-.cat h3{
-margin:0 0 6px
-}
-
-.cat p{
-margin:0;
-color:#6d7972;
-font-size:12px;
-line-height:1.5
-}
-
-/* =========================
-   PRODUCTS
-========================= */
-
-.productsArea{
-background:#edf6f1;
-padding:65px 0
-}
-
-.productHead{
-max-width:1250px;
-margin:auto;
-padding:0 16px 20px
-}
-
-.productHead h2{
-font-size:39px;
-margin:8px 0
-}
-
-#productStatus{
-color:#66756c;
-font-size:13px
-}
-
-.grid{
-max-width:1250px;
-margin:auto;
-padding:10px 16px;
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:17px
-}
-
-.product{
-background:#fff;
-border:1px solid #dde6e1;
-border-radius:14px;
-overflow:hidden;
-display:flex;
-flex-direction:column;
-transition:.2s
-}
-
-.product:hover{
-transform:translateY(-4px);
-box-shadow:0 12px 30px #00000012
-}
-
-.photo{
-height:220px;
-background:#f3f7f5;
-display:flex;
-align-items:center;
-justify-content:center;
-overflow:hidden
-}
-
-.photo img{
-width:100%;
-height:100%;
-object-fit:contain;
-padding:8px
-}
-
-.noPhoto{font-size:55px}
-
-.info{
-padding:16px;
-display:flex;
-flex-direction:column;
-flex:1
-}
-
-.category{
-font-size:10px;
-color:#087847;
-font-weight:900;
-text-transform:uppercase;
-letter-spacing:.5px
-}
-
-.info h3{
-font-size:17px;
-margin:8px 0
-}
-
-.desc{
-font-size:12px;
-color:#68766e;
-line-height:1.55;
-min-height:56px
-}
-
-.stock{
-font-size:11px;
-color:#526158;
-margin:10px 0
-}
-
-.price{
-font-size:22px;
-font-weight:900;
-margin-top:auto
-}
-
-.product .btn{
-width:100%;
-margin-top:12px
-}
-
-.product .btn:disabled{
-background:#9da8a2;
-cursor:not-allowed
-}
-
-/* =========================
-   ABOUT
-========================= */
-
-.about{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:45px;
-align-items:center
-}
-
-.about img{
-width:100%;
-height:420px;
-object-fit:cover;
-border-radius:17px;
-box-shadow:0 18px 40px #00000016
-}
-
-.about h2{
-font-size:39px;
-margin:10px 0
-}
-
-.about p{
-color:#65736b;
-line-height:1.7
-}
-
-.checks{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:9px;
-margin-top:20px
-}
-
-.check{
-background:#edf7f1;
-padding:12px;
-border-radius:8px;
-font-size:12px;
-font-weight:bold
-}
-
-/* =========================
-   SUPPORT
-========================= */
-
-.support{
-background:#034a34;
-color:#fff;
-padding:65px 5%;
-text-align:center
-}
-
-.support h2{
-font-size:38px;
-margin:10px 0
+.header h2{margin:0}
+.logout{
+background:white;color:#075d3a;border:0;
+padding:9px 14px;border-radius:7px;font-weight:bold
 }
 
-.support p{color:#c8ddd2}
-
-.supportGrid{
-max-width:1100px;
-margin:30px auto 0;
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:15px
-}
-
-.supportCard{
-background:#ffffff10;
-border:1px solid #ffffff18;
-border-radius:12px;
-padding:22px;
-text-align:left
-}
-
-/* =========================
-   HELP
-========================= */
-
-.help{
-max-width:1220px;
-margin:50px auto;
-padding:30px;
-background:#087847;
-color:#fff;
-border-radius:15px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:20px
-}
-
-.help h2{
-margin:0 0 6px
-}
-
-.help p{
-margin:0;
-color:#d9eee3
-}
-
-.wa{
-background:#fff;
-color:#087847;
-padding:13px 18px;
-border-radius:8px;
-font-weight:bold
-}
-
-/* =========================
-   FOOTER
-========================= */
-
-footer{
-background:#033c2b;
-color:#fff;
-padding:45px 5% 22px
-}
-
-.footerGrid{
-max-width:1200px;
-margin:auto;
-display:grid;
-grid-template-columns:2fr 1fr 1fr;
-gap:35px
-}
-
-.footerLogo{
-width:115px;
-background:#fff;
-padding:5px;
-border-radius:7px
-}
-
-footer p{
-color:#bed4c9;
-font-size:12px;
-line-height:1.8
-}
-
-.copy{
-max-width:1200px;
-margin:30px auto 0;
-padding-top:18px;
-border-top:1px solid #ffffff1d;
-color:#9dbbae;
-font-size:11px;
-text-align:center
-}
-
-/* =========================
-   CART
-========================= */
-
-.overlay{
-position:fixed;
-inset:0;
-background:#0007;
-z-index:90;
-display:none
-}
-
-.overlay.show{display:block}
-
-.cart{
-position:fixed;
-right:-470px;
-top:0;
-width:450px;
-max-width:100%;
-height:100vh;
-background:#fff;
-z-index:100;
-padding:22px;
-overflow:auto;
-box-shadow:-8px 0 30px #0003;
-transition:.25s
-}
-
-.cart.open{right:0}
-
-.close{
-float:right;
-border:0;
-background:#edf1ef;
-border-radius:50%;
-width:35px;
-height:35px
-}
-
-.cartRow{
-padding:14px 0;
-border-bottom:1px solid #e5ebe7
-}
-
-.cartName{
-font-weight:bold;
-margin-bottom:5px
-}
-
-.qty{
-width:29px;
-height:29px;
-border:1px solid #ccd7d1;
-background:#fff;
-border-radius:5px
-}
+.wrap{max-width:1200px;margin:auto;padding:25px 15px}
 
-.remove{
-border:0;
-background:none;
-color:#b42318;
-margin-left:8px
+.login{
+max-width:420px;margin:80px auto;background:white;
+padding:28px;border-radius:15px;
+box-shadow:0 8px 30px #0001
 }
 
-.total{
-font-size:23px;
-font-weight:900;
-margin:20px 0
+.card{
+background:white;border-radius:14px;padding:20px;
+margin-bottom:20px;box-shadow:0 4px 20px #0000000d
 }
 
 .field{
-width:100%;
-padding:12px;
-border:1px solid #d3ddd7;
-border-radius:8px;
-margin:5px 0
+width:100%;padding:12px;border:1px solid #d5dfd9;
+border-radius:8px;margin:6px 0
 }
 
-textarea.field{
-height:85px;
-resize:vertical
+.btn{
+border:0;background:#087745;color:white;
+padding:12px 16px;border-radius:8px;font-weight:bold
 }
 
-.pay{
-width:100%;
-margin-top:8px
+.red{background:#b42318}
+.gray{background:#53665c}
+.blue{background:#1769aa}
+.orange{background:#b86b00}
+
+.grid2{
+display:grid;grid-template-columns:1fr 1fr;gap:12px
 }
 
-.cod{background:#075c39}
-
-.message{
-display:none;
-padding:11px;
-border-radius:7px;
-margin:9px 0;
-font-size:12px
+.products{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:13px
 }
 
-.message.ok{
-display:block;
-background:#e5f6eb;
-color:#08683a
+.product{
+border:1px solid #e0e7e3;
+border-radius:12px;padding:12px
 }
 
-.message.err{
-display:block;
-background:#ffe8e8;
-color:#9c2020
+.product img{
+width:100%;height:150px;object-fit:contain;
+background:#f5f8f6;border-radius:8px
 }
 
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:900px){
-
-.cats,.grid{
-grid-template-columns:repeat(2,1fr)
+.noimg{
+height:150px;background:#f5f8f6;border-radius:8px;
+display:flex;align-items:center;justify-content:center;
+font-size:45px
 }
 
-.trust{
-grid-template-columns:repeat(2,1fr)
+.product h3{margin:9px 0 5px}
+
+.small{
+font-size:12px;color:#68776e;line-height:1.5
 }
 
-.about{
-grid-template-columns:1fr
+.actions{
+display:flex;gap:6px;margin-top:10px
 }
 
-.supportGrid{
-grid-template-columns:1fr
+.actions button{flex:1}
+
+.preview{
+width:150px;height:150px;object-fit:contain;
+border:1px solid #ddd;border-radius:10px;
+display:none;margin:10px 0
 }
 
-.footerGrid{
-grid-template-columns:1fr 1fr
+.order{
+border:1px solid #e0e7e3;
+border-radius:12px;padding:16px;margin:12px 0
 }
 
+.orderTop{
+display:flex;justify-content:space-between;
+align-items:flex-start;gap:10px
 }
 
-@media(max-width:600px){
-
-.top{font-size:10px}
-
-.top span:first-child{
-display:none
+.tag{
+padding:6px 9px;border-radius:20px;
+font-size:11px;font-weight:bold;
+background:#e5f5eb;color:#087745
 }
 
-.nav{
-height:67px;
-padding:7px 3%;
-gap:7px
+.statusArea{
+background:#f5f8f6;padding:12px;
+border-radius:9px;margin-top:12px
 }
 
-.logo{width:75px}
-
-.search{
-padding:10px;
-min-width:0
+.statusSelect{
+width:100%;padding:11px;border:1px solid #ccd8d1;
+border-radius:7px;background:white;margin-bottom:8px
 }
 
-.nav .btn{
-padding:10px;
-font-size:11px
+.hidden{display:none!important}
+
+.msg{
+padding:10px;border-radius:7px;
+margin:8px 0;display:none
 }
 
-.hero{
-min-height:450px;
-padding:55px 5%;
-background-position:center
+.ok{
+background:#e4f6ea;color:#086b38
 }
 
-.hero h1{
-font-size:38px
+.err{
+background:#ffe8e8;color:#9c1c1c
 }
 
-.hero p{
-font-size:14px
+.tabs{
+display:flex;gap:8px;margin-bottom:18px
 }
 
-.trustWrap{
-margin-top:-20px
+.tabs button{flex:1}
+
+.statGrid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;margin-bottom:20px
 }
 
-.trust div{
-padding:14px
+.stat{
+background:white;padding:15px;border-radius:12px;
+box-shadow:0 3px 15px #0000000d
 }
 
-.section{
-padding:50px 11px
+.stat b{
+display:block;font-size:24px;color:#087745
 }
 
-.title,
-.productHead h2,
-.about h2,
-.support h2{
-font-size:29px
+@media(max-width:800px){
+.products{grid-template-columns:1fr 1fr}
+.grid2{grid-template-columns:1fr}
+.statGrid{grid-template-columns:1fr 1fr}
 }
 
-.cats{gap:9px}
-
-.cat img{
-height:130px
-}
-
-.catText{
-padding:10px
-}
-
-.grid{
-gap:9px;
-padding:8px 9px
-}
-
-.photo{
-height:165px
-}
-
-.info{
-padding:11px
-}
-
-.info h3{
-font-size:14px
-}
-
-.desc{
-font-size:11px;
-min-height:50px
-}
-
-.price{
-font-size:19px
-}
-
-.product .btn{
-padding:10px 4px;
-font-size:10px
-}
-
-.about img{
-height:300px
-}
-
-.checks{
-grid-template-columns:1fr
-}
-
-.help{
-margin:30px 10px;
-flex-direction:column;
-align-items:flex-start
-}
-
-.footerGrid{
-grid-template-columns:1fr
-}
-
+@media(max-width:520px){
+.products{grid-template-columns:1fr}
+.header{padding:13px}
+.wrap{padding:12px}
+.orderTop{flex-direction:column}
 }
 </style>
 </head>
 
 <body>
 
-<div class="top">
-<span>VETBEINGS • COMPASSION • CARE • CURE</span>
-<span>Customer Support: +91 88290 53040</span>
-</div>
+<!-- LOGIN -->
 
-<nav class="nav">
-
-<img
-src="logo.png"
-class="logo"
-alt="VetBeings"
->
+<div id="loginBox" class="login">
+<h2>VetBeings Admin</h2>
+<p class="small">Secure Store Management Dashboard</p>
 
 <input
-id="search"
-class="search"
-placeholder="Search veterinary products..."
-oninput="renderProducts()"
+id="password"
+class="field"
+type="password"
+placeholder="Admin password"
 >
 
 <button
 class="btn"
-onclick="openCart()"
+style="width:100%;margin-top:8px"
+onclick="login()"
 >
-Cart (<span id="count">0</span>)
+LOGIN
 </button>
 
-</nav>
-
-<!-- =========================
-     PREMIUM DOCTOR HERO
-========================= -->
-
-<section class="hero">
-
-<div class="heroIn">
-
-<span class="badge">
-VETERINARY HEALTHCARE
-</span>
-
-<h1>
-Better Care for the Animals That Depend on You.
-</h1>
-
-<p>
-Shop veterinary medicines, nutritional supplements and animal healthcare products for cattle, livestock and animal wellness.
-</p>
-
-<div class="heroBtns">
-
-<a
-href="#products"
-class="white"
->
-SHOP PRODUCTS
-</a>
-
-<a
-href="tel:+918829053040"
-class="outline"
->
-CALL VETBEINGS
-</a>
-
+<div id="loginMsg" class="msg err"></div>
 </div>
 
-</div>
+<!-- DASHBOARD -->
 
-</section>
+<div id="dashboard" class="hidden">
 
-<!-- =========================
-     TRUST
-========================= -->
-
-<div class="trustWrap">
-
-<div class="trust">
-
+<div class="header">
 <div>
-<b>Quality Products</b>
-<small>
-Veterinary healthcare focused catalogue
-</small>
+<b>VetBeings</b><br>
+<small>Admin Dashboard</small>
 </div>
 
-<div>
-<b>Animal Care</b>
-<small>
-Cattle, livestock and wellness products
-</small>
+<button class="logout" onclick="logout()">
+Logout
+</button>
 </div>
 
-<div>
-<b>Secure Ordering</b>
-<small>
-COD and online payment options
-</small>
+<div class="wrap">
+
+<div class="statGrid">
+
+<div class="stat">
+<b id="statProducts">0</b>
+<span class="small">Products</span>
 </div>
 
-<div>
-<b>Customer Support</b>
-<small>
-Help with products and ordering
-</small>
+<div class="stat">
+<b id="statOrders">0</b>
+<span class="small">Orders</span>
 </div>
 
+<div class="stat">
+<b id="statPending">0</b>
+<span class="small">Pending</span>
 </div>
 
-</div>
-
-<!-- =========================
-     CATEGORIES
-========================= -->
-
-<section class="section center">
-
-<div class="green">
-ANIMAL HEALTHCARE
-</div>
-
-<h2 class="title">
-Care for Every Stage of Animal Health
-</h2>
-
-<p class="sub">
-Explore veterinary healthcare and nutrition products for the everyday needs of animals.
-</p>
-
-<div class="cats">
-
-<div class="cat">
-
-<img
-src="https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?auto=format&fit=crop&w=700&q=85"
-alt="Cattle"
->
-
-<div class="catText">
-
-<h3>Cattle Care</h3>
-
-<p>
-Healthcare and wellness solutions for cattle.
-</p>
-
+<div class="stat">
+<b id="statDelivered">0</b>
+<span class="small">Delivered</span>
 </div>
 
 </div>
 
-<div class="cat">
-
-<img
-src="https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=700&q=85"
-alt="Animal Nutrition"
->
-
-<div class="catText">
-
-<h3>Animal Nutrition</h3>
-
-<p>
-Nutrition and supplementation for animal wellbeing.
-</p>
-
-</div>
-
-</div>
-
-<div class="cat">
-
-<img
-src="https://images.unsplash.com/photo-1560493676-04071c5f467b?auto=format&fit=crop&w=700&q=85"
-alt="Farm Animal Care"
->
-
-<div class="catText">
-
-<h3>Farm Animal Care</h3>
-
-<p>
-Products for livestock health and management.
-</p>
-
-</div>
-
-</div>
-
-<div class="cat">
-
-<img
-src="https://images.unsplash.com/photo-1558788353-f76d92427f16?auto=format&fit=crop&w=700&q=85"
-alt="Animal Care"
->
-
-<div class="catText">
-
-<h3>General Care</h3>
-
-<p>
-Everyday animal health and wellness products.
-</p>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- =========================
-     PRODUCTS
-========================= -->
-
-<section
-class="productsArea"
-id="products"
->
-
-<div class="productHead">
-
-<div class="green">
-VETBEINGS STORE
-</div>
-
-<h2>
-Veterinary Products
-</h2>
-
-<div id="productStatus">
-Loading products...
-</div>
-
-</div>
-
-<div
-id="productGrid"
-class="grid"
-></div>
-
-</section>
-
-<!-- =========================
-     PREMIUM VETERINARY CARE
-     NO PIG IMAGE
-========================= -->
-
-<section class="section about">
-
-<img
-src="vet-doctor-hero.png"
-alt="VetBeings veterinary doctor providing professional animal healthcare"
->
-
-<div>
-
-<div class="green">
-WHY VETBEINGS
-</div>
-
-<h2>
-Professional Animal Healthcare Made Easier.
-</h2>
-
-<p>
-VetBeings brings veterinary medicines, animal nutrition and healthcare products together in one convenient online store.
-</p>
-
-<p>
-Products added from the VetBeings Admin Dashboard automatically become available in this store.
-</p>
-
-<div class="checks">
-
-<div class="check">
-✓ Veterinary Healthcare Focus
-</div>
-
-<div class="check">
-✓ Product Photos & Details
-</div>
-
-<div class="check">
-✓ Cash on Delivery
-</div>
-
-<div class="check">
-✓ Secure Online Payment
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- =========================
-     SUPPORT
-========================= -->
-
-<section class="support">
-
-<div
-class="green"
-style="color:#9ed8bb"
->
-COMPASSION • CARE • CURE
-</div>
-
-<h2>
-Supporting Healthier Animals
-</h2>
-
-<p>
-Dependable animal healthcare products made easier to discover and order.
-</p>
-
-<div class="supportGrid">
-
-<div class="supportCard">
-
-<h3>
-Cattle Healthcare
-</h3>
-
-<p>
-Everyday cattle health and wellness products.
-</p>
-
-</div>
-
-<div class="supportCard">
-
-<h3>
-Nutrition Support
-</h3>
-
-<p>
-Nutrition and supplementation supporting animal health.
-</p>
-
-</div>
-
-<div class="supportCard">
-
-<h3>
-Convenient Ordering
-</h3>
-
-<p>
-Order products with COD or secure online checkout.
-</p>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- =========================
-     HELP
-========================= -->
-
-<div class="help">
-
-<div>
-
-<h2>
-Need Help With an Order?
-</h2>
-
-<p>
-Contact VetBeings for product and ordering assistance.
-</p>
-
-</div>
-
-<a
-class="wa"
-href="https://wa.me/918829053040"
->
-WHATSAPP VETBEINGS
-</a>
-
-</div>
-
-<!-- =========================
-     FOOTER
-========================= -->
-
-<footer>
-
-<div class="footerGrid">
-
-<div>
-
-<img
-src="logo.png"
-class="footerLogo"
-alt="VetBeings"
->
-
-<p>
-Veterinary medicines, nutrition and animal healthcare products.
-</p>
-
-</div>
-
-<div>
-
-<b>SHOP</b>
-
-<p>
-Veterinary Products<br>
-Cattle Care<br>
-Nutrition<br>
-Animal Wellness
-</p>
-
-</div>
-
-<div>
-
-<b>CONTACT</b>
-
-<p>
-Phone / WhatsApp<br>
-+91 88290 53040
-</p>
-
-</div>
-
-</div>
-
-<div class="copy">
-© 2026 VetBeings. All rights reserved.
-</div>
-
-</footer>
-
-<!-- =========================
-     CART
-========================= -->
-
-<div
-id="overlay"
-class="overlay"
-onclick="closeCart()"
-></div>
-
-<aside
-id="cart"
-class="cart"
->
+<div class="tabs">
 
 <button
-class="close"
-onclick="closeCart()"
+class="btn"
+onclick="showTab('productsTab')"
 >
-✕
+PRODUCTS
 </button>
 
-<h2>
-Your Cart
-</h2>
+<button
+class="btn gray"
+onclick="showTab('ordersTab')"
+>
+ORDERS
+</button>
 
-<div id="cartRows"></div>
-
-<div class="total">
-Total ₹<span id="total">0</span>
 </div>
 
-<h3>
-Delivery Details
-</h3>
+<!-- PRODUCTS -->
 
-<input
-id="customerName"
-class="field"
-placeholder="Customer name"
->
+<div id="productsTab">
 
+<div class="card">
+
+<h2 id="formTitle">Add New Product</h2>
+
+<input type="hidden" id="productId">
+
+<div class="grid2">
+
+<div>
+<label>Product Name</label>
 <input
-id="customerMobile"
+id="name"
 class="field"
-type="tel"
-maxlength="10"
-placeholder="10-digit mobile number"
+placeholder="Product name"
 >
+</div>
+
+<div>
+<label>Category</label>
+<input
+id="category"
+class="field"
+placeholder="Category"
+>
+</div>
+
+</div>
+
+<label>Product Description</label>
 
 <textarea
-id="customerAddress"
+id="description"
 class="field"
-placeholder="Complete delivery address"
+rows="4"
+placeholder="Product details, benefits, pack information..."
 ></textarea>
 
-<div
-id="message"
-class="message"
-></div>
+<div class="grid2">
+
+<div>
+<label>Price ₹</label>
+<input
+id="price"
+class="field"
+type="number"
+min="0"
+placeholder="Price"
+>
+</div>
+
+<div>
+<label>Stock Quantity</label>
+<input
+id="stock"
+class="field"
+type="number"
+min="0"
+placeholder="Stock"
+>
+</div>
+
+</div>
+
+<label><b>Product Photo</b></label>
+
+<input
+id="image"
+class="field"
+type="file"
+accept="image/*"
+onchange="previewImage(event)"
+>
+
+<img id="preview" class="preview">
+
+<div id="saveMsg" class="msg"></div>
 
 <button
-class="btn pay"
-onclick="payOnline()"
+id="saveBtn"
+class="btn"
+onclick="saveProduct()"
 >
-PAY ONLINE — UPI / CARD
+SAVE PRODUCT
 </button>
 
 <button
-class="btn pay cod"
-onclick="placeCOD()"
+id="cancelBtn"
+class="btn gray hidden"
+onclick="clearForm()"
 >
-CASH ON DELIVERY
+CANCEL EDIT
 </button>
 
-</aside>
+</div>
+
+<div class="card">
+
+<h2>Product Manager</h2>
+
+<p id="productCount" class="small">
+Loading products...
+</p>
+
+<div id="products" class="products"></div>
+
+</div>
+
+</div>
+
+<!-- ORDERS -->
+
+<div id="ordersTab" class="hidden">
+
+<div class="card">
+
+<div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+
+<div>
+<h2 style="margin-bottom:4px">Customer Orders</h2>
+<p class="small" style="margin-top:0">
+Manage and update order status
+</p>
+</div>
+
+<button
+class="btn"
+onclick="loadOrders()"
+>
+REFRESH
+</button>
+
+</div>
+
+<div id="orders"></div>
+
+</div>
+
+</div>
+
+</div>
+</div>
 
 <script>
 
-/* =========================
-   DATA
-========================= */
-
+let ADMIN_PASSWORD="";
 let PRODUCTS=[];
-let CART=[];
+let ORDERS=[];
 
-try{
-
-CART=
-JSON.parse(
-localStorage.getItem("vbcart")||"[]"
-);
-
-if(!Array.isArray(CART)){
-CART=[];
-}
-
-}catch(e){
-
-CART=[];
-
-}
-
-/* =========================
-   ESCAPE
-========================= */
+/* ======================
+   HELPERS
+====================== */
 
 function esc(v){
 
 return String(v??"")
-
 .replace(/&/g,"&amp;")
 .replace(/</g,"&lt;")
 .replace(/>/g,"&gt;")
@@ -1344,26 +422,149 @@ return String(v??"")
 
 }
 
-/* =========================
-   LOAD PRODUCTS
-========================= */
+function authHeaders(){
 
-async function loadProducts(){
+return {
+"Authorization":
+"Bearer "+ADMIN_PASSWORD
+};
 
-const status=
-document.getElementById(
-"productStatus"
+}
+
+/* ======================
+   LOGIN
+====================== */
+
+async function login(){
+
+const p=
+document
+.getElementById("password")
+.value
+.trim();
+
+if(!p){
+
+showLogin(
+"Admin password enter karo."
 );
+
+return;
+
+}
+
+ADMIN_PASSWORD=p;
 
 try{
 
-status.textContent=
-"Loading products...";
+const r=
+await fetch(
+"/api/admin/orders",
+{
+headers:authHeaders()
+}
+);
+
+if(!r.ok){
+
+ADMIN_PASSWORD="";
+
+showLogin(
+"Wrong admin password."
+);
+
+return;
+
+}
+
+document
+.getElementById("loginBox")
+.classList.add("hidden");
+
+document
+.getElementById("dashboard")
+.classList.remove("hidden");
+
+await loadProducts();
+await loadOrders();
+
+}catch(e){
+
+showLogin(
+"Server connection failed."
+);
+
+}
+
+}
+
+function showLogin(text){
+
+const x=
+document.getElementById(
+"loginMsg"
+);
+
+x.textContent=text;
+x.style.display="block";
+
+}
+
+function logout(){
+
+ADMIN_PASSWORD="";
+
+document
+.getElementById("password")
+.value="";
+
+document
+.getElementById("dashboard")
+.classList.add("hidden");
+
+document
+.getElementById("loginBox")
+.classList.remove("hidden");
+
+}
+
+/* ======================
+   TABS
+====================== */
+
+function showTab(id){
+
+document
+.getElementById("productsTab")
+.classList.add("hidden");
+
+document
+.getElementById("ordersTab")
+.classList.add("hidden");
+
+document
+.getElementById(id)
+.classList.remove("hidden");
+
+if(id==="ordersTab"){
+
+loadOrders();
+
+}
+
+}
+
+/* ======================
+   PRODUCTS
+====================== */
+
+async function loadProducts(){
+
+try{
 
 const r=
 await fetch(
-"/api/products?time="+
-Date.now(),
+"/api/products?t="+Date.now(),
 {
 cache:"no-store"
 }
@@ -1372,166 +573,60 @@ cache:"no-store"
 if(!r.ok){
 
 throw new Error(
-"Server error "+r.status
+"Products load failed."
 );
 
 }
 
-const data=
+PRODUCTS=
 await r.json();
 
-if(!Array.isArray(data)){
-
-throw new Error(
-"Invalid product data"
-);
-
-}
-
-PRODUCTS=data;
-
-status.textContent=
-PRODUCTS.length+
-" products available";
-
 renderProducts();
-renderCart();
+
+document
+.getElementById("statProducts")
+.textContent=
+PRODUCTS.length;
 
 }catch(e){
 
-console.error(e);
-
-status.textContent=
-"Products could not load. Please refresh.";
-
 document
-.getElementById("productGrid")
-.innerHTML=
-
-'<div style="grid-column:1/-1;background:white;padding:25px;border-radius:12px">Unable to load products.</div>';
-
-}
+.getElementById("productCount")
+.textContent=
+"Products could not load.";
 
 }
 
-/* =========================
-   DESCRIPTION
-========================= */
-
-function fallbackDescription(p){
-
-const c=
-String(
-p.category||""
-).toLowerCase();
-
-if(
-c.includes("nutrition")
-){
-
-return "Animal nutrition and supplementation product supporting everyday health and wellbeing.";
-
 }
-
-if(
-c.includes("medicine")
-){
-
-return "Veterinary healthcare product for animal care and wellness.";
-
-}
-
-return "Quality animal healthcare product available from VetBeings.";
-
-}
-
-/* =========================
-   RENDER PRODUCTS
-========================= */
 
 function renderProducts(){
 
-const grid=
-document.getElementById(
-"productGrid"
-);
-
-const search=
 document
-.getElementById("search")
-.value
-.toLowerCase()
-.trim();
+.getElementById("productCount")
+.textContent=
+PRODUCTS.length+
+" products";
 
-const list=
-PRODUCTS.filter(
-p=>
+document
+.getElementById("products")
+.innerHTML=
 
-(
-(p.name||"")+
-" "+
-(p.category||"")+
-" "+
-(p.description||"")
-)
+PRODUCTS.map(p=>`
 
-.toLowerCase()
-.includes(search)
+<div class="product">
 
-);
-
-if(!list.length){
-
-grid.innerHTML=
-
-'<div style="grid-column:1/-1;background:white;padding:25px;border-radius:12px">No matching products found.</div>';
-
-return;
-
-}
-
-grid.innerHTML=
-
-list.map(p=>{
-
-const id=
-Number(p.id);
-
-const price=
-Number(p.price||0);
-
-const stock=
-Number(p.stock||0);
-
-const image=
+${
 p.image
-
 ?
-
 `<img
 src="${esc(p.image)}"
 alt="${esc(p.name)}"
-loading="lazy"
-onerror="this.parentElement.innerHTML='<div class=&quot;noPhoto&quot;>💊</div>'"
 >`
-
 :
+`<div class="noimg">💊</div>`
+}
 
-`<div class="noPhoto">
-💊
-</div>`;
-
-return `
-
-<article class="product">
-
-<div class="photo">
-${image}
-</div>
-
-<div class="info">
-
-<div class="category">
+<div class="small">
 ${esc(
 p.category||
 "Veterinary Product"
@@ -1539,834 +634,816 @@ p.category||
 </div>
 
 <h3>
-${esc(
-p.name||
-"VetBeings Product"
-)}
+${esc(p.name)}
 </h3>
 
-<div class="desc">
+<div class="small">
 ${esc(
 p.description||
-fallbackDescription(p)
+"No description added."
 )}
 </div>
 
-<div class="stock">
+<p>
 
-${
-stock>0
-?
-"✓ In Stock: "+stock
-:
-"Out of Stock"
-}
+<b>
+₹${Number(
+p.price||0
+).toLocaleString("en-IN")}
+</b>
 
-</div>
+<br>
 
-<div class="price">
+<span class="small">
+Stock:
+${Number(p.stock||0)}
+</span>
 
-₹${price.toLocaleString(
-"en-IN"
-)}
+</p>
 
-</div>
+<div class="actions">
 
 <button
-class="btn"
-${stock<=0?"disabled":""}
-onclick="addCart(${id})"
+class="btn blue"
+onclick="editProduct('${p.id}')"
 >
+EDIT
+</button>
 
-${
-stock>0
-?
-"ADD TO CART"
-:
-"OUT OF STOCK"
-}
-
+<button
+class="btn red"
+onclick="deleteProduct('${p.id}')"
+>
+DELETE
 </button>
 
 </div>
 
-</article>
+</div>
+
+`).join("");
+
+}
+
+/* ======================
+   PHOTO PREVIEW
+====================== */
+
+function previewImage(e){
+
+const file=
+e.target.files[0];
+
+if(!file)return;
+
+const img=
+document.getElementById(
+"preview"
+);
+
+img.src=
+URL.createObjectURL(file);
+
+img.style.display=
+"block";
+
+}
+
+/* ======================
+   EDIT PRODUCT
+====================== */
+
+function editProduct(id){
+
+const p=
+PRODUCTS.find(
+x=>
+String(x.id)===
+String(id)
+);
+
+if(!p)return;
+
+document
+.getElementById("productId")
+.value=p.id;
+
+document
+.getElementById("name")
+.value=p.name||"";
+
+document
+.getElementById("category")
+.value=p.category||"";
+
+document
+.getElementById("description")
+.value=p.description||"";
+
+document
+.getElementById("price")
+.value=p.price||0;
+
+document
+.getElementById("stock")
+.value=p.stock||0;
+
+const preview=
+document.getElementById(
+"preview"
+);
+
+if(p.image){
+
+preview.src=p.image;
+
+preview.style.display=
+"block";
+
+}else{
+
+preview.style.display=
+"none";
+
+}
+
+document
+.getElementById("formTitle")
+.textContent=
+"Edit Product";
+
+document
+.getElementById("saveBtn")
+.textContent=
+"UPDATE PRODUCT";
+
+document
+.getElementById("cancelBtn")
+.classList.remove("hidden");
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+
+/* ======================
+   CLEAR FORM
+====================== */
+
+function clearForm(){
+
+document
+.getElementById("productId")
+.value="";
+
+document
+.getElementById("name")
+.value="";
+
+document
+.getElementById("category")
+.value="";
+
+document
+.getElementById("description")
+.value="";
+
+document
+.getElementById("price")
+.value="";
+
+document
+.getElementById("stock")
+.value="";
+
+document
+.getElementById("image")
+.value="";
+
+document
+.getElementById("preview")
+.style.display="none";
+
+document
+.getElementById("formTitle")
+.textContent=
+"Add New Product";
+
+document
+.getElementById("saveBtn")
+.textContent=
+"SAVE PRODUCT";
+
+document
+.getElementById("cancelBtn")
+.classList.add("hidden");
+
+}
+
+/* ======================
+   SAVE PRODUCT
+====================== */
+
+async function saveProduct(){
+
+const name=
+document
+.getElementById("name")
+.value.trim();
+
+const category=
+document
+.getElementById("category")
+.value.trim();
+
+const description=
+document
+.getElementById("description")
+.value.trim();
+
+const price=
+document
+.getElementById("price")
+.value;
+
+const stock=
+document
+.getElementById("stock")
+.value;
+
+const id=
+document
+.getElementById("productId")
+.value;
+
+const image=
+document
+.getElementById("image")
+.files[0];
+
+if(!name){
+
+saveMessage(
+"Product name required.",
+false
+);
+
+return;
+
+}
+
+if(price===""){
+
+saveMessage(
+"Price required.",
+false
+);
+
+return;
+
+}
+
+if(stock===""){
+
+saveMessage(
+"Stock required.",
+false
+);
+
+return;
+
+}
+
+const fd=
+new FormData();
+
+if(id){
+
+fd.append(
+"id",
+id
+);
+
+}
+
+fd.append(
+"name",
+name
+);
+
+fd.append(
+"category",
+category
+);
+
+fd.append(
+"description",
+description
+);
+
+fd.append(
+"price",
+price
+);
+
+fd.append(
+"stock",
+stock
+);
+
+if(image){
+
+fd.append(
+"image",
+image
+);
+
+}
+
+saveMessage(
+"Saving product...",
+true
+);
+
+try{
+
+const r=
+await fetch(
+"/api/admin/products",
+{
+method:"POST",
+headers:authHeaders(),
+body:fd
+}
+);
+
+const data=
+await r.json();
+
+if(!r.ok){
+
+throw new Error(
+data.error||
+"Save failed."
+);
+
+}
+
+saveMessage(
+id
+?
+"Product updated successfully."
+:
+"Product added successfully.",
+true
+);
+
+clearForm();
+
+await loadProducts();
+
+}catch(e){
+
+saveMessage(
+e.message,
+false
+);
+
+}
+
+}
+
+function saveMessage(
+text,
+ok
+){
+
+const box=
+document.getElementById(
+"saveMsg"
+);
+
+box.textContent=text;
+
+box.className=
+"msg "+
+(ok?"ok":"err");
+
+box.style.display=
+"block";
+
+}
+
+/* ======================
+   DELETE PRODUCT
+====================== */
+
+async function deleteProduct(id){
+
+if(
+!confirm(
+"Delete this product?"
+)
+)return;
+
+try{
+
+const r=
+await fetch(
+"/api/admin/products/"+id,
+{
+method:"DELETE",
+headers:authHeaders()
+}
+);
+
+const data=
+await r.json();
+
+if(!r.ok){
+
+throw new Error(
+data.error||
+"Delete failed."
+);
+
+}
+
+await loadProducts();
+
+}catch(e){
+
+alert(e.message);
+
+}
+
+}
+
+/* ======================
+   LOAD ORDERS
+====================== */
+
+async function loadOrders(){
+
+const box=
+document.getElementById(
+"orders"
+);
+
+box.innerHTML=
+"<p>Loading orders...</p>";
+
+try{
+
+const r=
+await fetch(
+"/api/admin/orders?t="+
+Date.now(),
+{
+headers:authHeaders(),
+cache:"no-store"
+}
+);
+
+const data=
+await r.json();
+
+if(!r.ok){
+
+throw new Error(
+data.error||
+"Orders load failed."
+);
+
+}
+
+ORDERS=data;
+
+updateStats();
+
+if(!ORDERS.length){
+
+box.innerHTML=
+"<p>No orders yet.</p>";
+
+return;
+
+}
+
+box.innerHTML=
+
+ORDERS.map(o=>{
+
+const status=
+String(
+o.status||
+"pending"
+).toLowerCase();
+
+return `
+
+<div class="order">
+
+<div class="orderTop">
+
+<div>
+
+<b>
+Order ${esc(o.id)}
+</b>
+
+<br>
+
+<span class="small">
+${
+o.time
+?
+new Date(
+o.time
+).toLocaleString("en-IN")
+:
+""
+}
+</span>
+
+</div>
+
+<span class="tag">
+${esc(
+o.payment||
+"COD"
+)}
+•
+${esc(status.toUpperCase())}
+</span>
+
+</div>
+
+<p>
+
+<b>
+${esc(
+o.customer?.name||
+"Customer"
+)}
+</b>
+
+<br>
+
+📞
+${esc(
+o.customer?.mobile||
+"-"
+)}
+
+<br>
+
+📍
+${esc(
+o.customer?.address||
+"-"
+)}
+
+</p>
+
+<div class="small">
+
+${(o.items||[])
+.map(i=>
+
+`${esc(i.name)}
+—
+${Number(i.qty||0)}
+×
+₹${Number(
+i.price||0
+).toLocaleString("en-IN")}`
+
+)
+.join("<br>")}
+
+</div>
+
+<p>
+
+<b>
+Total:
+₹${Number(
+o.total||0
+).toLocaleString("en-IN")}
+</b>
+
+</p>
+
+<div class="statusArea">
+
+<label>
+<b>Order Status</b>
+</label>
+
+<select
+id="status-${o.id}"
+class="statusSelect"
+>
+
+<option
+value="pending"
+${status==="pending"?"selected":""}
+>
+Pending
+</option>
+
+<option
+value="confirmed"
+${status==="confirmed"?"selected":""}
+>
+Confirmed
+</option>
+
+<option
+value="shipped"
+${status==="shipped"?"selected":""}
+>
+Shipped
+</option>
+
+<option
+value="delivered"
+${status==="delivered"?"selected":""}
+>
+Delivered
+</option>
+
+<option
+value="cancelled"
+${status==="cancelled"?"selected":""}
+>
+Cancelled
+</option>
+
+</select>
+
+<button
+class="btn"
+style="width:100%"
+onclick="updateOrderStatus('${o.id}')"
+>
+UPDATE STATUS
+</button>
+
+</div>
+
+</div>
 
 `;
 
 }).join("");
 
-}
+}catch(e){
 
-/* =========================
-   ADD CART
-========================= */
-
-function addCart(id){
-
-const p=
-PRODUCTS.find(
-x=>
-Number(x.id)===
-Number(id)
-);
-
-if(!p)return;
-
-const stock=
-Number(p.stock||0);
-
-if(stock<=0){
-
-alert(
-"Product is out of stock."
-);
-
-return;
+box.innerHTML=
+'<div class="msg err" style="display:block">'+
+esc(e.message)+
+'</div>';
 
 }
 
-const item=
-CART.find(
-x=>
-Number(x.id)===
-Number(id)
-);
-
-if(item){
-
-if(
-Number(item.qty)>=stock
-){
-
-alert(
-"Only "+
-stock+
-" available in stock."
-);
-
-return;
-
 }
 
-item.qty++;
+/* ======================
+   UPDATE STATUS
+====================== */
 
-}else{
+async function updateOrderStatus(id){
 
-CART.push({
-id:Number(id),
-qty:1
-});
-
-}
-
-saveCart();
-openCart();
-
-}
-
-/* =========================
-   SAVE CART
-========================= */
-
-function saveCart(){
-
-localStorage.setItem(
-"vbcart",
-JSON.stringify(CART)
-);
-
-renderCart();
-
-}
-
-/* =========================
-   QUANTITY
-========================= */
-
-function changeQty(
-index,
-change
-){
-
-const item=
-CART[index];
-
-if(!item)return;
-
-const p=
-PRODUCTS.find(
-x=>
-Number(x.id)===
-Number(item.id)
-);
-
-if(!p)return;
-
-item.qty=
-Number(item.qty)+
-change;
-
-if(item.qty<1){
-
-CART.splice(
-index,
-1
-);
-
-}else if(
-item.qty>
-Number(p.stock||0)
-){
-
-item.qty=
-Number(p.stock||0);
-
-alert(
-"Only "+
-p.stock+
-" available."
-);
-
-}
-
-saveCart();
-
-}
-
-/* =========================
-   REMOVE
-========================= */
-
-function removeItem(index){
-
-CART.splice(
-index,
-1
-);
-
-saveCart();
-
-}
-
-/* =========================
-   TOTAL
-========================= */
-
-function cartTotal(){
-
-return CART.reduce(
-(sum,item)=>{
-
-const p=
-PRODUCTS.find(
-x=>
-Number(x.id)===
-Number(item.id)
-);
-
-return p
-?
-sum+
-(
-Number(p.price||0)*
-Number(item.qty||0)
-)
-:
-sum;
-
-},
-0
-);
-
-}
-
-/* =========================
-   RENDER CART
-========================= */
-
-function renderCart(){
-
-let count=0;
-
-const html=
-CART.map(
-(item,index)=>{
-
-const p=
-PRODUCTS.find(
-x=>
-Number(x.id)===
-Number(item.id)
-);
-
-if(!p)return"";
-
-count+=
-Number(item.qty||0);
-
-return `
-
-<div class="cartRow">
-
-<div class="cartName">
-${esc(p.name)}
-</div>
-
-<div>
-
-₹${Number(
-p.price||0
-).toLocaleString("en-IN")}
-×
-${Number(item.qty)}
-
-</div>
-
-<div style="margin-top:8px">
-
-<button
-class="qty"
-onclick="changeQty(${index},-1)"
->
-−
-</button>
-
-<b style="margin:0 8px">
-${Number(item.qty)}
-</b>
-
-<button
-class="qty"
-onclick="changeQty(${index},1)"
->
-+
-</button>
-
-<button
-class="remove"
-onclick="removeItem(${index})"
->
-Remove
-</button>
-
-</div>
-
-</div>
-
-`;
-
-}
-).join("");
-
-document
-.getElementById("cartRows")
-.innerHTML=
-
-html||
-"<p>Your cart is empty.</p>";
-
-document
-.getElementById("count")
-.textContent=
-count;
-
-document
-.getElementById("total")
-.textContent=
-
-cartTotal()
-.toLocaleString(
-"en-IN"
-);
-
-}
-
-/* =========================
-   OPEN / CLOSE CART
-========================= */
-
-function openCart(){
-
-document
-.getElementById("cart")
-.classList.add("open");
-
-document
-.getElementById("overlay")
-.classList.add("show");
-
-}
-
-function closeCart(){
-
-document
-.getElementById("cart")
-.classList.remove("open");
-
-document
-.getElementById("overlay")
-.classList.remove("show");
-
-}
-
-/* =========================
-   CUSTOMER
-========================= */
-
-function customer(){
-
-return{
-
-name:
-document
-.getElementById("customerName")
-.value
-.trim(),
-
-mobile:
-document
-.getElementById("customerMobile")
-.value
-.trim(),
-
-address:
-document
-.getElementById("customerAddress")
-.value
-.trim()
-
-};
-
-}
-
-/* =========================
-   MESSAGE
-========================= */
-
-function msg(
-text,
-ok
-){
-
-const x=
+const select=
 document.getElementById(
-"message"
+"status-"+id
 );
 
-x.textContent=text;
+if(!select)return;
 
-x.className=
-"message "+
-(ok?"ok":"err");
-
-}
-
-/* =========================
-   VALIDATION
-========================= */
-
-function validate(){
-
-const c=
-customer();
-
-if(!CART.length){
-
-msg(
-"Cart is empty.",
-false
-);
-
-return false;
-
-}
-
-if(!c.name){
-
-msg(
-"Customer name enter karo.",
-false
-);
-
-return false;
-
-}
+const status=
+select.value;
 
 if(
-!/^[6-9][0-9]{9}$/
-.test(c.mobile)
+status==="cancelled"
 ){
 
-msg(
-"Valid 10-digit mobile number enter karo.",
-false
+const yes=
+confirm(
+"Cancel this order?\n\nProduct stock will be returned automatically."
 );
 
-return false;
+if(!yes){
+
+await loadOrders();
+return;
 
 }
 
-if(!c.address){
-
-msg(
-"Delivery address enter karo.",
-false
-);
-
-return false;
-
 }
 
-return true;
+try{
 
-}
-
-/* =========================
-   ORDER ITEMS
-========================= */
-
-function orderItems(){
-
-return CART.map(
-item=>{
-
-const p=
-PRODUCTS.find(
-x=>
-Number(x.id)===
-Number(item.id)
-);
-
-return p
-?
+const r=
+await fetch(
+"/api/admin/orders/"+
+id+
+"/status",
 {
+method:"PATCH",
 
-id:p.id,
+headers:{
+...authHeaders(),
+"Content-Type":
+"application/json"
+},
 
-name:p.name,
+body:
+JSON.stringify({
+status
+})
+}
+);
 
-price:
-Number(
-p.price||0
-),
+const data=
+await r.json();
 
-qty:
-Number(
-item.qty||0
+if(!r.ok){
+
+throw new Error(
+data.error||
+"Status update failed."
+);
+
+}
+
+alert(
+"Order status updated to: "+
+status.toUpperCase()
+);
+
+await loadOrders();
+await loadProducts();
+
+}catch(e){
+
+alert(
+"Status update failed: "+
+e.message
+);
+
+await loadOrders();
+
+}
+
+}
+
+/* ======================
+   DASHBOARD STATS
+====================== */
+
+function updateStats(){
+
+document
+.getElementById(
+"statOrders"
 )
+.textContent=
+ORDERS.length;
+
+document
+.getElementById(
+"statPending"
+)
+.textContent=
+ORDERS.filter(
+o=>
+String(
+o.status||
+"pending"
+).toLowerCase()
+==="pending"
+).length;
+
+document
+.getElementById(
+"statDelivered"
+)
+.textContent=
+ORDERS.filter(
+o=>
+String(
+o.status||
+""
+).toLowerCase()
+==="delivered"
+).length;
 
 }
-:
-null;
-
-}
-).filter(Boolean);
-
-}
-
-/* =========================
-   COD
-========================= */
-
-async function placeCOD(){
-
-if(!validate())return;
-
-msg(
-"Creating COD order...",
-true
-);
-
-try{
-
-const r=
-await fetch(
-"/api/orders",
-{
-
-method:"POST",
-
-headers:{
-"Content-Type":
-"application/json"
-},
-
-body:
-JSON.stringify({
-
-customer:
-customer(),
-
-items:
-orderItems(),
-
-total:
-cartTotal(),
-
-payment:
-"COD"
-
-})
-
-}
-);
-
-const data=
-await r.json();
-
-if(!r.ok){
-
-throw new Error(
-data.error||
-"Order failed"
-);
-
-}
-
-alert(
-
-"ORDER SUCCESSFUL\n\n"+
-
-"Order ID: "+
-data.id+
-
-"\nPayment: Cash on Delivery"
-
-);
-
-msg(
-"Order successful. Order ID: "+
-data.id,
-true
-);
-
-CART=[];
-
-saveCart();
-
-await loadProducts();
-
-}catch(e){
-
-msg(
-"Order failed: "+
-e.message,
-false
-);
-
-}
-
-}
-
-/* =========================
-   RAZORPAY
-========================= */
-
-async function payOnline(){
-
-if(!validate())return;
-
-const amount=
-cartTotal();
-
-msg(
-"Preparing secure payment...",
-true
-);
-
-try{
-
-const r=
-await fetch(
-"/api/payment/order",
-{
-
-method:"POST",
-
-headers:{
-"Content-Type":
-"application/json"
-},
-
-body:
-JSON.stringify({
-amount
-})
-
-}
-);
-
-const data=
-await r.json();
-
-if(!r.ok){
-
-throw new Error(
-data.error||
-"Online payment unavailable"
-);
-
-}
-
-const c=
-customer();
-
-const rz=
-new Razorpay({
-
-key:data.key,
-
-amount:
-data.order.amount,
-
-currency:
-"INR",
-
-name:
-"VetBeings",
-
-description:
-"Veterinary Healthcare Order",
-
-order_id:
-data.order.id,
-
-prefill:{
-
-name:
-c.name,
-
-contact:
-c.mobile
-
-},
-
-handler:
-async function(response){
-
-try{
-
-const vr=
-await fetch(
-"/api/payment/verify",
-{
-
-method:"POST",
-
-headers:{
-"Content-Type":
-"application/json"
-},
-
-body:
-JSON.stringify({
-
-...response,
-
-customer:c,
-
-items:
-orderItems(),
-
-total:
-amount
-
-})
-
-}
-);
-
-const vd=
-await vr.json();
-
-if(
-!vr.ok||
-!vd.ok
-){
-
-throw new Error(
-vd.error||
-"Payment verification failed"
-);
-
-}
-
-alert(
-
-"PAYMENT SUCCESSFUL\n\n"+
-
-"Order ID: "+
-vd.order.id
-
-);
-
-msg(
-
-"Payment successful. Order ID: "+
-vd.order.id,
-
-true
-
-);
-
-CART=[];
-
-saveCart();
-
-await loadProducts();
-
-}catch(e){
-
-msg(
-e.message,
-false
-);
-
-}
-
-}
-
-});
-
-rz.on(
-"payment.failed",
-function(response){
-
-msg(
-
-"Payment failed: "+
-(
-response.error?.description||
-"Please try again."
-),
-
-false
-
-);
-
-}
-);
-
-rz.open();
-
-}catch(e){
-
-msg(
-"Online payment: "+
-e.message,
-false
-);
-
-}
-
-}
-
-/* =========================
-   START
-========================= */
-
-loadProducts();
 
 </script>
 
