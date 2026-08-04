@@ -8,10 +8,6 @@ const { v2: cloudinary } = require("cloudinary");
 
 const app = express();
 
-/* =========================
-   BASIC SETUP
-========================= */
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
@@ -32,10 +28,7 @@ const read = (file) => {
 };
 
 const write = (file, data) => {
-  fs.writeFileSync(
-    file,
-    JSON.stringify(data, null, 2)
-  );
+  fs.writeFileSync(file, JSON.stringify(data, null, 2));
 };
 
 /* =========================
@@ -43,23 +36,16 @@ const write = (file, data) => {
 ========================= */
 
 cloudinary.config({
-  cloud_name:
-    process.env.CLOUDINARY_CLOUD_NAME,
-
-  api_key:
-    process.env.CLOUDINARY_API_KEY,
-
-  api_secret:
-    process.env.CLOUDINARY_API_SECRET
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
 const upload = multer({
   storage: multer.memoryStorage(),
-
   limits: {
     fileSize: 5 * 1024 * 1024
   },
-
   fileFilter: (req, file, cb) => {
     if (
       file.mimetype &&
@@ -67,71 +53,42 @@ const upload = multer({
     ) {
       cb(null, true);
     } else {
-      cb(
-        new Error(
-          "Only image files are allowed."
-        )
-      );
+      cb(new Error("Only image files are allowed."));
     }
   }
 });
 
 function uploadToCloudinary(buffer) {
-  return new Promise(
-    (resolve, reject) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: "vetbeings/products",
+        resource_type: "image"
+      },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
 
-      const stream =
-        cloudinary.uploader.upload_stream(
-          {
-            folder:
-              "vetbeings/products",
-
-            resource_type:
-              "image"
-          },
-
-          (error, result) => {
-
-            if (error) {
-              reject(error);
-            } else {
-              resolve(result);
-            }
-
-          }
-        );
-
-      stream.end(buffer);
-    }
-  );
+    stream.end(buffer);
+  });
 }
 
 /* =========================
    ADMIN SECURITY
 ========================= */
 
-const adminAuth = (
-  req,
-  res,
-  next
-) => {
-
-  if (
-    !process.env.ADMIN_PASSWORD
-  ) {
+const adminAuth = (req, res, next) => {
+  if (!process.env.ADMIN_PASSWORD) {
     return res.status(503).json({
-      error:
-        "ADMIN_PASSWORD not configured"
+      error: "ADMIN_PASSWORD not configured"
     });
   }
 
-  const expected =
-    "Bearer " +
-    process.env.ADMIN_PASSWORD;
-
   if (
     req.headers.authorization !==
-    expected
+    "Bearer " + process.env.ADMIN_PASSWORD
   ) {
     return res.status(401).json({
       error: "Unauthorized"
@@ -142,35 +99,13 @@ const adminAuth = (
 };
 
 /* =========================
-   PRODUCTS - CUSTOMER
+   PRODUCTS
 ========================= */
 
-app.get(
-  "/api/products",
-  (req, res) => {
-
-    try {
-
-      const products =
-        read(PF);
-
-      res.set(
-        "Cache-Control",
-        "no-store"
-      );
-
-      res.json(products);
-
-    } catch (e) {
-
-      res.status(500).json({
-        error:
-          "Products could not load."
-      });
-
-    }
-  }
-);
+app.get("/api/products", (req, res) => {
+  res.set("Cache-Control", "no-store");
+  res.json(read(PF));
+});
 
 /* =========================
    ADD / EDIT PRODUCT
@@ -178,114 +113,74 @@ app.get(
 
 app.post(
   "/api/admin/products",
-
   adminAuth,
-
   upload.single("image"),
-
   async (req, res) => {
-
     try {
-
-      let products =
-        read(PF);
-
-      const existingId =
-        req.body.id
-          ? Number(req.body.id)
-          : null;
+      let products = read(PF);
 
       const product = {
+        id: req.body.id
+          ? Number(req.body.id)
+          : Date.now(),
 
-        id:
-          existingId ||
-          Date.now(),
+        name: String(
+          req.body.name || ""
+        ).trim(),
 
-        name:
-          String(
-            req.body.name || ""
-          ).trim(),
+        category: String(
+          req.body.category || ""
+        ).trim(),
 
-        category:
-          String(
-            req.body.category || ""
-          ).trim(),
+        description: String(
+          req.body.description || ""
+        ).trim(),
 
-        description:
-          String(
-            req.body.description || ""
-          ).trim(),
+        price: Number(
+          req.body.price || 0
+        ),
 
-        price:
-          Number(
-            req.body.price || 0
-          ),
-
-        stock:
-          Number(
-            req.body.stock || 0
-          )
+        stock: Number(
+          req.body.stock || 0
+        )
       };
 
-      /* BASIC VALIDATION */
-
       if (!product.name) {
-        return res
-          .status(400)
-          .json({
-            error:
-              "Product name is required."
-          });
+        return res.status(400).json({
+          error: "Product name is required."
+        });
       }
 
       if (
-        !Number.isFinite(
-          product.price
-        ) ||
+        !Number.isFinite(product.price) ||
         product.price < 0
       ) {
-        return res
-          .status(400)
-          .json({
-            error:
-              "Invalid product price."
-          });
+        return res.status(400).json({
+          error: "Invalid product price."
+        });
       }
 
       if (
-        !Number.isFinite(
-          product.stock
-        ) ||
+        !Number.isFinite(product.stock) ||
         product.stock < 0
       ) {
-        return res
-          .status(400)
-          .json({
-            error:
-              "Invalid stock quantity."
-          });
+        return res.status(400).json({
+          error: "Invalid stock quantity."
+        });
       }
 
-      /* FIND OLD PRODUCT */
-
-      const index =
-        products.findIndex(
-          (x) =>
-            Number(x.id) ===
-            Number(product.id)
-        );
+      const index = products.findIndex(
+        (x) =>
+          Number(x.id) ===
+          Number(product.id)
+      );
 
       const oldProduct =
         index >= 0
           ? products[index]
           : null;
 
-      /* =========================
-         IMAGE UPLOAD
-      ========================= */
-
       if (req.file) {
-
         const result =
           await uploadToCloudinary(
             req.file.buffer
@@ -297,74 +192,40 @@ app.post(
         product.imagePublicId =
           result.public_id;
 
-        /*
-          Delete old Cloudinary image
-          only after new upload succeeds
-        */
-
         if (
           oldProduct &&
           oldProduct.imagePublicId
         ) {
-
           try {
-
-            await cloudinary
-              .uploader
-              .destroy(
-                oldProduct
-                  .imagePublicId
-              );
-
+            await cloudinary.uploader.destroy(
+              oldProduct.imagePublicId
+            );
           } catch (e) {
-
             console.error(
               "Old image delete error:",
               e.message
             );
-
           }
         }
-
       } else if (oldProduct) {
-
-        /*
-          Editing without selecting
-          a new photo:
-          keep old photo.
-        */
-
-        if (
-          oldProduct.image
-        ) {
+        if (oldProduct.image) {
           product.image =
             oldProduct.image;
         }
 
-        if (
-          oldProduct.imagePublicId
-        ) {
+        if (oldProduct.imagePublicId) {
           product.imagePublicId =
-            oldProduct
-              .imagePublicId;
+            oldProduct.imagePublicId;
         }
       }
 
-      /* =========================
-         SAVE PRODUCT
-      ========================= */
-
       if (index >= 0) {
-
         products[index] = {
           ...oldProduct,
           ...product
         };
-
       } else {
-
         products.push(product);
-
       }
 
       write(PF, products);
@@ -376,13 +237,8 @@ app.post(
             ? products[index]
             : product
       });
-
     } catch (e) {
-
-      console.error(
-        "Product save error:",
-        e
-      );
+      console.error(e);
 
       res.status(500).json({
         error:
@@ -399,15 +255,10 @@ app.post(
 
 app.delete(
   "/api/admin/products/:id",
-
   adminAuth,
-
   async (req, res) => {
-
     try {
-
-      let products =
-        read(PF);
+      let products = read(PF);
 
       const product =
         products.find(
@@ -417,40 +268,21 @@ app.delete(
         );
 
       if (!product) {
-
-        return res
-          .status(404)
-          .json({
-            error:
-              "Product not found."
-          });
+        return res.status(404).json({
+          error: "Product not found."
+        });
       }
 
-      /*
-        Delete product image
-        from Cloudinary
-      */
-
-      if (
-        product.imagePublicId
-      ) {
-
+      if (product.imagePublicId) {
         try {
-
-          await cloudinary
-            .uploader
-            .destroy(
-              product
-                .imagePublicId
-            );
-
+          await cloudinary.uploader.destroy(
+            product.imagePublicId
+          );
         } catch (e) {
-
           console.error(
-            "Cloudinary delete error:",
+            "Image delete error:",
             e.message
           );
-
         }
       }
 
@@ -466,22 +298,114 @@ app.delete(
       res.json({
         ok: true
       });
-
     } catch (e) {
-
-      console.error(
-        "Delete product error:",
-        e
-      );
-
       res.status(500).json({
-        error:
-          e.message ||
-          "Product could not be deleted."
+        error: e.message
       });
     }
   }
 );
+
+/* =========================
+   STOCK FUNCTIONS
+========================= */
+
+function checkAndReduceStock(items) {
+  let products = read(PF);
+
+  if (
+    !Array.isArray(items) ||
+    !items.length
+  ) {
+    throw new Error(
+      "Order has no products."
+    );
+  }
+
+  /* FIRST CHECK ALL STOCK */
+
+  for (const item of items) {
+    const product =
+      products.find(
+        (p) =>
+          Number(p.id) ===
+          Number(item.id)
+      );
+
+    if (!product) {
+      throw new Error(
+        "Product not found: " +
+        (item.name || item.id)
+      );
+    }
+
+    const qty =
+      Number(item.qty || 0);
+
+    if (
+      !Number.isInteger(qty) ||
+      qty <= 0
+    ) {
+      throw new Error(
+        "Invalid product quantity."
+      );
+    }
+
+    if (
+      Number(product.stock || 0) <
+      qty
+    ) {
+      throw new Error(
+        product.name +
+        " has only " +
+        Number(product.stock || 0) +
+        " in stock."
+      );
+    }
+  }
+
+  /* REDUCE ONLY AFTER ALL CHECKS PASS */
+
+  for (const item of items) {
+    const product =
+      products.find(
+        (p) =>
+          Number(p.id) ===
+          Number(item.id)
+      );
+
+    product.stock =
+      Number(product.stock || 0) -
+      Number(item.qty || 0);
+  }
+
+  write(PF, products);
+}
+
+function restoreStock(items) {
+  let products = read(PF);
+
+  if (!Array.isArray(items)) {
+    return;
+  }
+
+  for (const item of items) {
+    const product =
+      products.find(
+        (p) =>
+          Number(p.id) ===
+          Number(item.id)
+      );
+
+    if (product) {
+      product.stock =
+        Number(product.stock || 0) +
+        Number(item.qty || 0);
+    }
+  }
+
+  write(PF, products);
+}
 
 /* =========================
    ADMIN ORDERS
@@ -489,51 +413,140 @@ app.delete(
 
 app.get(
   "/api/admin/orders",
-
   adminAuth,
-
   (req, res) => {
+    res.set(
+      "Cache-Control",
+      "no-store"
+    );
 
+    res.json(read(OF));
+  }
+);
+
+/* =========================
+   UPDATE ORDER STATUS
+========================= */
+
+app.patch(
+  "/api/admin/orders/:id/status",
+  adminAuth,
+  (req, res) => {
     try {
+      const allowed = [
+        "pending",
+        "confirmed",
+        "shipped",
+        "delivered",
+        "cancelled"
+      ];
 
-      res.set(
-        "Cache-Control",
-        "no-store"
-      );
+      const newStatus =
+        String(
+          req.body.status || ""
+        ).toLowerCase();
 
-      res.json(
-        read(OF)
-      );
+      if (
+        !allowed.includes(newStatus)
+      ) {
+        return res.status(400).json({
+          error:
+            "Invalid order status."
+        });
+      }
 
-    } catch (e) {
+      const orders = read(OF);
 
-      res.status(500).json({
-        error:
-          "Orders could not load."
+      const index =
+        orders.findIndex(
+          (o) =>
+            String(o.id) ===
+            String(req.params.id)
+        );
+
+      if (index < 0) {
+        return res.status(404).json({
+          error:
+            "Order not found."
+        });
+      }
+
+      const order =
+        orders[index];
+
+      const oldStatus =
+        order.status || "pending";
+
+      /*
+        If an active order is cancelled,
+        return items to stock.
+      */
+
+      if (
+        newStatus === "cancelled" &&
+        oldStatus !== "cancelled"
+      ) {
+        restoreStock(
+          order.items
+        );
+
+        order.stockRestored =
+          true;
+      }
+
+      /*
+        If cancelled order becomes active
+        again, reduce stock again.
+      */
+
+      if (
+        oldStatus === "cancelled" &&
+        newStatus !== "cancelled"
+      ) {
+        checkAndReduceStock(
+          order.items
+        );
+
+        order.stockRestored =
+          false;
+      }
+
+      order.status =
+        newStatus;
+
+      order.statusUpdatedAt =
+        new Date().toISOString();
+
+      orders[index] =
+        order;
+
+      write(OF, orders);
+
+      res.json({
+        ok: true,
+        order
       });
-
+    } catch (e) {
+      res.status(400).json({
+        error:
+          e.message ||
+          "Status update failed."
+      });
     }
   }
 );
 
 /* =========================
-   CASH ON DELIVERY ORDER
+   COD ORDER
 ========================= */
 
 app.post(
   "/api/orders",
-
   (req, res) => {
-
     try {
-
-      const orders =
-        read(OF);
-
       const {
         customer,
-        items,
-        total
+        items
       } = req.body;
 
       if (
@@ -542,37 +555,75 @@ app.post(
         !customer.mobile ||
         !customer.address
       ) {
-
-        return res
-          .status(400)
-          .json({
-            error:
-              "Customer details are required."
-          });
+        return res.status(400).json({
+          error:
+            "Customer details are required."
+        });
       }
 
-      if (
-        !Array.isArray(items) ||
-        !items.length
-      ) {
+      /*
+        IMPORTANT:
+        Server calculates total itself.
+        Do not trust customer browser price.
+      */
 
-        return res
-          .status(400)
-          .json({
-            error:
-              "Order has no products."
-          });
-      }
+      const products = read(PF);
+
+      let calculatedTotal = 0;
+
+      const safeItems =
+        items.map((item) => {
+          const p =
+            products.find(
+              (x) =>
+                Number(x.id) ===
+                Number(item.id)
+            );
+
+          if (!p) {
+            throw new Error(
+              "Product not found."
+            );
+          }
+
+          const qty =
+            Number(item.qty || 0);
+
+          if (
+            !Number.isInteger(qty) ||
+            qty <= 0
+          ) {
+            throw new Error(
+              "Invalid quantity."
+            );
+          }
+
+          calculatedTotal +=
+            Number(p.price || 0) *
+            qty;
+
+          return {
+            id: p.id,
+            name: p.name,
+            price:
+              Number(p.price || 0),
+            qty
+          };
+        });
+
+      checkAndReduceStock(
+        safeItems
+      );
+
+      const orders = read(OF);
 
       const order = {
-
         id:
           "VB" +
           Date.now(),
 
         time:
-          new Date()
-            .toISOString(),
+          new Date().toISOString(),
 
         status:
           "pending",
@@ -582,29 +633,40 @@ app.post(
 
         customer,
 
-        items,
+        items:
+          safeItems,
 
         total:
-          Number(total || 0)
+          calculatedTotal,
+
+        stockRestored:
+          false
       };
 
       orders.unshift(order);
 
-      write(
-        OF,
-        orders
-      );
+      try {
+        write(OF, orders);
+      } catch (e) {
+        /*
+          If order save fails,
+          restore stock.
+        */
+        restoreStock(
+          safeItems
+        );
+
+        throw e;
+      }
 
       res.json(order);
-
     } catch (e) {
-
       console.error(
-        "COD order error:",
+        "COD error:",
         e
       );
 
-      res.status(500).json({
+      res.status(400).json({
         error:
           e.message ||
           "Order could not be created."
@@ -619,24 +681,16 @@ app.post(
 
 app.post(
   "/api/payment/order",
-
   async (req, res) => {
-
     try {
-
       if (
-        !process.env
-          .RAZORPAY_KEY_ID ||
-        !process.env
-          .RAZORPAY_KEY_SECRET
+        !process.env.RAZORPAY_KEY_ID ||
+        !process.env.RAZORPAY_KEY_SECRET
       ) {
-
-        return res
-          .status(503)
-          .json({
-            error:
-              "Razorpay keys not configured."
-          });
+        return res.status(503).json({
+          error:
+            "Razorpay keys not configured."
+        });
       }
 
       const amount =
@@ -648,65 +702,48 @@ app.post(
         !Number.isFinite(amount) ||
         amount <= 0
       ) {
-
-        return res
-          .status(400)
-          .json({
-            error:
-              "Invalid payment amount."
-          });
+        return res.status(400).json({
+          error:
+            "Invalid payment amount."
+        });
       }
 
       const razorpay =
         new Razorpay({
-
           key_id:
-            process.env
-              .RAZORPAY_KEY_ID,
+            process.env.RAZORPAY_KEY_ID,
 
           key_secret:
-            process.env
-              .RAZORPAY_KEY_SECRET
+            process.env.RAZORPAY_KEY_SECRET
         });
 
       const order =
-        await razorpay
-          .orders
-          .create({
+        await razorpay.orders.create({
+          amount:
+            Math.round(
+              amount * 100
+            ),
 
-            amount:
-              Math.round(
-                amount * 100
-              ),
+          currency:
+            "INR",
 
-            currency:
-              "INR",
-
-            receipt:
-              "vb_" +
-              Date.now()
-          });
+          receipt:
+            "vb_" +
+            Date.now()
+        });
 
       res.json({
-
         order,
-
         key:
-          process.env
-            .RAZORPAY_KEY_ID
+          process.env.RAZORPAY_KEY_ID
       });
-
     } catch (e) {
-
-      console.error(
-        "Razorpay order error:",
-        e
-      );
+      console.error(e);
 
       res.status(500).json({
         error:
           e.message ||
-          "Payment order could not be created."
+          "Payment order failed."
       });
     }
   }
@@ -718,45 +755,24 @@ app.post(
 
 app.post(
   "/api/payment/verify",
-
   (req, res) => {
-
     try {
-
       const {
         razorpay_order_id,
         razorpay_payment_id,
         razorpay_signature,
         customer,
-        items,
-        total
+        items
       } = req.body;
 
       if (
         !process.env
           .RAZORPAY_KEY_SECRET
       ) {
-
-        return res
-          .status(503)
-          .json({
-            error:
-              "Razorpay secret not configured."
-          });
-      }
-
-      if (
-        !razorpay_order_id ||
-        !razorpay_payment_id ||
-        !razorpay_signature
-      ) {
-
-        return res
-          .status(400)
-          .json({
-            error:
-              "Payment details missing."
-          });
+        return res.status(503).json({
+          error:
+            "Razorpay secret not configured."
+        });
       }
 
       const expected =
@@ -777,30 +793,101 @@ app.post(
         expected !==
         razorpay_signature
       ) {
-
-        return res
-          .status(400)
-          .json({
-            error:
-              "Invalid payment signature."
-          });
+        return res.status(400).json({
+          error:
+            "Invalid payment signature."
+        });
       }
+
+      /*
+        Prevent duplicate payment
+        verification/order creation.
+      */
+
+      const existingOrders =
+        read(OF);
+
+      const duplicate =
+        existingOrders.find(
+          (o) =>
+            o.paymentId ===
+            razorpay_payment_id
+        );
+
+      if (duplicate) {
+        return res.json({
+          ok: true,
+          order: duplicate
+        });
+      }
+
+      /*
+        Calculate products and total
+        from server data.
+      */
+
+      const products =
+        read(PF);
+
+      let calculatedTotal = 0;
+
+      const safeItems =
+        items.map((item) => {
+          const p =
+            products.find(
+              (x) =>
+                Number(x.id) ===
+                Number(item.id)
+            );
+
+          if (!p) {
+            throw new Error(
+              "Product not found."
+            );
+          }
+
+          const qty =
+            Number(item.qty || 0);
+
+          if (
+            !Number.isInteger(qty) ||
+            qty <= 0
+          ) {
+            throw new Error(
+              "Invalid quantity."
+            );
+          }
+
+          calculatedTotal +=
+            Number(p.price || 0) *
+            qty;
+
+          return {
+            id: p.id,
+            name: p.name,
+            price:
+              Number(p.price || 0),
+            qty
+          };
+        });
+
+      checkAndReduceStock(
+        safeItems
+      );
 
       const orders =
         read(OF);
 
       const order = {
-
         id:
           "VB" +
           Date.now(),
 
         time:
-          new Date()
-            .toISOString(),
+          new Date().toISOString(),
 
         status:
-          "paid",
+          "confirmed",
 
         payment:
           "Razorpay",
@@ -813,32 +900,39 @@ app.post(
 
         customer,
 
-        items,
+        items:
+          safeItems,
 
         total:
-          Number(total || 0)
+          calculatedTotal,
+
+        stockRestored:
+          false
       };
 
       orders.unshift(order);
 
-      write(
-        OF,
-        orders
-      );
+      try {
+        write(OF, orders);
+      } catch (e) {
+        restoreStock(
+          safeItems
+        );
+
+        throw e;
+      }
 
       res.json({
         ok: true,
         order
       });
-
     } catch (e) {
-
       console.error(
         "Payment verify error:",
         e
       );
 
-      res.status(500).json({
+      res.status(400).json({
         error:
           e.message ||
           "Payment verification failed."
@@ -853,11 +947,7 @@ app.post(
 
 app.use(
   (err, req, res, next) => {
-
-    console.error(
-      "Server error:",
-      err
-    );
+    console.error(err);
 
     res.status(500).json({
       error:
@@ -872,17 +962,11 @@ app.use(
 ========================= */
 
 const PORT =
-  process.env.PORT ||
-  3000;
+  process.env.PORT || 3000;
 
-app.listen(
-  PORT,
-  () => {
-
-    console.log(
-      "VetBeings running on port " +
-      PORT
-    );
-
-  }
-);
+app.listen(PORT, () => {
+  console.log(
+    "VetBeings running on port " +
+    PORT
+  );
+});
