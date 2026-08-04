@@ -1,130 +1,394 @@
-const express=require("express"),fs=require("fs"),path=require("path"),crypto=require("crypto"),Razorpay=require("razorpay");
+const express = require("express");
+const fs = require("fs");
+const path = require("path");
+const crypto = require("crypto");
+const Razorpay = require("razorpay");
+const multer = require("multer");
+const { v2: cloudinary } = require("cloudinary");
 
-const app=express();
+const app = express();
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
-app.get("/",(req,res)=>res.sendFile(path.join(__dirname,"index.html")));
 
-const PF=path.join(__dirname,"products.json"),OF=path.join(__dirname,"orders.json");
-const read=f=>JSON.parse(fs.readFileSync(f));
-const write=(f,d)=>fs.writeFileSync(f,JSON.stringify(d,null,2));
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
 
-app.get("/api/products",(req,res)=>res.json(read(PF)));
+const PF = path.join(__dirname, "products.json");
+const OF = path.join(__dirname, "orders.json");
 
-/* ADMIN SECURITY */
-const adminAuth=(req,res,next)=>{
-  if(!process.env.ADMIN_PASSWORD){
-    return res.status(503).json({error:"ADMIN_PASSWORD not configured"});
+const read = (file) => {
+  try {
+    return JSON.parse(fs.readFileSync(file, "utf8"));
+  } catch (e) {
+    return [];
+  }
+};
+
+const write = (file, data) => {
+  fs.writeFileSync(file, JSON.stringify(data, null, 2));
+};
+
+/* =========================
+   CLOUDINARY
+========================= */
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024
+  }
+});
+
+function uploadToCloudinary(buffer) {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        folder: "vetbeings/products",
+        resource_type: "image"
+      },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
+
+    stream.end(buffer);
+  });
+}
+
+/* =========================
+   ADMIN SECURITY
+========================= */
+
+const adminAuth = (req, res, next) => {
+  if (!process.env.ADMIN_PASSWORD) {
+    return res.status(503).json({
+      error: "ADMIN_PASSWORD not configured"
+    });
   }
 
-  if(req.headers.authorization!=="Bearer "+process.env.ADMIN_PASSWORD){
-    return res.status(401).json({error:"Unauthorized"});
+  if (
+    req.headers.authorization !==
+    "Bearer " + process.env.ADMIN_PASSWORD
+  ) {
+    return res.status(401).json({
+      error: "Unauthorized"
+    });
   }
 
   next();
 };
 
-app.post("/api/admin/products",adminAuth,(req,res)=>{
-  let p=read(PF),x=req.body;
+/* =========================
+   PRODUCTS
+========================= */
 
-  if(x.id){
-    let i=p.findIndex(v=>v.id==x.id);
-    if(i<0)return res.status(404).json({error:"Not found"});
-    p[i]={...p[i],...x};
-  }else{
-    x.id=Date.now();
-    p.push(x);
+app.get("/api/products", (req, res) => {
+  res.json(read(PF));
+});
+
+/* ADD / EDIT PRODUCT */
+
+app.post(
+  "/api/admin/products",
+  adminAuth,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      let products = read(PF);
+
+      let product = {
+        id: req.body.id
+          ? Number(req.body.id)
+          : Date.now(),
+
+        name: req.body.name || "",
+        category: req.body.category || "",
+        price: Number(req.body.price || 0),
+        stock: Number(req.body.stock || 0)
+      };
+
+      /* IMAGE UPLOAD */
+
+      if (req.file) {
+        const result = await uploadToCloudinary(
+          req.file.buffer
+        );
+
+        product.image = result.secure_url;
+        product.imagePublicId = result.public_id;
+      }
+
+      const index = products.findIndex(
+        (x) => x.id == product.id
+      );
+
+      if (index >= 0) {
+        /* Keep old image if new image not uploaded */
+
+        if (!product.image && products[index].image) {
+          product.image = products[index].image;
+          product.imagePublicId =
+            products[index].imagePublicId;
+        }
+
+        products[index] = {
+          ...products[index],
+          ...product
+        };
+      } else {
+        products.push(product);
+      }
+
+      write(PF, products);
+
+      res.json({
+        ok: true,
+        product
+      });
+
+    } catch (e) {
+      console.error(e);
+
+      res.status(500).json({
+        error: e.message
+      });
+    }
   }
+);
 
-  write(PF,p);
-  res.json({ok:true,products:p});
-});
+/* DELETE PRODUCT */
 
-app.delete("/api/admin/products/:id",adminAuth,(req,res)=>{
-  let p=read(PF).filter(x=>x.id!=req.params.id);
-  write(PF,p);
-  res.json({ok:true});
-});
+app.delete(
+  "/api/admin/products/:id",
+  adminAuth,
+  async (req, res) => {
+    try {
+      let products = read(PF);
 
-app.get("/api/admin/orders",adminAuth,(req,res)=>res.json(read(OF)));
+      const product = products.find(
+        (x) => x.id == req.params.id
+      );
 
-app.post("/api/orders",(req,res)=>{
-  let o=read(OF),x={
-    id:"VB"+Date.now(),
-    time:new Date().toISOString(),
-    status:"pending",
-    payment:"COD",
+      if (
+        product &&
+        product.imagePublicId
+      ) {
+        try {
+          await cloudinary.uploader.destroy(
+            product.imagePublicId
+          );
+        } catch (e) {
+          console.error(
+            "Cloudinary delete error:",
+            e.message
+          );
+        }
+      }
+
+      products = products.filter(
+        (x) => x.id != req.params.id
+      );
+
+      write(PF, products);
+
+      res.json({
+        ok: true
+      });
+
+    } catch (e) {
+      res.status(500).json({
+        error: e.message
+      });
+    }
+  }
+);
+
+/* =========================
+   ORDERS
+========================= */
+
+app.get(
+  "/api/admin/orders",
+  adminAuth,
+  (req, res) => {
+    res.json(read(OF));
+  }
+);
+
+app.post("/api/orders", (req, res) => {
+  const orders = read(OF);
+
+  const order = {
+    id: "VB" + Date.now(),
+    time: new Date().toISOString(),
+    status: "pending",
+    payment: "COD",
     ...req.body
   };
 
-  o.unshift(x);
-  write(OF,o);
-  res.json(x);
+  orders.unshift(order);
+
+  write(OF, orders);
+
+  res.json(order);
 });
 
-app.post("/api/payment/order",async(req,res)=>{
-  try{
-    if(!process.env.RAZORPAY_KEY_ID||!process.env.RAZORPAY_KEY_SECRET)
-      return res.status(503).json({
-        error:"Razorpay keys not configured. Use COD or configure server environment variables."
+/* =========================
+   RAZORPAY
+========================= */
+
+app.post(
+  "/api/payment/order",
+  async (req, res) => {
+    try {
+
+      if (
+        !process.env.RAZORPAY_KEY_ID ||
+        !process.env.RAZORPAY_KEY_SECRET
+      ) {
+        return res.status(503).json({
+          error:
+            "Razorpay keys not configured."
+        });
+      }
+
+      const razorpay = new Razorpay({
+        key_id:
+          process.env.RAZORPAY_KEY_ID,
+
+        key_secret:
+          process.env.RAZORPAY_KEY_SECRET
       });
 
-    const rz=new Razorpay({
-      key_id:process.env.RAZORPAY_KEY_ID,
-      key_secret:process.env.RAZORPAY_KEY_SECRET
-    });
+      const order =
+        await razorpay.orders.create({
+          amount: Math.round(
+            Number(req.body.amount) * 100
+          ),
 
-    const order=await rz.orders.create({
-      amount:Math.round(req.body.amount*100),
-      currency:"INR",
-      receipt:"vb_"+Date.now()
-    });
+          currency: "INR",
 
-    res.json({order,key:process.env.RAZORPAY_KEY_ID});
+          receipt:
+            "vb_" + Date.now()
+        });
 
-  }catch(e){
-    res.status(500).json({error:e.message});
+      res.json({
+        order,
+        key:
+          process.env.RAZORPAY_KEY_ID
+      });
+
+    } catch (e) {
+
+      console.error(e);
+
+      res.status(500).json({
+        error: e.message
+      });
+    }
   }
-});
-
-app.post("/api/payment/verify",(req,res)=>{
-  let {
-    razorpay_order_id,
-    razorpay_payment_id,
-    razorpay_signature,
-    customer,
-    items,
-    total
-  }=req.body;
-
-  let expected=crypto
-    .createHmac("sha256",process.env.RAZORPAY_KEY_SECRET||"")
-    .update(razorpay_order_id+"|"+razorpay_payment_id)
-    .digest("hex");
-
-  if(!crypto.timingSafeEqual(
-    Buffer.from(expected),
-    Buffer.from(razorpay_signature)
-  ))
-    return res.status(400).json({error:"Invalid signature"});
-
-  let o=read(OF),x={
-    id:"VB"+Date.now(),
-    time:new Date().toISOString(),
-    status:"paid",
-    payment:"Razorpay",
-    paymentId:razorpay_payment_id,
-    customer,
-    items,
-    total
-  };
-
-  o.unshift(x);
-  write(OF,o);
-  res.json({ok:true,order:x});
-});
-
-app.listen(
-  process.env.PORT||3000,
-  ()=>console.log("VetBeings running on port "+(process.env.PORT||3000))
 );
+
+/* VERIFY PAYMENT */
+
+app.post(
+  "/api/payment/verify",
+  (req, res) => {
+
+    try {
+
+      const {
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature,
+        customer,
+        items,
+        total
+      } = req.body;
+
+      if (
+        !process.env
+          .RAZORPAY_KEY_SECRET
+      ) {
+        return res.status(503).json({
+          error:
+            "Razorpay secret not configured."
+        });
+      }
+
+      const expected = crypto
+        .createHmac(
+          "sha256",
+          process.env
+            .RAZORPAY_KEY_SECRET
+        )
+        .update(
+          razorpay_order_id +
+          "|" +
+          razorpay_payment_id
+        )
+        .digest("hex");
+
+      if (expected !== razorpay_signature) {
+        return res.status(400).json({
+          error:
+            "Invalid payment signature"
+        });
+      }
+
+      const orders = read(OF);
+
+      const order = {
+        id: "VB" + Date.now(),
+        time:
+          new Date().toISOString(),
+        status: "paid",
+        payment: "Razorpay",
+        paymentId:
+          razorpay_payment_id,
+        customer,
+        items,
+        total
+      };
+
+      orders.unshift(order);
+
+      write(OF, orders);
+
+      res.json({
+        ok: true,
+        order
+      });
+
+    } catch (e) {
+
+      res.status(500).json({
+        error: e.message
+      });
+    }
+  }
+);
+
+/* =========================
+   SERVER
+========================= */
+
+const PORT =
+  process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(
+    "VetBeings running on port " +
+    PORT
+  );
+});
