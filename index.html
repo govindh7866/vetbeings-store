@@ -5,103 +5,780 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>VetBeings | Veterinary Medicines & Animal Healthcare</title>
 <meta name="description" content="VetBeings veterinary medicines, animal nutrition and healthcare products.">
+
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <style>
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f7faf8;color:#14251c}
+
+body{
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+background:#f7faf8;
+color:#14251c
+}
+
 button,input,textarea{font:inherit}
 button{cursor:pointer}
 a{text-decoration:none}
-.top{background:#043d2b;color:#fff;padding:8px 5%;display:flex;justify-content:space-between;gap:15px;font-size:12px}
-.nav{height:78px;background:#fff;padding:9px 5%;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:30;box-shadow:0 3px 18px #00000012}
-.logo{width:115px;height:58px;object-fit:contain}
-.search{flex:1;padding:13px 15px;border:1px solid #d9e2dd;border-radius:9px;outline:none}
-.btn{border:0;background:#087847;color:#fff;padding:12px 16px;border-radius:8px;font-weight:800}
+
+.top{
+background:#043d2b;
+color:#fff;
+padding:8px 5%;
+display:flex;
+justify-content:space-between;
+gap:15px;
+font-size:12px
+}
+
+.nav{
+height:78px;
+background:#fff;
+padding:9px 5%;
+display:flex;
+align-items:center;
+gap:14px;
+position:sticky;
+top:0;
+z-index:30;
+box-shadow:0 3px 18px #00000012
+}
+
+.logo{
+width:115px;
+height:58px;
+object-fit:contain
+}
+
+.search{
+flex:1;
+padding:13px 15px;
+border:1px solid #d9e2dd;
+border-radius:9px;
+outline:none
+}
+
+.btn{
+border:0;
+background:#087847;
+color:#fff;
+padding:12px 16px;
+border-radius:8px;
+font-weight:800
+}
+
 .btn:hover{background:#05663b}
-.hero{min-height:520px;padding:75px 6%;display:flex;align-items:center;color:#fff;background:linear-gradient(90deg,rgba(1,55,37,.96),rgba(1,55,37,.70),rgba(0,0,0,.18)),url("https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=1800&q=90");background-size:cover;background-position:center}
+
+/* =========================
+   PREMIUM HERO
+========================= */
+
+.hero{
+min-height:520px;
+padding:75px 6%;
+display:flex;
+align-items:center;
+color:#fff;
+
+background:
+linear-gradient(
+90deg,
+rgba(1,55,37,.96),
+rgba(1,55,37,.72),
+rgba(0,0,0,.15)
+),
+url("vet-doctor-hero.png");
+
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat
+}
+
 .heroIn{max-width:720px}
-.badge{display:inline-block;padding:8px 13px;border:1px solid #ffffff55;border-radius:30px;background:#ffffff16;font-size:11px;font-weight:bold;letter-spacing:1px}
-.hero h1{font-size:55px;line-height:1.02;margin:20px 0 18px;letter-spacing:-1.5px}
-.hero p{font-size:17px;line-height:1.7;color:#e3f1ea;max-width:650px}
-.heroBtns{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
-.white{background:#fff;color:#076b42;padding:14px 19px;border-radius:8px;font-weight:bold}
-.outline{border:1px solid #ffffff77;color:#fff;padding:14px 19px;border-radius:8px;font-weight:bold}
-.trustWrap{max-width:1250px;margin:-35px auto 0;padding:0 15px;position:relative;z-index:5}
-.trust{background:#fff;display:grid;grid-template-columns:repeat(4,1fr);border-radius:14px;overflow:hidden;box-shadow:0 15px 35px #00000018}
-.trust div{padding:23px;border-right:1px solid #e7ece9}
+
+.badge{
+display:inline-block;
+padding:8px 13px;
+border:1px solid #ffffff55;
+border-radius:30px;
+background:#ffffff16;
+font-size:11px;
+font-weight:bold;
+letter-spacing:1px
+}
+
+.hero h1{
+font-size:55px;
+line-height:1.02;
+margin:20px 0 18px;
+letter-spacing:-1.5px
+}
+
+.hero p{
+font-size:17px;
+line-height:1.7;
+color:#e3f1ea;
+max-width:650px
+}
+
+.heroBtns{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-top:28px
+}
+
+.white{
+background:#fff;
+color:#076b42;
+padding:14px 19px;
+border-radius:8px;
+font-weight:bold
+}
+
+.outline{
+border:1px solid #ffffff77;
+color:#fff;
+padding:14px 19px;
+border-radius:8px;
+font-weight:bold
+}
+
+/* =========================
+   TRUST
+========================= */
+
+.trustWrap{
+max-width:1250px;
+margin:-35px auto 0;
+padding:0 15px;
+position:relative;
+z-index:5
+}
+
+.trust{
+background:#fff;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+border-radius:14px;
+overflow:hidden;
+box-shadow:0 15px 35px #00000018
+}
+
+.trust div{
+padding:23px;
+border-right:1px solid #e7ece9
+}
+
 .trust div:last-child{border:0}
-.trust b{display:block;margin-bottom:6px}
-.trust small{color:#6d7a72;line-height:1.5}
-.section{max-width:1250px;margin:auto;padding:70px 16px}
+
+.trust b{
+display:block;
+margin-bottom:6px
+}
+
+.trust small{
+color:#6d7a72;
+line-height:1.5
+}
+
+/* =========================
+   SECTIONS
+========================= */
+
+.section{
+max-width:1250px;
+margin:auto;
+padding:70px 16px
+}
+
 .center{text-align:center}
-.green{color:#087847;font-size:11px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase}
-.title{font-size:39px;margin:9px 0 12px}
-.sub{max-width:700px;margin:0 auto 32px;color:#68766e;line-height:1.7}
-.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.cat{background:#fff;border:1px solid #e0e8e3;border-radius:14px;overflow:hidden}
-.cat img{width:100%;height:185px;object-fit:cover}
+
+.green{
+color:#087847;
+font-size:11px;
+font-weight:900;
+letter-spacing:1.2px;
+text-transform:uppercase
+}
+
+.title{
+font-size:39px;
+margin:9px 0 12px
+}
+
+.sub{
+max-width:700px;
+margin:0 auto 32px;
+color:#68766e;
+line-height:1.7
+}
+
+/* =========================
+   CATEGORIES
+========================= */
+
+.cats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:16px
+}
+
+.cat{
+background:#fff;
+border:1px solid #e0e8e3;
+border-radius:14px;
+overflow:hidden
+}
+
+.cat img{
+width:100%;
+height:185px;
+object-fit:cover
+}
+
 .catText{padding:15px}
-.cat h3{margin:0 0 6px}
-.cat p{margin:0;color:#6d7972;font-size:12px;line-height:1.5}
-.productsArea{background:#edf6f1;padding:65px 0}
-.productHead{max-width:1250px;margin:auto;padding:0 16px 20px}
-.productHead h2{font-size:39px;margin:8px 0}
-#productStatus{color:#66756c;font-size:13px}
-.grid{max-width:1250px;margin:auto;padding:10px 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:17px}
-.product{background:#fff;border:1px solid #dde6e1;border-radius:14px;overflow:hidden;display:flex;flex-direction:column;transition:.2s}
-.product:hover{transform:translateY(-4px);box-shadow:0 12px 30px #00000012}
-.photo{height:220px;background:#f3f7f5;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.photo img{width:100%;height:100%;object-fit:contain;padding:8px}
+
+.cat h3{
+margin:0 0 6px
+}
+
+.cat p{
+margin:0;
+color:#6d7972;
+font-size:12px;
+line-height:1.5
+}
+
+/* =========================
+   PRODUCTS
+========================= */
+
+.productsArea{
+background:#edf6f1;
+padding:65px 0
+}
+
+.productHead{
+max-width:1250px;
+margin:auto;
+padding:0 16px 20px
+}
+
+.productHead h2{
+font-size:39px;
+margin:8px 0
+}
+
+#productStatus{
+color:#66756c;
+font-size:13px
+}
+
+.grid{
+max-width:1250px;
+margin:auto;
+padding:10px 16px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:17px
+}
+
+.product{
+background:#fff;
+border:1px solid #dde6e1;
+border-radius:14px;
+overflow:hidden;
+display:flex;
+flex-direction:column;
+transition:.2s
+}
+
+.product:hover{
+transform:translateY(-4px);
+box-shadow:0 12px 30px #00000012
+}
+
+.photo{
+height:220px;
+background:#f3f7f5;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden
+}
+
+.photo img{
+width:100%;
+height:100%;
+object-fit:contain;
+padding:8px
+}
+
 .noPhoto{font-size:55px}
-.info{padding:16px;display:flex;flex-direction:column;flex:1}
-.category{font-size:10px;color:#087847;font-weight:900;text-transform:uppercase;letter-spacing:.5px}
-.info h3{font-size:17px;margin:8px 0}
-.desc{font-size:12px;color:#68766e;line-height:1.55;min-height:56px}
-.stock{font-size:11px;color:#526158;margin:10px 0}
-.price{font-size:22px;font-weight:900;margin-top:auto}
-.product .btn{width:100%;margin-top:12px}
-.product .btn:disabled{background:#9da8a2;cursor:not-allowed}
-.about{display:grid;grid-template-columns:1fr 1fr;gap:45px;align-items:center}
-.about img{width:100%;height:420px;object-fit:cover;border-radius:17px}
-.about h2{font-size:39px;margin:10px 0}
-.about p{color:#65736b;line-height:1.7}
-.checks{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:20px}
-.check{background:#edf7f1;padding:12px;border-radius:8px;font-size:12px;font-weight:bold}
-.support{background:#034a34;color:#fff;padding:65px 5%;text-align:center}
-.support h2{font-size:38px;margin:10px 0}
+
+.info{
+padding:16px;
+display:flex;
+flex-direction:column;
+flex:1
+}
+
+.category{
+font-size:10px;
+color:#087847;
+font-weight:900;
+text-transform:uppercase;
+letter-spacing:.5px
+}
+
+.info h3{
+font-size:17px;
+margin:8px 0
+}
+
+.desc{
+font-size:12px;
+color:#68766e;
+line-height:1.55;
+min-height:56px
+}
+
+.stock{
+font-size:11px;
+color:#526158;
+margin:10px 0
+}
+
+.price{
+font-size:22px;
+font-weight:900;
+margin-top:auto
+}
+
+.product .btn{
+width:100%;
+margin-top:12px
+}
+
+.product .btn:disabled{
+background:#9da8a2;
+cursor:not-allowed
+}
+
+/* =========================
+   ABOUT
+========================= */
+
+.about{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:45px;
+align-items:center
+}
+
+.about img{
+width:100%;
+height:420px;
+object-fit:cover;
+border-radius:17px;
+box-shadow:0 18px 40px #00000016
+}
+
+.about h2{
+font-size:39px;
+margin:10px 0
+}
+
+.about p{
+color:#65736b;
+line-height:1.7
+}
+
+.checks{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:9px;
+margin-top:20px
+}
+
+.check{
+background:#edf7f1;
+padding:12px;
+border-radius:8px;
+font-size:12px;
+font-weight:bold
+}
+
+/* =========================
+   SUPPORT
+========================= */
+
+.support{
+background:#034a34;
+color:#fff;
+padding:65px 5%;
+text-align:center
+}
+
+.support h2{
+font-size:38px;
+margin:10px 0
+}
+
 .support p{color:#c8ddd2}
-.supportGrid{max-width:1100px;margin:30px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
-.supportCard{background:#ffffff10;border:1px solid #ffffff18;border-radius:12px;padding:22px;text-align:left}
-.help{max-width:1220px;margin:50px auto;padding:30px;background:#087847;color:#fff;border-radius:15px;display:flex;justify-content:space-between;align-items:center;gap:20px}
-.help h2{margin:0 0 6px}
-.help p{margin:0;color:#d9eee3}
-.wa{background:#fff;color:#087847;padding:13px 18px;border-radius:8px;font-weight:bold}
-footer{background:#033c2b;color:#fff;padding:45px 5% 22px}
-.footerGrid{max-width:1200px;margin:auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:35px}
-.footerLogo{width:115px;background:#fff;padding:5px;border-radius:7px}
-footer p{color:#bed4c9;font-size:12px;line-height:1.8}
-.copy{max-width:1200px;margin:30px auto 0;padding-top:18px;border-top:1px solid #ffffff1d;color:#9dbbae;font-size:11px;text-align:center}
-.overlay{position:fixed;inset:0;background:#0007;z-index:90;display:none}
+
+.supportGrid{
+max-width:1100px;
+margin:30px auto 0;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px
+}
+
+.supportCard{
+background:#ffffff10;
+border:1px solid #ffffff18;
+border-radius:12px;
+padding:22px;
+text-align:left
+}
+
+/* =========================
+   HELP
+========================= */
+
+.help{
+max-width:1220px;
+margin:50px auto;
+padding:30px;
+background:#087847;
+color:#fff;
+border-radius:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:20px
+}
+
+.help h2{
+margin:0 0 6px
+}
+
+.help p{
+margin:0;
+color:#d9eee3
+}
+
+.wa{
+background:#fff;
+color:#087847;
+padding:13px 18px;
+border-radius:8px;
+font-weight:bold
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+background:#033c2b;
+color:#fff;
+padding:45px 5% 22px
+}
+
+.footerGrid{
+max-width:1200px;
+margin:auto;
+display:grid;
+grid-template-columns:2fr 1fr 1fr;
+gap:35px
+}
+
+.footerLogo{
+width:115px;
+background:#fff;
+padding:5px;
+border-radius:7px
+}
+
+footer p{
+color:#bed4c9;
+font-size:12px;
+line-height:1.8
+}
+
+.copy{
+max-width:1200px;
+margin:30px auto 0;
+padding-top:18px;
+border-top:1px solid #ffffff1d;
+color:#9dbbae;
+font-size:11px;
+text-align:center
+}
+
+/* =========================
+   CART
+========================= */
+
+.overlay{
+position:fixed;
+inset:0;
+background:#0007;
+z-index:90;
+display:none
+}
+
 .overlay.show{display:block}
-.cart{position:fixed;right:-470px;top:0;width:450px;max-width:100%;height:100vh;background:#fff;z-index:100;padding:22px;overflow:auto;box-shadow:-8px 0 30px #0003;transition:.25s}
+
+.cart{
+position:fixed;
+right:-470px;
+top:0;
+width:450px;
+max-width:100%;
+height:100vh;
+background:#fff;
+z-index:100;
+padding:22px;
+overflow:auto;
+box-shadow:-8px 0 30px #0003;
+transition:.25s
+}
+
 .cart.open{right:0}
-.close{float:right;border:0;background:#edf1ef;border-radius:50%;width:35px;height:35px}
-.cartRow{padding:14px 0;border-bottom:1px solid #e5ebe7}
-.cartName{font-weight:bold;margin-bottom:5px}
-.qty{width:29px;height:29px;border:1px solid #ccd7d1;background:#fff;border-radius:5px}
-.remove{border:0;background:none;color:#b42318;margin-left:8px}
-.total{font-size:23px;font-weight:900;margin:20px 0}
-.field{width:100%;padding:12px;border:1px solid #d3ddd7;border-radius:8px;margin:5px 0}
-textarea.field{height:85px;resize:vertical}
-.pay{width:100%;margin-top:8px}
+
+.close{
+float:right;
+border:0;
+background:#edf1ef;
+border-radius:50%;
+width:35px;
+height:35px
+}
+
+.cartRow{
+padding:14px 0;
+border-bottom:1px solid #e5ebe7
+}
+
+.cartName{
+font-weight:bold;
+margin-bottom:5px
+}
+
+.qty{
+width:29px;
+height:29px;
+border:1px solid #ccd7d1;
+background:#fff;
+border-radius:5px
+}
+
+.remove{
+border:0;
+background:none;
+color:#b42318;
+margin-left:8px
+}
+
+.total{
+font-size:23px;
+font-weight:900;
+margin:20px 0
+}
+
+.field{
+width:100%;
+padding:12px;
+border:1px solid #d3ddd7;
+border-radius:8px;
+margin:5px 0
+}
+
+textarea.field{
+height:85px;
+resize:vertical
+}
+
+.pay{
+width:100%;
+margin-top:8px
+}
+
 .cod{background:#075c39}
-.message{display:none;padding:11px;border-radius:7px;margin:9px 0;font-size:12px}
-.message.ok{display:block;background:#e5f6eb;color:#08683a}
-.message.err{display:block;background:#ffe8e8;color:#9c2020}
-@media(max-width:900px){.cats,.grid{grid-template-columns:repeat(2,1fr)}.trust{grid-template-columns:repeat(2,1fr)}.about{grid-template-columns:1fr}.supportGrid{grid-template-columns:1fr}.footerGrid{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.top{font-size:10px}.top span:first-child{display:none}.nav{height:67px;padding:7px 3%;gap:7px}.logo{width:75px}.search{padding:10px;min-width:0}.nav .btn{padding:10px;font-size:11px}.hero{min-height:450px;padding:55px 5%}.hero h1{font-size:38px}.hero p{font-size:14px}.trustWrap{margin-top:-20px}.trust div{padding:14px}.section{padding:50px 11px}.title,.productHead h2,.about h2,.support h2{font-size:29px}.cats{gap:9px}.cat img{height:130px}.catText{padding:10px}.grid{gap:9px;padding:8px 9px}.photo{height:165px}.info{padding:11px}.info h3{font-size:14px}.desc{font-size:11px;min-height:50px}.price{font-size:19px}.product .btn{padding:10px 4px;font-size:10px}.about img{height:300px}.checks{grid-template-columns:1fr}.help{margin:30px 10px;flex-direction:column;align-items:flex-start}.footerGrid{grid-template-columns:1fr}}
+
+.message{
+display:none;
+padding:11px;
+border-radius:7px;
+margin:9px 0;
+font-size:12px
+}
+
+.message.ok{
+display:block;
+background:#e5f6eb;
+color:#08683a
+}
+
+.message.err{
+display:block;
+background:#ffe8e8;
+color:#9c2020
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:900px){
+
+.cats,.grid{
+grid-template-columns:repeat(2,1fr)
+}
+
+.trust{
+grid-template-columns:repeat(2,1fr)
+}
+
+.about{
+grid-template-columns:1fr
+}
+
+.supportGrid{
+grid-template-columns:1fr
+}
+
+.footerGrid{
+grid-template-columns:1fr 1fr
+}
+
+}
+
+@media(max-width:600px){
+
+.top{font-size:10px}
+
+.top span:first-child{
+display:none
+}
+
+.nav{
+height:67px;
+padding:7px 3%;
+gap:7px
+}
+
+.logo{width:75px}
+
+.search{
+padding:10px;
+min-width:0
+}
+
+.nav .btn{
+padding:10px;
+font-size:11px
+}
+
+.hero{
+min-height:450px;
+padding:55px 5%;
+background-position:center
+}
+
+.hero h1{
+font-size:38px
+}
+
+.hero p{
+font-size:14px
+}
+
+.trustWrap{
+margin-top:-20px
+}
+
+.trust div{
+padding:14px
+}
+
+.section{
+padding:50px 11px
+}
+
+.title,
+.productHead h2,
+.about h2,
+.support h2{
+font-size:29px
+}
+
+.cats{gap:9px}
+
+.cat img{
+height:130px
+}
+
+.catText{
+padding:10px
+}
+
+.grid{
+gap:9px;
+padding:8px 9px
+}
+
+.photo{
+height:165px
+}
+
+.info{
+padding:11px
+}
+
+.info h3{
+font-size:14px
+}
+
+.desc{
+font-size:11px;
+min-height:50px
+}
+
+.price{
+font-size:19px
+}
+
+.product .btn{
+padding:10px 4px;
+font-size:10px
+}
+
+.about img{
+height:300px
+}
+
+.checks{
+grid-template-columns:1fr
+}
+
+.help{
+margin:30px 10px;
+flex-direction:column;
+align-items:flex-start
+}
+
+.footerGrid{
+grid-template-columns:1fr
+}
+
+}
 </style>
 </head>
 
@@ -113,534 +790,1584 @@ textarea.field{height:85px;resize:vertical}
 </div>
 
 <nav class="nav">
-<img src="logo.png" class="logo" alt="VetBeings">
-<input id="search" class="search" placeholder="Search veterinary products..." oninput="renderProducts()">
-<button class="btn" onclick="openCart()">Cart (<span id="count">0</span>)</button>
+
+<img
+src="logo.png"
+class="logo"
+alt="VetBeings"
+>
+
+<input
+id="search"
+class="search"
+placeholder="Search veterinary products..."
+oninput="renderProducts()"
+>
+
+<button
+class="btn"
+onclick="openCart()"
+>
+Cart (<span id="count">0</span>)
+</button>
+
 </nav>
 
+<!-- =========================
+     PREMIUM DOCTOR HERO
+========================= -->
+
 <section class="hero">
+
 <div class="heroIn">
-<span class="badge">VETERINARY HEALTHCARE</span>
-<h1>Better Care for the Animals That Depend on You.</h1>
-<p>Shop veterinary medicines, nutritional supplements and animal healthcare products for cattle, livestock and animal wellness.</p>
+
+<span class="badge">
+VETERINARY HEALTHCARE
+</span>
+
+<h1>
+Better Care for the Animals That Depend on You.
+</h1>
+
+<p>
+Shop veterinary medicines, nutritional supplements and animal healthcare products for cattle, livestock and animal wellness.
+</p>
+
 <div class="heroBtns">
-<a href="#products" class="white">SHOP PRODUCTS</a>
-<a href="tel:+918829053040" class="outline">CALL VETBEINGS</a>
+
+<a
+href="#products"
+class="white"
+>
+SHOP PRODUCTS
+</a>
+
+<a
+href="tel:+918829053040"
+class="outline"
+>
+CALL VETBEINGS
+</a>
+
 </div>
+
 </div>
+
 </section>
+
+<!-- =========================
+     TRUST
+========================= -->
 
 <div class="trustWrap">
+
 <div class="trust">
-<div><b>Quality Products</b><small>Veterinary healthcare focused catalogue</small></div>
-<div><b>Animal Care</b><small>Cattle, livestock and wellness products</small></div>
-<div><b>Secure Ordering</b><small>COD and online payment options</small></div>
-<div><b>Customer Support</b><small>Help with products and ordering</small></div>
+
+<div>
+<b>Quality Products</b>
+<small>
+Veterinary healthcare focused catalogue
+</small>
 </div>
+
+<div>
+<b>Animal Care</b>
+<small>
+Cattle, livestock and wellness products
+</small>
 </div>
+
+<div>
+<b>Secure Ordering</b>
+<small>
+COD and online payment options
+</small>
+</div>
+
+<div>
+<b>Customer Support</b>
+<small>
+Help with products and ordering
+</small>
+</div>
+
+</div>
+
+</div>
+
+<!-- =========================
+     CATEGORIES
+========================= -->
 
 <section class="section center">
-<div class="green">ANIMAL HEALTHCARE</div>
-<h2 class="title">Care for Every Stage of Animal Health</h2>
-<p class="sub">Explore veterinary healthcare and nutrition products for the everyday needs of animals.</p>
+
+<div class="green">
+ANIMAL HEALTHCARE
+</div>
+
+<h2 class="title">
+Care for Every Stage of Animal Health
+</h2>
+
+<p class="sub">
+Explore veterinary healthcare and nutrition products for the everyday needs of animals.
+</p>
 
 <div class="cats">
+
 <div class="cat">
-<img src="https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?auto=format&fit=crop&w=700&q=85" alt="Cattle">
-<div class="catText"><h3>Cattle Care</h3><p>Healthcare and wellness solutions for cattle.</p></div>
+
+<img
+src="https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?auto=format&fit=crop&w=700&q=85"
+alt="Cattle"
+>
+
+<div class="catText">
+
+<h3>Cattle Care</h3>
+
+<p>
+Healthcare and wellness solutions for cattle.
+</p>
+
+</div>
+
 </div>
 
 <div class="cat">
-<img src="https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=700&q=85" alt="Nutrition">
-<div class="catText"><h3>Animal Nutrition</h3><p>Nutrition and supplementation for animal wellbeing.</p></div>
+
+<img
+src="https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=700&q=85"
+alt="Animal Nutrition"
+>
+
+<div class="catText">
+
+<h3>Animal Nutrition</h3>
+
+<p>
+Nutrition and supplementation for animal wellbeing.
+</p>
+
+</div>
+
 </div>
 
 <div class="cat">
-<img src="https://images.unsplash.com/photo-1560493676-04071c5f467b?auto=format&fit=crop&w=700&q=85" alt="Farm">
-<div class="catText"><h3>Farm Animal Care</h3><p>Products for livestock health and management.</p></div>
+
+<img
+src="https://images.unsplash.com/photo-1560493676-04071c5f467b?auto=format&fit=crop&w=700&q=85"
+alt="Farm Animal Care"
+>
+
+<div class="catText">
+
+<h3>Farm Animal Care</h3>
+
+<p>
+Products for livestock health and management.
+</p>
+
+</div>
+
 </div>
 
 <div class="cat">
-<img src="https://images.unsplash.com/photo-1558788353-f76d92427f16?auto=format&fit=crop&w=700&q=85" alt="Animal">
-<div class="catText"><h3>General Care</h3><p>Everyday animal health and wellness products.</p></div>
+
+<img
+src="https://images.unsplash.com/photo-1558788353-f76d92427f16?auto=format&fit=crop&w=700&q=85"
+alt="Animal Care"
+>
+
+<div class="catText">
+
+<h3>General Care</h3>
+
+<p>
+Everyday animal health and wellness products.
+</p>
+
 </div>
+
 </div>
+
+</div>
+
 </section>
 
-<section class="productsArea" id="products">
+<!-- =========================
+     PRODUCTS
+========================= -->
+
+<section
+class="productsArea"
+id="products"
+>
+
 <div class="productHead">
-<div class="green">VETBEINGS STORE</div>
-<h2>Veterinary Products</h2>
-<div id="productStatus">Loading products...</div>
+
+<div class="green">
+VETBEINGS STORE
 </div>
-<div id="productGrid" class="grid"></div>
+
+<h2>
+Veterinary Products
+</h2>
+
+<div id="productStatus">
+Loading products...
+</div>
+
+</div>
+
+<div
+id="productGrid"
+class="grid"
+></div>
+
 </section>
+
+<!-- =========================
+     PREMIUM VETERINARY CARE
+     NO PIG IMAGE
+========================= -->
 
 <section class="section about">
-<img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=1000&q=90" alt="Veterinary animal care">
+
+<img
+src="vet-doctor-hero.png"
+alt="VetBeings veterinary doctor providing professional animal healthcare"
+>
 
 <div>
-<div class="green">WHY VETBEINGS</div>
-<h2>Professional Animal Healthcare Made Easier.</h2>
-<p>VetBeings brings veterinary medicines, animal nutrition and healthcare products together in one convenient online store.</p>
-<p>Products added from the VetBeings Admin Dashboard automatically become available in this store.</p>
+
+<div class="green">
+WHY VETBEINGS
+</div>
+
+<h2>
+Professional Animal Healthcare Made Easier.
+</h2>
+
+<p>
+VetBeings brings veterinary medicines, animal nutrition and healthcare products together in one convenient online store.
+</p>
+
+<p>
+Products added from the VetBeings Admin Dashboard automatically become available in this store.
+</p>
+
 <div class="checks">
-<div class="check">✓ Veterinary Healthcare Focus</div>
-<div class="check">✓ Product Photos & Details</div>
-<div class="check">✓ Cash on Delivery</div>
-<div class="check">✓ Secure Online Payment</div>
+
+<div class="check">
+✓ Veterinary Healthcare Focus
 </div>
+
+<div class="check">
+✓ Product Photos & Details
 </div>
+
+<div class="check">
+✓ Cash on Delivery
+</div>
+
+<div class="check">
+✓ Secure Online Payment
+</div>
+
+</div>
+
+</div>
+
 </section>
+
+<!-- =========================
+     SUPPORT
+========================= -->
 
 <section class="support">
-<div class="green" style="color:#9ed8bb">COMPASSION • CARE • CURE</div>
-<h2>Supporting Healthier Animals</h2>
-<p>Dependable animal healthcare products made easier to discover and order.</p>
+
+<div
+class="green"
+style="color:#9ed8bb"
+>
+COMPASSION • CARE • CURE
+</div>
+
+<h2>
+Supporting Healthier Animals
+</h2>
+
+<p>
+Dependable animal healthcare products made easier to discover and order.
+</p>
 
 <div class="supportGrid">
-<div class="supportCard"><h3>Cattle Healthcare</h3><p>Everyday cattle health and wellness products.</p></div>
-<div class="supportCard"><h3>Nutrition Support</h3><p>Nutrition and supplementation supporting animal health.</p></div>
-<div class="supportCard"><h3>Convenient Ordering</h3><p>Order products with COD or secure online checkout.</p></div>
+
+<div class="supportCard">
+
+<h3>
+Cattle Healthcare
+</h3>
+
+<p>
+Everyday cattle health and wellness products.
+</p>
+
 </div>
+
+<div class="supportCard">
+
+<h3>
+Nutrition Support
+</h3>
+
+<p>
+Nutrition and supplementation supporting animal health.
+</p>
+
+</div>
+
+<div class="supportCard">
+
+<h3>
+Convenient Ordering
+</h3>
+
+<p>
+Order products with COD or secure online checkout.
+</p>
+
+</div>
+
+</div>
+
 </section>
 
+<!-- =========================
+     HELP
+========================= -->
+
 <div class="help">
-<div><h2>Need Help With an Order?</h2><p>Contact VetBeings for product and ordering assistance.</p></div>
-<a class="wa" href="https://wa.me/918829053040">WHATSAPP VETBEINGS</a>
+
+<div>
+
+<h2>
+Need Help With an Order?
+</h2>
+
+<p>
+Contact VetBeings for product and ordering assistance.
+</p>
+
 </div>
+
+<a
+class="wa"
+href="https://wa.me/918829053040"
+>
+WHATSAPP VETBEINGS
+</a>
+
+</div>
+
+<!-- =========================
+     FOOTER
+========================= -->
 
 <footer>
+
 <div class="footerGrid">
+
 <div>
-<img src="logo.png" class="footerLogo" alt="VetBeings">
-<p>Veterinary medicines, nutrition and animal healthcare products.</p>
+
+<img
+src="logo.png"
+class="footerLogo"
+alt="VetBeings"
+>
+
+<p>
+Veterinary medicines, nutrition and animal healthcare products.
+</p>
+
 </div>
-<div><b>SHOP</b><p>Veterinary Products<br>Cattle Care<br>Nutrition<br>Animal Wellness</p></div>
-<div><b>CONTACT</b><p>Phone / WhatsApp<br>+91 88290 53040</p></div>
+
+<div>
+
+<b>SHOP</b>
+
+<p>
+Veterinary Products<br>
+Cattle Care<br>
+Nutrition<br>
+Animal Wellness
+</p>
+
 </div>
-<div class="copy">© 2026 VetBeings. All rights reserved.</div>
+
+<div>
+
+<b>CONTACT</b>
+
+<p>
+Phone / WhatsApp<br>
++91 88290 53040
+</p>
+
+</div>
+
+</div>
+
+<div class="copy">
+© 2026 VetBeings. All rights reserved.
+</div>
+
 </footer>
 
-<div id="overlay" class="overlay" onclick="closeCart()"></div>
+<!-- =========================
+     CART
+========================= -->
 
-<aside id="cart" class="cart">
-<button class="close" onclick="closeCart()">✕</button>
-<h2>Your Cart</h2>
+<div
+id="overlay"
+class="overlay"
+onclick="closeCart()"
+></div>
+
+<aside
+id="cart"
+class="cart"
+>
+
+<button
+class="close"
+onclick="closeCart()"
+>
+✕
+</button>
+
+<h2>
+Your Cart
+</h2>
+
 <div id="cartRows"></div>
 
-<div class="total">Total ₹<span id="total">0</span></div>
+<div class="total">
+Total ₹<span id="total">0</span>
+</div>
 
-<h3>Delivery Details</h3>
-<input id="customerName" class="field" placeholder="Customer name">
-<input id="customerMobile" class="field" type="tel" maxlength="10" placeholder="10-digit mobile number">
-<textarea id="customerAddress" class="field" placeholder="Complete delivery address"></textarea>
+<h3>
+Delivery Details
+</h3>
 
-<div id="message" class="message"></div>
+<input
+id="customerName"
+class="field"
+placeholder="Customer name"
+>
 
-<button class="btn pay" onclick="payOnline()">PAY ONLINE — UPI / CARD</button>
-<button class="btn pay cod" onclick="placeCOD()">CASH ON DELIVERY</button>
+<input
+id="customerMobile"
+class="field"
+type="tel"
+maxlength="10"
+placeholder="10-digit mobile number"
+>
+
+<textarea
+id="customerAddress"
+class="field"
+placeholder="Complete delivery address"
+></textarea>
+
+<div
+id="message"
+class="message"
+></div>
+
+<button
+class="btn pay"
+onclick="payOnline()"
+>
+PAY ONLINE — UPI / CARD
+</button>
+
+<button
+class="btn pay cod"
+onclick="placeCOD()"
+>
+CASH ON DELIVERY
+</button>
+
 </aside>
 
 <script>
+
+/* =========================
+   DATA
+========================= */
+
 let PRODUCTS=[];
 let CART=[];
 
 try{
-CART=JSON.parse(localStorage.getItem("vbcart")||"[]");
-if(!Array.isArray(CART))CART=[];
-}catch(e){CART=[];}
+
+CART=
+JSON.parse(
+localStorage.getItem("vbcart")||"[]"
+);
+
+if(!Array.isArray(CART)){
+CART=[];
+}
+
+}catch(e){
+
+CART=[];
+
+}
+
+/* =========================
+   ESCAPE
+========================= */
 
 function esc(v){
+
 return String(v??"")
+
 .replace(/&/g,"&amp;")
 .replace(/</g,"&lt;")
 .replace(/>/g,"&gt;")
 .replace(/"/g,"&quot;")
 .replace(/'/g,"&#039;");
+
 }
 
+/* =========================
+   LOAD PRODUCTS
+========================= */
+
 async function loadProducts(){
-const status=document.getElementById("productStatus");
+
+const status=
+document.getElementById(
+"productStatus"
+);
 
 try{
-status.textContent="Loading products...";
 
-const r=await fetch("/api/products?time="+Date.now(),{
+status.textContent=
+"Loading products...";
+
+const r=
+await fetch(
+"/api/products?time="+
+Date.now(),
+{
 cache:"no-store"
-});
+}
+);
 
-if(!r.ok)throw new Error("Server error "+r.status);
+if(!r.ok){
 
-const data=await r.json();
+throw new Error(
+"Server error "+r.status
+);
 
-if(!Array.isArray(data))throw new Error("Invalid product data");
+}
+
+const data=
+await r.json();
+
+if(!Array.isArray(data)){
+
+throw new Error(
+"Invalid product data"
+);
+
+}
 
 PRODUCTS=data;
 
-status.textContent=PRODUCTS.length+" products available";
+status.textContent=
+PRODUCTS.length+
+" products available";
 
 renderProducts();
 renderCart();
 
 }catch(e){
+
 console.error(e);
-status.textContent="Products could not load. Please refresh.";
-document.getElementById("productGrid").innerHTML=
+
+status.textContent=
+"Products could not load. Please refresh.";
+
+document
+.getElementById("productGrid")
+.innerHTML=
+
 '<div style="grid-column:1/-1;background:white;padding:25px;border-radius:12px">Unable to load products.</div>';
+
 }
+
 }
+
+/* =========================
+   DESCRIPTION
+========================= */
 
 function fallbackDescription(p){
-const c=String(p.category||"").toLowerCase();
 
-if(c.includes("nutrition"))
+const c=
+String(
+p.category||""
+).toLowerCase();
+
+if(
+c.includes("nutrition")
+){
+
 return "Animal nutrition and supplementation product supporting everyday health and wellbeing.";
 
-if(c.includes("medicine"))
-return "Veterinary healthcare product for animal care and wellness.";
-
-return "Quality animal healthcare product available from VetBeings.";
 }
 
-function renderProducts(){
-const grid=document.getElementById("productGrid");
-const search=document.getElementById("search").value.toLowerCase().trim();
+if(
+c.includes("medicine")
+){
 
-const list=PRODUCTS.filter(p=>
-((p.name||"")+" "+(p.category||"")+" "+(p.description||""))
-.toLowerCase().includes(search)
+return "Veterinary healthcare product for animal care and wellness.";
+
+}
+
+return "Quality animal healthcare product available from VetBeings.";
+
+}
+
+/* =========================
+   RENDER PRODUCTS
+========================= */
+
+function renderProducts(){
+
+const grid=
+document.getElementById(
+"productGrid"
+);
+
+const search=
+document
+.getElementById("search")
+.value
+.toLowerCase()
+.trim();
+
+const list=
+PRODUCTS.filter(
+p=>
+
+(
+(p.name||"")+
+" "+
+(p.category||"")+
+" "+
+(p.description||"")
+)
+
+.toLowerCase()
+.includes(search)
+
 );
 
 if(!list.length){
-grid.innerHTML='<div style="grid-column:1/-1;background:white;padding:25px;border-radius:12px">No matching products found.</div>';
+
+grid.innerHTML=
+
+'<div style="grid-column:1/-1;background:white;padding:25px;border-radius:12px">No matching products found.</div>';
+
 return;
+
 }
 
-grid.innerHTML=list.map(p=>{
-const id=Number(p.id);
-const price=Number(p.price||0);
-const stock=Number(p.stock||0);
+grid.innerHTML=
 
-const image=p.image
-? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=&quot;noPhoto&quot;>💊</div>'">`
-: `<div class="noPhoto">💊</div>`;
+list.map(p=>{
+
+const id=
+Number(p.id);
+
+const price=
+Number(p.price||0);
+
+const stock=
+Number(p.stock||0);
+
+const image=
+p.image
+
+?
+
+`<img
+src="${esc(p.image)}"
+alt="${esc(p.name)}"
+loading="lazy"
+onerror="this.parentElement.innerHTML='<div class=&quot;noPhoto&quot;>💊</div>'"
+>`
+
+:
+
+`<div class="noPhoto">
+💊
+</div>`;
 
 return `
+
 <article class="product">
-<div class="photo">${image}</div>
+
+<div class="photo">
+${image}
+</div>
 
 <div class="info">
-<div class="category">${esc(p.category||"Veterinary Product")}</div>
 
-<h3>${esc(p.name||"VetBeings Product")}</h3>
+<div class="category">
+${esc(
+p.category||
+"Veterinary Product"
+)}
+</div>
+
+<h3>
+${esc(
+p.name||
+"VetBeings Product"
+)}
+</h3>
 
 <div class="desc">
-${esc(p.description||fallbackDescription(p))}
+${esc(
+p.description||
+fallbackDescription(p)
+)}
 </div>
 
 <div class="stock">
-${stock>0?"✓ In Stock: "+stock:"Out of Stock"}
+
+${
+stock>0
+?
+"✓ In Stock: "+stock
+:
+"Out of Stock"
+}
+
 </div>
 
 <div class="price">
-₹${price.toLocaleString("en-IN")}
+
+₹${price.toLocaleString(
+"en-IN"
+)}
+
 </div>
 
 <button
 class="btn"
 ${stock<=0?"disabled":""}
-onclick="addCart(${id})">
-${stock>0?"ADD TO CART":"OUT OF STOCK"}
-</button>
-</div>
-</article>`;
-}).join("");
+onclick="addCart(${id})"
+>
+
+${
+stock>0
+?
+"ADD TO CART"
+:
+"OUT OF STOCK"
 }
+
+</button>
+
+</div>
+
+</article>
+
+`;
+
+}).join("");
+
+}
+
+/* =========================
+   ADD CART
+========================= */
 
 function addCart(id){
-const p=PRODUCTS.find(x=>Number(x.id)===Number(id));
+
+const p=
+PRODUCTS.find(
+x=>
+Number(x.id)===
+Number(id)
+);
+
 if(!p)return;
 
-const stock=Number(p.stock||0);
+const stock=
+Number(p.stock||0);
 
 if(stock<=0){
-alert("Product is out of stock.");
+
+alert(
+"Product is out of stock."
+);
+
 return;
+
 }
 
-const item=CART.find(x=>Number(x.id)===Number(id));
+const item=
+CART.find(
+x=>
+Number(x.id)===
+Number(id)
+);
 
 if(item){
-if(Number(item.qty)>=stock){
-alert("Only "+stock+" available in stock.");
+
+if(
+Number(item.qty)>=stock
+){
+
+alert(
+"Only "+
+stock+
+" available in stock."
+);
+
 return;
+
 }
+
 item.qty++;
+
 }else{
-CART.push({id:Number(id),qty:1});
+
+CART.push({
+id:Number(id),
+qty:1
+});
+
 }
 
 saveCart();
 openCart();
+
 }
+
+/* =========================
+   SAVE CART
+========================= */
 
 function saveCart(){
-localStorage.setItem("vbcart",JSON.stringify(CART));
+
+localStorage.setItem(
+"vbcart",
+JSON.stringify(CART)
+);
+
 renderCart();
+
 }
 
-function changeQty(index,change){
-const item=CART[index];
+/* =========================
+   QUANTITY
+========================= */
+
+function changeQty(
+index,
+change
+){
+
+const item=
+CART[index];
+
 if(!item)return;
 
-const p=PRODUCTS.find(x=>Number(x.id)===Number(item.id));
+const p=
+PRODUCTS.find(
+x=>
+Number(x.id)===
+Number(item.id)
+);
+
 if(!p)return;
 
-item.qty=Number(item.qty)+change;
+item.qty=
+Number(item.qty)+
+change;
 
 if(item.qty<1){
-CART.splice(index,1);
-}else if(item.qty>Number(p.stock||0)){
-item.qty=Number(p.stock||0);
-alert("Only "+p.stock+" available.");
+
+CART.splice(
+index,
+1
+);
+
+}else if(
+item.qty>
+Number(p.stock||0)
+){
+
+item.qty=
+Number(p.stock||0);
+
+alert(
+"Only "+
+p.stock+
+" available."
+);
+
 }
 
 saveCart();
+
 }
+
+/* =========================
+   REMOVE
+========================= */
 
 function removeItem(index){
-CART.splice(index,1);
+
+CART.splice(
+index,
+1
+);
+
 saveCart();
+
 }
+
+/* =========================
+   TOTAL
+========================= */
 
 function cartTotal(){
-return CART.reduce((sum,item)=>{
-const p=PRODUCTS.find(x=>Number(x.id)===Number(item.id));
-return p?sum+(Number(p.price||0)*Number(item.qty||0)):sum;
-},0);
+
+return CART.reduce(
+(sum,item)=>{
+
+const p=
+PRODUCTS.find(
+x=>
+Number(x.id)===
+Number(item.id)
+);
+
+return p
+?
+sum+
+(
+Number(p.price||0)*
+Number(item.qty||0)
+)
+:
+sum;
+
+},
+0
+);
+
 }
 
+/* =========================
+   RENDER CART
+========================= */
+
 function renderCart(){
+
 let count=0;
 
-const html=CART.map((item,index)=>{
-const p=PRODUCTS.find(x=>Number(x.id)===Number(item.id));
+const html=
+CART.map(
+(item,index)=>{
+
+const p=
+PRODUCTS.find(
+x=>
+Number(x.id)===
+Number(item.id)
+);
 
 if(!p)return"";
 
-count+=Number(item.qty||0);
+count+=
+Number(item.qty||0);
 
 return `
+
 <div class="cartRow">
-<div class="cartName">${esc(p.name)}</div>
+
+<div class="cartName">
+${esc(p.name)}
+</div>
 
 <div>
-₹${Number(p.price||0).toLocaleString("en-IN")} × ${Number(item.qty)}
+
+₹${Number(
+p.price||0
+).toLocaleString("en-IN")}
+×
+${Number(item.qty)}
+
 </div>
 
 <div style="margin-top:8px">
-<button class="qty" onclick="changeQty(${index},-1)">−</button>
-<b style="margin:0 8px">${Number(item.qty)}</b>
-<button class="qty" onclick="changeQty(${index},1)">+</button>
-<button class="remove" onclick="removeItem(${index})">Remove</button>
+
+<button
+class="qty"
+onclick="changeQty(${index},-1)"
+>
+−
+</button>
+
+<b style="margin:0 8px">
+${Number(item.qty)}
+</b>
+
+<button
+class="qty"
+onclick="changeQty(${index},1)"
+>
++
+</button>
+
+<button
+class="remove"
+onclick="removeItem(${index})"
+>
+Remove
+</button>
+
 </div>
-</div>`;
-}).join("");
 
-document.getElementById("cartRows").innerHTML=
-html||"<p>Your cart is empty.</p>";
+</div>
 
-document.getElementById("count").textContent=count;
+`;
 
-document.getElementById("total").textContent=
-cartTotal().toLocaleString("en-IN");
+}
+).join("");
+
+document
+.getElementById("cartRows")
+.innerHTML=
+
+html||
+"<p>Your cart is empty.</p>";
+
+document
+.getElementById("count")
+.textContent=
+count;
+
+document
+.getElementById("total")
+.textContent=
+
+cartTotal()
+.toLocaleString(
+"en-IN"
+);
+
 }
 
+/* =========================
+   OPEN / CLOSE CART
+========================= */
+
 function openCart(){
-document.getElementById("cart").classList.add("open");
-document.getElementById("overlay").classList.add("show");
+
+document
+.getElementById("cart")
+.classList.add("open");
+
+document
+.getElementById("overlay")
+.classList.add("show");
+
 }
 
 function closeCart(){
-document.getElementById("cart").classList.remove("open");
-document.getElementById("overlay").classList.remove("show");
+
+document
+.getElementById("cart")
+.classList.remove("open");
+
+document
+.getElementById("overlay")
+.classList.remove("show");
+
 }
+
+/* =========================
+   CUSTOMER
+========================= */
 
 function customer(){
+
 return{
-name:document.getElementById("customerName").value.trim(),
-mobile:document.getElementById("customerMobile").value.trim(),
-address:document.getElementById("customerAddress").value.trim()
+
+name:
+document
+.getElementById("customerName")
+.value
+.trim(),
+
+mobile:
+document
+.getElementById("customerMobile")
+.value
+.trim(),
+
+address:
+document
+.getElementById("customerAddress")
+.value
+.trim()
+
 };
+
 }
 
-function msg(text,ok){
-const x=document.getElementById("message");
+/* =========================
+   MESSAGE
+========================= */
+
+function msg(
+text,
+ok
+){
+
+const x=
+document.getElementById(
+"message"
+);
+
 x.textContent=text;
-x.className="message "+(ok?"ok":"err");
+
+x.className=
+"message "+
+(ok?"ok":"err");
+
 }
+
+/* =========================
+   VALIDATION
+========================= */
 
 function validate(){
-const c=customer();
+
+const c=
+customer();
 
 if(!CART.length){
-msg("Cart is empty.",false);
+
+msg(
+"Cart is empty.",
+false
+);
+
 return false;
+
 }
 
 if(!c.name){
-msg("Customer name enter karo.",false);
+
+msg(
+"Customer name enter karo.",
+false
+);
+
 return false;
+
 }
 
-if(!/^[6-9][0-9]{9}$/.test(c.mobile)){
-msg("Valid 10-digit mobile number enter karo.",false);
+if(
+!/^[6-9][0-9]{9}$/
+.test(c.mobile)
+){
+
+msg(
+"Valid 10-digit mobile number enter karo.",
+false
+);
+
 return false;
+
 }
 
 if(!c.address){
-msg("Delivery address enter karo.",false);
+
+msg(
+"Delivery address enter karo.",
+false
+);
+
 return false;
+
 }
 
 return true;
+
 }
+
+/* =========================
+   ORDER ITEMS
+========================= */
 
 function orderItems(){
-return CART.map(item=>{
-const p=PRODUCTS.find(x=>Number(x.id)===Number(item.id));
 
-return p?{
+return CART.map(
+item=>{
+
+const p=
+PRODUCTS.find(
+x=>
+Number(x.id)===
+Number(item.id)
+);
+
+return p
+?
+{
+
 id:p.id,
-name:p.name,
-price:Number(p.price||0),
-qty:Number(item.qty||0)
-}:null;
 
-}).filter(Boolean);
+name:p.name,
+
+price:
+Number(
+p.price||0
+),
+
+qty:
+Number(
+item.qty||0
+)
+
 }
+:
+null;
+
+}
+).filter(Boolean);
+
+}
+
+/* =========================
+   COD
+========================= */
 
 async function placeCOD(){
+
 if(!validate())return;
 
-msg("Creating COD order...",true);
-
-try{
-const r=await fetch("/api/orders",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-customer:customer(),
-items:orderItems(),
-total:cartTotal(),
-payment:"COD"
-})
-});
-
-const data=await r.json();
-
-if(!r.ok)throw new Error(data.error||"Order failed");
-
-alert(
-"ORDER SUCCESSFUL\n\n"+
-"Order ID: "+data.id+
-"\nPayment: Cash on Delivery"
+msg(
+"Creating COD order...",
+true
 );
 
-msg("Order successful. Order ID: "+data.id,true);
-
-CART=[];
-saveCart();
-
-}catch(e){
-msg("Order failed: "+e.message,false);
-}
-}
-
-async function payOnline(){
-if(!validate())return;
-
-const amount=cartTotal();
-
-msg("Preparing secure payment...",true);
-
 try{
-const r=await fetch("/api/payment/order",{
+
+const r=
+await fetch(
+"/api/orders",
+{
+
 method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({amount})
-});
 
-const data=await r.json();
-
-if(!r.ok)throw new Error(data.error||"Online payment unavailable");
-
-const c=customer();
-
-const rz=new Razorpay({
-key:data.key,
-amount:data.order.amount,
-currency:"INR",
-name:"VetBeings",
-description:"Veterinary Healthcare Order",
-order_id:data.order.id,
-
-prefill:{
-name:c.name,
-contact:c.mobile
+headers:{
+"Content-Type":
+"application/json"
 },
 
-handler:async function(response){
-try{
-const vr=await fetch("/api/payment/verify",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-...response,
-customer:c,
-items:orderItems(),
-total:amount
+body:
+JSON.stringify({
+
+customer:
+customer(),
+
+items:
+orderItems(),
+
+total:
+cartTotal(),
+
+payment:
+"COD"
+
 })
-});
 
-const vd=await vr.json();
+}
+);
 
-if(!vr.ok||!vd.ok)
-throw new Error(vd.error||"Payment verification failed");
+const data=
+await r.json();
+
+if(!r.ok){
+
+throw new Error(
+data.error||
+"Order failed"
+);
+
+}
 
 alert(
-"PAYMENT SUCCESSFUL\n\n"+
-"Order ID: "+vd.order.id
+
+"ORDER SUCCESSFUL\n\n"+
+
+"Order ID: "+
+data.id+
+
+"\nPayment: Cash on Delivery"
+
 );
 
-msg("Payment successful. Order ID: "+vd.order.id,true);
+msg(
+"Order successful. Order ID: "+
+data.id,
+true
+);
 
 CART=[];
+
 saveCart();
 
-}catch(e){
-msg(e.message,false);
-}
-}
-});
+await loadProducts();
 
-rz.on("payment.failed",function(response){
+}catch(e){
+
 msg(
-"Payment failed: "+
-(response.error?.description||"Please try again."),
+"Order failed: "+
+e.message,
 false
 );
+
+}
+
+}
+
+/* =========================
+   RAZORPAY
+========================= */
+
+async function payOnline(){
+
+if(!validate())return;
+
+const amount=
+cartTotal();
+
+msg(
+"Preparing secure payment...",
+true
+);
+
+try{
+
+const r=
+await fetch(
+"/api/payment/order",
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:
+JSON.stringify({
+amount
+})
+
+}
+);
+
+const data=
+await r.json();
+
+if(!r.ok){
+
+throw new Error(
+data.error||
+"Online payment unavailable"
+);
+
+}
+
+const c=
+customer();
+
+const rz=
+new Razorpay({
+
+key:data.key,
+
+amount:
+data.order.amount,
+
+currency:
+"INR",
+
+name:
+"VetBeings",
+
+description:
+"Veterinary Healthcare Order",
+
+order_id:
+data.order.id,
+
+prefill:{
+
+name:
+c.name,
+
+contact:
+c.mobile
+
+},
+
+handler:
+async function(response){
+
+try{
+
+const vr=
+await fetch(
+"/api/payment/verify",
+{
+
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:
+JSON.stringify({
+
+...response,
+
+customer:c,
+
+items:
+orderItems(),
+
+total:
+amount
+
+})
+
+}
+);
+
+const vd=
+await vr.json();
+
+if(
+!vr.ok||
+!vd.ok
+){
+
+throw new Error(
+vd.error||
+"Payment verification failed"
+);
+
+}
+
+alert(
+
+"PAYMENT SUCCESSFUL\n\n"+
+
+"Order ID: "+
+vd.order.id
+
+);
+
+msg(
+
+"Payment successful. Order ID: "+
+vd.order.id,
+
+true
+
+);
+
+CART=[];
+
+saveCart();
+
+await loadProducts();
+
+}catch(e){
+
+msg(
+e.message,
+false
+);
+
+}
+
+}
+
 });
+
+rz.on(
+"payment.failed",
+function(response){
+
+msg(
+
+"Payment failed: "+
+(
+response.error?.description||
+"Please try again."
+),
+
+false
+
+);
+
+}
+);
 
 rz.open();
 
 }catch(e){
-msg("Online payment: "+e.message,false);
-}
+
+msg(
+"Online payment: "+
+e.message,
+false
+);
+
 }
 
+}
+
+/* =========================
+   START
+========================= */
+
 loadProducts();
+
 </script>
 
 </body>
