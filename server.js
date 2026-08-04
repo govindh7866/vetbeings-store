@@ -16,6 +16,10 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
+/* =========================
+   FILES
+========================= */
+
 const PF = path.join(__dirname, "products.json");
 const OF = path.join(__dirname, "orders.json");
 
@@ -28,7 +32,10 @@ const read = (file) => {
 };
 
 const write = (file, data) => {
-  fs.writeFileSync(file, JSON.stringify(data, null, 2));
+  fs.writeFileSync(
+    file,
+    JSON.stringify(data, null, 2)
+  );
 };
 
 /* =========================
@@ -50,18 +57,25 @@ const upload = multer({
 
 function uploadToCloudinary(buffer) {
   return new Promise((resolve, reject) => {
+
     const stream = cloudinary.uploader.upload_stream(
       {
         folder: "vetbeings/products",
         resource_type: "image"
       },
       (error, result) => {
-        if (error) reject(error);
-        else resolve(result);
+
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+
       }
     );
 
     stream.end(buffer);
+
   });
 }
 
@@ -70,6 +84,7 @@ function uploadToCloudinary(buffer) {
 ========================= */
 
 const adminAuth = (req, res, next) => {
+
   if (!process.env.ADMIN_PASSWORD) {
     return res.status(503).json({
       error: "ADMIN_PASSWORD not configured"
@@ -92,61 +107,139 @@ const adminAuth = (req, res, next) => {
    PRODUCTS
 ========================= */
 
+/* CUSTOMER PRODUCT LIST */
+
 app.get("/api/products", (req, res) => {
-  res.json(read(PF));
+
+  const products = read(PF);
+
+  res.json(products);
+
 });
 
-/* ADD / EDIT PRODUCT */
+/* =========================
+   ADD / EDIT PRODUCT
+========================= */
 
 app.post(
   "/api/admin/products",
   adminAuth,
   upload.single("image"),
   async (req, res) => {
+
     try {
+
       let products = read(PF);
 
-      let product = {
+      const product = {
+
         id: req.body.id
           ? Number(req.body.id)
           : Date.now(),
 
-        name: req.body.name || "",
-        category: req.body.category || "",
-        price: Number(req.body.price || 0),
-        stock: Number(req.body.stock || 0)
+        name:
+          String(req.body.name || "").trim(),
+
+        category:
+          String(req.body.category || "").trim(),
+
+        description:
+          String(req.body.description || "").trim(),
+
+        price:
+          Number(req.body.price || 0),
+
+        stock:
+          Number(req.body.stock || 0)
+
       };
 
-      /* IMAGE UPLOAD */
+      /* BASIC VALIDATION */
 
-      if (req.file) {
-        const result = await uploadToCloudinary(
-          req.file.buffer
-        );
-
-        product.image = result.secure_url;
-        product.imagePublicId = result.public_id;
+      if (!product.name) {
+        return res.status(400).json({
+          error: "Product name is required"
+        });
       }
 
-      const index = products.findIndex(
-        (x) => x.id == product.id
-      );
+      if (product.price < 0) {
+        return res.status(400).json({
+          error: "Invalid product price"
+        });
+      }
+
+      if (product.stock < 0) {
+        return res.status(400).json({
+          error: "Invalid product stock"
+        });
+      }
+
+      /* =========================
+         IMAGE UPLOAD
+      ========================= */
+
+      if (req.file) {
+
+        const result =
+          await uploadToCloudinary(
+            req.file.buffer
+          );
+
+        product.image =
+          result.secure_url;
+
+        product.imagePublicId =
+          result.public_id;
+
+      }
+
+      const index =
+        products.findIndex(
+          (item) =>
+            String(item.id) ===
+            String(product.id)
+        );
+
+      /* =========================
+         EDIT EXISTING PRODUCT
+      ========================= */
 
       if (index >= 0) {
-        /* Keep old image if new image not uploaded */
 
-        if (!product.image && products[index].image) {
-          product.image = products[index].image;
+        /*
+          Agar edit karte waqt new photo
+          upload nahi hui to old photo
+          preserve hogi.
+        */
+
+        if (
+          !product.image &&
+          products[index].image
+        ) {
+
+          product.image =
+            products[index].image;
+
           product.imagePublicId =
             products[index].imagePublicId;
+
         }
 
         products[index] = {
           ...products[index],
           ...product
         };
-      } else {
+
+      }
+
+      /* =========================
+         ADD NEW PRODUCT
+      ========================= */
+
+      else {
+
         products.push(product);
+
       }
 
       write(PF, products);
@@ -157,47 +250,78 @@ app.post(
       });
 
     } catch (e) {
-      console.error(e);
+
+      console.error(
+        "Product save error:",
+        e
+      );
 
       res.status(500).json({
-        error: e.message
+        error:
+          e.message ||
+          "Unable to save product"
       });
+
     }
+
   }
 );
 
-/* DELETE PRODUCT */
+/* =========================
+   DELETE PRODUCT
+========================= */
 
 app.delete(
   "/api/admin/products/:id",
   adminAuth,
   async (req, res) => {
+
     try {
+
       let products = read(PF);
 
-      const product = products.find(
-        (x) => x.id == req.params.id
-      );
+      const product =
+        products.find(
+          (item) =>
+            String(item.id) ===
+            String(req.params.id)
+        );
 
-      if (
-        product &&
-        product.imagePublicId
-      ) {
+      if (!product) {
+
+        return res.status(404).json({
+          error: "Product not found"
+        });
+
+      }
+
+      /* DELETE CLOUDINARY PHOTO */
+
+      if (product.imagePublicId) {
+
         try {
+
           await cloudinary.uploader.destroy(
             product.imagePublicId
           );
+
         } catch (e) {
+
           console.error(
             "Cloudinary delete error:",
             e.message
           );
+
         }
+
       }
 
-      products = products.filter(
-        (x) => x.id != req.params.id
-      );
+      products =
+        products.filter(
+          (item) =>
+            String(item.id) !==
+            String(req.params.id)
+        );
 
       write(PF, products);
 
@@ -206,100 +330,184 @@ app.delete(
       });
 
     } catch (e) {
+
+      console.error(
+        "Delete product error:",
+        e
+      );
+
       res.status(500).json({
-        error: e.message
+        error:
+          e.message ||
+          "Unable to delete product"
       });
+
     }
+
   }
 );
 
 /* =========================
-   ORDERS
+   ADMIN ORDERS
 ========================= */
 
 app.get(
   "/api/admin/orders",
   adminAuth,
   (req, res) => {
-    res.json(read(OF));
+
+    const orders = read(OF);
+
+    res.json(orders);
+
   }
 );
 
+/* =========================
+   CASH ON DELIVERY ORDER
+========================= */
+
 app.post("/api/orders", (req, res) => {
-  const orders = read(OF);
 
-  const order = {
-    id: "VB" + Date.now(),
-    time: new Date().toISOString(),
-    status: "pending",
-    payment: "COD",
-    ...req.body
-  };
+  try {
 
-  orders.unshift(order);
+    const orders = read(OF);
 
-  write(OF, orders);
+    const order = {
 
-  res.json(order);
+      id:
+        "VB" + Date.now(),
+
+      time:
+        new Date().toISOString(),
+
+      status:
+        "pending",
+
+      payment:
+        "COD",
+
+      ...req.body
+
+    };
+
+    orders.unshift(order);
+
+    write(OF, orders);
+
+    res.json(order);
+
+  } catch (e) {
+
+    console.error(
+      "COD order error:",
+      e
+    );
+
+    res.status(500).json({
+      error:
+        e.message ||
+        "Unable to create order"
+    });
+
+  }
+
 });
 
 /* =========================
-   RAZORPAY
+   RAZORPAY CREATE ORDER
 ========================= */
 
 app.post(
   "/api/payment/order",
   async (req, res) => {
+
     try {
 
       if (
         !process.env.RAZORPAY_KEY_ID ||
         !process.env.RAZORPAY_KEY_SECRET
       ) {
+
         return res.status(503).json({
           error:
             "Razorpay keys not configured."
         });
+
       }
 
-      const razorpay = new Razorpay({
-        key_id:
-          process.env.RAZORPAY_KEY_ID,
+      const amount =
+        Number(req.body.amount || 0);
 
-        key_secret:
-          process.env.RAZORPAY_KEY_SECRET
-      });
+      if (
+        !Number.isFinite(amount) ||
+        amount <= 0
+      ) {
+
+        return res.status(400).json({
+          error:
+            "Invalid payment amount."
+        });
+
+      }
+
+      const razorpay =
+        new Razorpay({
+
+          key_id:
+            process.env.RAZORPAY_KEY_ID,
+
+          key_secret:
+            process.env.RAZORPAY_KEY_SECRET
+
+        });
 
       const order =
         await razorpay.orders.create({
-          amount: Math.round(
-            Number(req.body.amount) * 100
-          ),
 
-          currency: "INR",
+          amount:
+            Math.round(
+              amount * 100
+            ),
+
+          currency:
+            "INR",
 
           receipt:
             "vb_" + Date.now()
+
         });
 
       res.json({
+
         order,
+
         key:
           process.env.RAZORPAY_KEY_ID
+
       });
 
     } catch (e) {
 
-      console.error(e);
+      console.error(
+        "Razorpay order error:",
+        e
+      );
 
       res.status(500).json({
-        error: e.message
+        error:
+          e.message ||
+          "Unable to create payment order"
       });
+
     }
+
   }
 );
 
-/* VERIFY PAYMENT */
+/* =========================
+   VERIFY RAZORPAY PAYMENT
+========================= */
 
 app.post(
   "/api/payment/verify",
@@ -317,48 +525,80 @@ app.post(
       } = req.body;
 
       if (
-        !process.env
-          .RAZORPAY_KEY_SECRET
+        !process.env.RAZORPAY_KEY_SECRET
       ) {
+
         return res.status(503).json({
           error:
             "Razorpay secret not configured."
         });
+
       }
 
-      const expected = crypto
-        .createHmac(
-          "sha256",
-          process.env
-            .RAZORPAY_KEY_SECRET
-        )
-        .update(
-          razorpay_order_id +
-          "|" +
-          razorpay_payment_id
-        )
-        .digest("hex");
+      if (
+        !razorpay_order_id ||
+        !razorpay_payment_id ||
+        !razorpay_signature
+      ) {
 
-      if (expected !== razorpay_signature) {
+        return res.status(400).json({
+          error:
+            "Payment details missing."
+        });
+
+      }
+
+      const expected =
+        crypto
+          .createHmac(
+            "sha256",
+            process.env
+              .RAZORPAY_KEY_SECRET
+          )
+          .update(
+            razorpay_order_id +
+            "|" +
+            razorpay_payment_id
+          )
+          .digest("hex");
+
+      if (
+        expected !==
+        razorpay_signature
+      ) {
+
         return res.status(400).json({
           error:
             "Invalid payment signature"
         });
+
       }
 
       const orders = read(OF);
 
       const order = {
-        id: "VB" + Date.now(),
+
+        id:
+          "VB" + Date.now(),
+
         time:
           new Date().toISOString(),
-        status: "paid",
-        payment: "Razorpay",
+
+        status:
+          "paid",
+
+        payment:
+          "Razorpay",
+
         paymentId:
           razorpay_payment_id,
+
         customer,
+
         items,
+
         total
+
       };
 
       orders.unshift(order);
@@ -372,10 +612,19 @@ app.post(
 
     } catch (e) {
 
+      console.error(
+        "Payment verify error:",
+        e
+      );
+
       res.status(500).json({
-        error: e.message
+        error:
+          e.message ||
+          "Payment verification failed"
       });
+
     }
+
   }
 );
 
@@ -387,8 +636,10 @@ const PORT =
   process.env.PORT || 3000;
 
 app.listen(PORT, () => {
+
   console.log(
     "VetBeings running on port " +
     PORT
   );
+
 });
