@@ -3,402 +3,1448 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VetBeings Admin</title>
+<title>VetBeings Admin Dashboard</title>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f3f7f5;color:#173025}
 button,input,textarea,select{font:inherit}
-.header{background:#063f2b;color:white;padding:16px 5%;display:flex;justify-content:space-between;align-items:center}
-.header h2{margin:0}.logout{background:#fff;color:#075d3a;border:0;padding:9px 14px;border-radius:7px;font-weight:bold}
+button{cursor:pointer}
+
+.header{
+background:#063f2b;color:white;padding:16px 5%;
+display:flex;justify-content:space-between;align-items:center
+}
+.header h2{margin:0}
+.logout{
+background:white;color:#075d3a;border:0;
+padding:9px 14px;border-radius:7px;font-weight:bold
+}
+
 .wrap{max-width:1200px;margin:auto;padding:25px 15px}
-.login{max-width:420px;margin:80px auto;background:white;padding:28px;border-radius:15px;box-shadow:0 8px 30px #0001}
-.card{background:white;border-radius:14px;padding:20px;margin-bottom:20px;box-shadow:0 4px 20px #0000000d}
-.field{width:100%;padding:12px;border:1px solid #d5dfd9;border-radius:8px;margin:6px 0}
-.btn{border:0;background:#087745;color:white;padding:12px 16px;border-radius:8px;font-weight:bold;cursor:pointer}
-.red{background:#b42318}.gray{background:#53665c}.blue{background:#1769aa}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.products{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
-.product{border:1px solid #e0e7e3;border-radius:12px;padding:12px}
-.product img{width:100%;height:150px;object-fit:contain;background:#f5f8f6;border-radius:8px}
-.noimg{height:150px;background:#f5f8f6;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:45px}
-.product h3{margin:9px 0 5px}.small{font-size:12px;color:#68776e}
-.actions{display:flex;gap:6px;margin-top:10px}.actions button{flex:1}
-.preview{width:150px;height:150px;object-fit:contain;border:1px solid #ddd;border-radius:10px;display:none;margin:10px 0}
-.order{border:1px solid #e0e7e3;border-radius:10px;padding:14px;margin:10px 0}
-.order-top{display:flex;justify-content:space-between;gap:10px}.tag{background:#e5f5eb;color:#087745;padding:5px 8px;border-radius:20px;font-size:11px;font-weight:bold}
+
+.login{
+max-width:420px;margin:80px auto;background:white;
+padding:28px;border-radius:15px;
+box-shadow:0 8px 30px #0001
+}
+
+.card{
+background:white;border-radius:14px;padding:20px;
+margin-bottom:20px;box-shadow:0 4px 20px #0000000d
+}
+
+.field{
+width:100%;padding:12px;border:1px solid #d5dfd9;
+border-radius:8px;margin:6px 0
+}
+
+.btn{
+border:0;background:#087745;color:white;
+padding:12px 16px;border-radius:8px;font-weight:bold
+}
+
+.red{background:#b42318}
+.gray{background:#53665c}
+.blue{background:#1769aa}
+.orange{background:#b86b00}
+
+.grid2{
+display:grid;grid-template-columns:1fr 1fr;gap:12px
+}
+
+.products{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:13px
+}
+
+.product{
+border:1px solid #e0e7e3;
+border-radius:12px;padding:12px
+}
+
+.product img{
+width:100%;height:150px;object-fit:contain;
+background:#f5f8f6;border-radius:8px
+}
+
+.noimg{
+height:150px;background:#f5f8f6;border-radius:8px;
+display:flex;align-items:center;justify-content:center;
+font-size:45px
+}
+
+.product h3{margin:9px 0 5px}
+
+.small{
+font-size:12px;color:#68776e;line-height:1.5
+}
+
+.actions{
+display:flex;gap:6px;margin-top:10px
+}
+
+.actions button{flex:1}
+
+.preview{
+width:150px;height:150px;object-fit:contain;
+border:1px solid #ddd;border-radius:10px;
+display:none;margin:10px 0
+}
+
+.order{
+border:1px solid #e0e7e3;
+border-radius:12px;padding:16px;margin:12px 0
+}
+
+.orderTop{
+display:flex;justify-content:space-between;
+align-items:flex-start;gap:10px
+}
+
+.tag{
+padding:6px 9px;border-radius:20px;
+font-size:11px;font-weight:bold;
+background:#e5f5eb;color:#087745
+}
+
+.statusArea{
+background:#f5f8f6;padding:12px;
+border-radius:9px;margin-top:12px
+}
+
+.statusSelect{
+width:100%;padding:11px;border:1px solid #ccd8d1;
+border-radius:7px;background:white;margin-bottom:8px
+}
+
 .hidden{display:none!important}
-.msg{padding:10px;border-radius:7px;margin:8px 0;display:none}
-.ok{background:#e4f6ea;color:#086b38}.err{background:#ffe8e8;color:#9c1c1c}
-.tabs{display:flex;gap:8px;margin-bottom:18px}.tabs button{flex:1}
-@media(max-width:800px){.products{grid-template-columns:1fr 1fr}.grid{grid-template-columns:1fr}}
-@media(max-width:520px){.products{grid-template-columns:1fr}.header{padding:13px}.wrap{padding:12px}}
+
+.msg{
+padding:10px;border-radius:7px;
+margin:8px 0;display:none
+}
+
+.ok{
+background:#e4f6ea;color:#086b38
+}
+
+.err{
+background:#ffe8e8;color:#9c1c1c
+}
+
+.tabs{
+display:flex;gap:8px;margin-bottom:18px
+}
+
+.tabs button{flex:1}
+
+.statGrid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;margin-bottom:20px
+}
+
+.stat{
+background:white;padding:15px;border-radius:12px;
+box-shadow:0 3px 15px #0000000d
+}
+
+.stat b{
+display:block;font-size:24px;color:#087745
+}
+
+@media(max-width:800px){
+.products{grid-template-columns:1fr 1fr}
+.grid2{grid-template-columns:1fr}
+.statGrid{grid-template-columns:1fr 1fr}
+}
+
+@media(max-width:520px){
+.products{grid-template-columns:1fr}
+.header{padding:13px}
+.wrap{padding:12px}
+.orderTop{flex-direction:column}
+}
 </style>
 </head>
 
 <body>
 
+<!-- LOGIN -->
+
 <div id="loginBox" class="login">
 <h2>VetBeings Admin</h2>
-<p class="small">Enter your administrator password.</p>
-<input id="password" class="field" type="password" placeholder="Admin password">
-<button class="btn" style="width:100%;margin-top:8px" onclick="login()">LOGIN</button>
+<p class="small">Secure Store Management Dashboard</p>
+
+<input
+id="password"
+class="field"
+type="password"
+placeholder="Admin password"
+>
+
+<button
+class="btn"
+style="width:100%;margin-top:8px"
+onclick="login()"
+>
+LOGIN
+</button>
+
 <div id="loginMsg" class="msg err"></div>
 </div>
+
+<!-- DASHBOARD -->
 
 <div id="dashboard" class="hidden">
 
 <div class="header">
-<div><b>VetBeings</b><br><small>Admin Dashboard</small></div>
-<button class="logout" onclick="logout()">Logout</button>
+<div>
+<b>VetBeings</b><br>
+<small>Admin Dashboard</small>
+</div>
+
+<button class="logout" onclick="logout()">
+Logout
+</button>
 </div>
 
 <div class="wrap">
 
-<div class="tabs">
-<button class="btn" onclick="showTab('productsTab')">PRODUCTS</button>
-<button class="btn gray" onclick="showTab('ordersTab')">ORDERS</button>
+<div class="statGrid">
+
+<div class="stat">
+<b id="statProducts">0</b>
+<span class="small">Products</span>
 </div>
+
+<div class="stat">
+<b id="statOrders">0</b>
+<span class="small">Orders</span>
+</div>
+
+<div class="stat">
+<b id="statPending">0</b>
+<span class="small">Pending</span>
+</div>
+
+<div class="stat">
+<b id="statDelivered">0</b>
+<span class="small">Delivered</span>
+</div>
+
+</div>
+
+<div class="tabs">
+
+<button
+class="btn"
+onclick="showTab('productsTab')"
+>
+PRODUCTS
+</button>
+
+<button
+class="btn gray"
+onclick="showTab('ordersTab')"
+>
+ORDERS
+</button>
+
+</div>
+
+<!-- PRODUCTS -->
 
 <div id="productsTab">
 
 <div class="card">
+
 <h2 id="formTitle">Add New Product</h2>
 
 <input type="hidden" id="productId">
 
-<div class="grid">
+<div class="grid2">
+
 <div>
 <label>Product Name</label>
-<input id="name" class="field" placeholder="Example: Mineral Mixture">
+<input
+id="name"
+class="field"
+placeholder="Product name"
+>
 </div>
 
 <div>
 <label>Category</label>
-<input id="category" class="field" placeholder="Example: Animal Nutrition">
+<input
+id="category"
+class="field"
+placeholder="Category"
+>
 </div>
+
 </div>
 
 <label>Product Description</label>
-<textarea id="description" class="field" rows="4" placeholder="Product details, benefits, usage information..."></textarea>
 
-<div class="grid">
+<textarea
+id="description"
+class="field"
+rows="4"
+placeholder="Product details, benefits, pack information..."
+></textarea>
+
+<div class="grid2">
+
 <div>
 <label>Price ₹</label>
-<input id="price" class="field" type="number" min="0" placeholder="Price">
+<input
+id="price"
+class="field"
+type="number"
+min="0"
+placeholder="Price"
+>
 </div>
 
 <div>
 <label>Stock Quantity</label>
-<input id="stock" class="field" type="number" min="0" placeholder="Stock">
+<input
+id="stock"
+class="field"
+type="number"
+min="0"
+placeholder="Stock"
+>
 </div>
+
 </div>
 
 <label><b>Product Photo</b></label>
-<input id="image" class="field" type="file" accept="image/*" onchange="previewImage(event)">
+
+<input
+id="image"
+class="field"
+type="file"
+accept="image/*"
+onchange="previewImage(event)"
+>
+
 <img id="preview" class="preview">
 
 <div id="saveMsg" class="msg"></div>
 
-<button id="saveBtn" class="btn" onclick="saveProduct()">SAVE PRODUCT</button>
-<button id="cancelBtn" class="btn gray hidden" onclick="clearForm()">CANCEL EDIT</button>
+<button
+id="saveBtn"
+class="btn"
+onclick="saveProduct()"
+>
+SAVE PRODUCT
+</button>
+
+<button
+id="cancelBtn"
+class="btn gray hidden"
+onclick="clearForm()"
+>
+CANCEL EDIT
+</button>
+
 </div>
 
 <div class="card">
+
 <h2>Product Manager</h2>
-<p id="productCount" class="small">Loading products...</p>
+
+<p id="productCount" class="small">
+Loading products...
+</p>
+
 <div id="products" class="products"></div>
+
 </div>
 
 </div>
+
+<!-- ORDERS -->
 
 <div id="ordersTab" class="hidden">
+
 <div class="card">
-<h2>Customer Orders</h2>
-<button class="btn" onclick="loadOrders()">REFRESH ORDERS</button>
-<div id="orders"></div>
+
+<div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+
+<div>
+<h2 style="margin-bottom:4px">Customer Orders</h2>
+<p class="small" style="margin-top:0">
+Manage and update order status
+</p>
 </div>
+
+<button
+class="btn"
+onclick="loadOrders()"
+>
+REFRESH
+</button>
+
+</div>
+
+<div id="orders"></div>
+
+</div>
+
 </div>
 
 </div>
 </div>
 
 <script>
+
 let ADMIN_PASSWORD="";
 let PRODUCTS=[];
+let ORDERS=[];
+
+/* ======================
+   HELPERS
+====================== */
 
 function esc(v){
+
 return String(v??"")
 .replace(/&/g,"&amp;")
 .replace(/</g,"&lt;")
 .replace(/>/g,"&gt;")
 .replace(/"/g,"&quot;")
 .replace(/'/g,"&#039;");
+
 }
 
 function authHeaders(){
-return {"Authorization":"Bearer "+ADMIN_PASSWORD};
+
+return {
+"Authorization":
+"Bearer "+ADMIN_PASSWORD
+};
+
 }
 
+/* ======================
+   LOGIN
+====================== */
+
 async function login(){
-const p=document.getElementById("password").value.trim();
-if(!p)return showLogin("Password enter karo.");
+
+const p=
+document
+.getElementById("password")
+.value
+.trim();
+
+if(!p){
+
+showLogin(
+"Admin password enter karo."
+);
+
+return;
+
+}
 
 ADMIN_PASSWORD=p;
 
 try{
-const r=await fetch("/api/admin/orders",{headers:authHeaders()});
+
+const r=
+await fetch(
+"/api/admin/orders",
+{
+headers:authHeaders()
+}
+);
 
 if(!r.ok){
+
 ADMIN_PASSWORD="";
-return showLogin("Wrong password.");
+
+showLogin(
+"Wrong admin password."
+);
+
+return;
+
 }
 
-document.getElementById("loginBox").classList.add("hidden");
-document.getElementById("dashboard").classList.remove("hidden");
+document
+.getElementById("loginBox")
+.classList.add("hidden");
+
+document
+.getElementById("dashboard")
+.classList.remove("hidden");
 
 await loadProducts();
 await loadOrders();
 
 }catch(e){
-showLogin("Server connection failed.");
-}
+
+showLogin(
+"Server connection failed."
+);
+
 }
 
-function showLogin(t){
-const x=document.getElementById("loginMsg");
-x.textContent=t;
+}
+
+function showLogin(text){
+
+const x=
+document.getElementById(
+"loginMsg"
+);
+
+x.textContent=text;
 x.style.display="block";
+
 }
 
 function logout(){
+
 ADMIN_PASSWORD="";
-document.getElementById("password").value="";
-document.getElementById("dashboard").classList.add("hidden");
-document.getElementById("loginBox").classList.remove("hidden");
+
+document
+.getElementById("password")
+.value="";
+
+document
+.getElementById("dashboard")
+.classList.add("hidden");
+
+document
+.getElementById("loginBox")
+.classList.remove("hidden");
+
 }
+
+/* ======================
+   TABS
+====================== */
 
 function showTab(id){
-document.getElementById("productsTab").classList.add("hidden");
-document.getElementById("ordersTab").classList.add("hidden");
-document.getElementById(id).classList.remove("hidden");
-if(id==="ordersTab")loadOrders();
+
+document
+.getElementById("productsTab")
+.classList.add("hidden");
+
+document
+.getElementById("ordersTab")
+.classList.add("hidden");
+
+document
+.getElementById(id)
+.classList.remove("hidden");
+
+if(id==="ordersTab"){
+
+loadOrders();
+
 }
 
-async function loadProducts(){
-try{
-const r=await fetch("/api/products?x="+Date.now(),{cache:"no-store"});
-if(!r.ok)throw new Error("Products load failed");
-PRODUCTS=await r.json();
-renderProducts();
-}catch(e){
-document.getElementById("productCount").textContent="Products could not load.";
 }
+
+/* ======================
+   PRODUCTS
+====================== */
+
+async function loadProducts(){
+
+try{
+
+const r=
+await fetch(
+"/api/products?t="+Date.now(),
+{
+cache:"no-store"
+}
+);
+
+if(!r.ok){
+
+throw new Error(
+"Products load failed."
+);
+
+}
+
+PRODUCTS=
+await r.json();
+
+renderProducts();
+
+document
+.getElementById("statProducts")
+.textContent=
+PRODUCTS.length;
+
+}catch(e){
+
+document
+.getElementById("productCount")
+.textContent=
+"Products could not load.";
+
+}
+
 }
 
 function renderProducts(){
-document.getElementById("productCount").textContent=PRODUCTS.length+" products";
 
-document.getElementById("products").innerHTML=PRODUCTS.map(p=>`
+document
+.getElementById("productCount")
+.textContent=
+PRODUCTS.length+
+" products";
+
+document
+.getElementById("products")
+.innerHTML=
+
+PRODUCTS.map(p=>`
+
 <div class="product">
-${p.image
-? `<img src="${esc(p.image)}" alt="${esc(p.name)}">`
-: `<div class="noimg">💊</div>`}
 
-<div class="small">${esc(p.category||"Veterinary Product")}</div>
-<h3>${esc(p.name)}</h3>
+${
+p.image
+?
+`<img
+src="${esc(p.image)}"
+alt="${esc(p.name)}"
+>`
+:
+`<div class="noimg">💊</div>`
+}
 
 <div class="small">
-${esc(p.description||"No description added yet.")}
+${esc(
+p.category||
+"Veterinary Product"
+)}
 </div>
 
-<p><b>₹${Number(p.price||0).toLocaleString("en-IN")}</b><br>
-<span class="small">Stock: ${Number(p.stock||0)}</span></p>
+<h3>
+${esc(p.name)}
+</h3>
 
-<div class="actions">
-<button class="btn blue" onclick="editProduct('${p.id}')">EDIT</button>
-<button class="btn red" onclick="deleteProduct('${p.id}')">DELETE</button>
-</div>
-</div>
-`).join("");
-}
-
-function previewImage(e){
-const file=e.target.files[0];
-if(!file)return;
-
-const img=document.getElementById("preview");
-img.src=URL.createObjectURL(file);
-img.style.display="block";
-}
-
-function editProduct(id){
-const p=PRODUCTS.find(x=>String(x.id)===String(id));
-if(!p)return;
-
-document.getElementById("productId").value=p.id;
-document.getElementById("name").value=p.name||"";
-document.getElementById("category").value=p.category||"";
-document.getElementById("description").value=p.description||"";
-document.getElementById("price").value=p.price||0;
-document.getElementById("stock").value=p.stock||0;
-
-const preview=document.getElementById("preview");
-
-if(p.image){
-preview.src=p.image;
-preview.style.display="block";
-}else{
-preview.style.display="none";
-}
-
-document.getElementById("formTitle").textContent="Edit Product";
-document.getElementById("saveBtn").textContent="UPDATE PRODUCT";
-document.getElementById("cancelBtn").classList.remove("hidden");
-
-window.scrollTo({top:0,behavior:"smooth"});
-}
-
-function clearForm(){
-document.getElementById("productId").value="";
-document.getElementById("name").value="";
-document.getElementById("category").value="";
-document.getElementById("description").value="";
-document.getElementById("price").value="";
-document.getElementById("stock").value="";
-document.getElementById("image").value="";
-document.getElementById("preview").style.display="none";
-
-document.getElementById("formTitle").textContent="Add New Product";
-document.getElementById("saveBtn").textContent="SAVE PRODUCT";
-document.getElementById("cancelBtn").classList.add("hidden");
-}
-
-async function saveProduct(){
-const name=document.getElementById("name").value.trim();
-const category=document.getElementById("category").value.trim();
-const description=document.getElementById("description").value.trim();
-const price=document.getElementById("price").value;
-const stock=document.getElementById("stock").value;
-const id=document.getElementById("productId").value;
-const image=document.getElementById("image").files[0];
-
-if(!name)return saveMessage("Product name required.",false);
-if(price==="")return saveMessage("Price required.",false);
-if(stock==="")return saveMessage("Stock required.",false);
-
-const fd=new FormData();
-
-if(id)fd.append("id",id);
-fd.append("name",name);
-fd.append("category",category);
-fd.append("description",description);
-fd.append("price",price);
-fd.append("stock",stock);
-
-if(image)fd.append("image",image);
-
-saveMessage("Saving product...",true);
-
-try{
-const r=await fetch("/api/admin/products",{
-method:"POST",
-headers:authHeaders(),
-body:fd
-});
-
-const data=await r.json();
-
-if(!r.ok)throw new Error(data.error||"Save failed.");
-
-saveMessage(id?"Product updated successfully.":"Product added successfully.",true);
-
-clearForm();
-await loadProducts();
-
-}catch(e){
-saveMessage(e.message,false);
-}
-}
-
-function saveMessage(text,ok){
-const box=document.getElementById("saveMsg");
-box.textContent=text;
-box.className="msg "+(ok?"ok":"err");
-box.style.display="block";
-}
-
-async function deleteProduct(id){
-if(!confirm("Delete this product?"))return;
-
-try{
-const r=await fetch("/api/admin/products/"+id,{
-method:"DELETE",
-headers:authHeaders()
-});
-
-const data=await r.json();
-
-if(!r.ok)throw new Error(data.error||"Delete failed.");
-
-await loadProducts();
-
-}catch(e){
-alert(e.message);
-}
-}
-
-async function loadOrders(){
-const box=document.getElementById("orders");
-box.innerHTML="<p>Loading orders...</p>";
-
-try{
-const r=await fetch("/api/admin/orders?x="+Date.now(),{
-headers:authHeaders(),
-cache:"no-store"
-});
-
-const orders=await r.json();
-
-if(!r.ok)throw new Error(orders.error||"Orders load failed.");
-
-if(!orders.length){
-box.innerHTML="<p>No orders yet.</p>";
-return;
-}
-
-box.innerHTML=orders.map(o=>`
-<div class="order">
-
-<div class="order-top">
-<b>${esc(o.id)}</b>
-<span class="tag">${esc(o.payment||"COD")} • ${esc(o.status||"pending")}</span>
+<div class="small">
+${esc(
+p.description||
+"No description added."
+)}
 </div>
 
 <p>
-<b>${esc(o.customer?.name||"Customer")}</b><br>
-📞 ${esc(o.customer?.mobile||"-")}<br>
-📍 ${esc(o.customer?.address||"-")}
+
+<b>
+₹${Number(
+p.price||0
+).toLocaleString("en-IN")}
+</b>
+
+<br>
+
+<span class="small">
+Stock:
+${Number(p.stock||0)}
+</span>
+
+</p>
+
+<div class="actions">
+
+<button
+class="btn blue"
+onclick="editProduct('${p.id}')"
+>
+EDIT
+</button>
+
+<button
+class="btn red"
+onclick="deleteProduct('${p.id}')"
+>
+DELETE
+</button>
+
+</div>
+
+</div>
+
+`).join("");
+
+}
+
+/* ======================
+   PHOTO PREVIEW
+====================== */
+
+function previewImage(e){
+
+const file=
+e.target.files[0];
+
+if(!file)return;
+
+const img=
+document.getElementById(
+"preview"
+);
+
+img.src=
+URL.createObjectURL(file);
+
+img.style.display=
+"block";
+
+}
+
+/* ======================
+   EDIT PRODUCT
+====================== */
+
+function editProduct(id){
+
+const p=
+PRODUCTS.find(
+x=>
+String(x.id)===
+String(id)
+);
+
+if(!p)return;
+
+document
+.getElementById("productId")
+.value=p.id;
+
+document
+.getElementById("name")
+.value=p.name||"";
+
+document
+.getElementById("category")
+.value=p.category||"";
+
+document
+.getElementById("description")
+.value=p.description||"";
+
+document
+.getElementById("price")
+.value=p.price||0;
+
+document
+.getElementById("stock")
+.value=p.stock||0;
+
+const preview=
+document.getElementById(
+"preview"
+);
+
+if(p.image){
+
+preview.src=p.image;
+
+preview.style.display=
+"block";
+
+}else{
+
+preview.style.display=
+"none";
+
+}
+
+document
+.getElementById("formTitle")
+.textContent=
+"Edit Product";
+
+document
+.getElementById("saveBtn")
+.textContent=
+"UPDATE PRODUCT";
+
+document
+.getElementById("cancelBtn")
+.classList.remove("hidden");
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+
+/* ======================
+   CLEAR FORM
+====================== */
+
+function clearForm(){
+
+document
+.getElementById("productId")
+.value="";
+
+document
+.getElementById("name")
+.value="";
+
+document
+.getElementById("category")
+.value="";
+
+document
+.getElementById("description")
+.value="";
+
+document
+.getElementById("price")
+.value="";
+
+document
+.getElementById("stock")
+.value="";
+
+document
+.getElementById("image")
+.value="";
+
+document
+.getElementById("preview")
+.style.display="none";
+
+document
+.getElementById("formTitle")
+.textContent=
+"Add New Product";
+
+document
+.getElementById("saveBtn")
+.textContent=
+"SAVE PRODUCT";
+
+document
+.getElementById("cancelBtn")
+.classList.add("hidden");
+
+}
+
+/* ======================
+   SAVE PRODUCT
+====================== */
+
+async function saveProduct(){
+
+const name=
+document
+.getElementById("name")
+.value.trim();
+
+const category=
+document
+.getElementById("category")
+.value.trim();
+
+const description=
+document
+.getElementById("description")
+.value.trim();
+
+const price=
+document
+.getElementById("price")
+.value;
+
+const stock=
+document
+.getElementById("stock")
+.value;
+
+const id=
+document
+.getElementById("productId")
+.value;
+
+const image=
+document
+.getElementById("image")
+.files[0];
+
+if(!name){
+
+saveMessage(
+"Product name required.",
+false
+);
+
+return;
+
+}
+
+if(price===""){
+
+saveMessage(
+"Price required.",
+false
+);
+
+return;
+
+}
+
+if(stock===""){
+
+saveMessage(
+"Stock required.",
+false
+);
+
+return;
+
+}
+
+const fd=
+new FormData();
+
+if(id){
+
+fd.append(
+"id",
+id
+);
+
+}
+
+fd.append(
+"name",
+name
+);
+
+fd.append(
+"category",
+category
+);
+
+fd.append(
+"description",
+description
+);
+
+fd.append(
+"price",
+price
+);
+
+fd.append(
+"stock",
+stock
+);
+
+if(image){
+
+fd.append(
+"image",
+image
+);
+
+}
+
+saveMessage(
+"Saving product...",
+true
+);
+
+try{
+
+const r=
+await fetch(
+"/api/admin/products",
+{
+method:"POST",
+headers:authHeaders(),
+body:fd
+}
+);
+
+const data=
+await r.json();
+
+if(!r.ok){
+
+throw new Error(
+data.error||
+"Save failed."
+);
+
+}
+
+saveMessage(
+id
+?
+"Product updated successfully."
+:
+"Product added successfully.",
+true
+);
+
+clearForm();
+
+await loadProducts();
+
+}catch(e){
+
+saveMessage(
+e.message,
+false
+);
+
+}
+
+}
+
+function saveMessage(
+text,
+ok
+){
+
+const box=
+document.getElementById(
+"saveMsg"
+);
+
+box.textContent=text;
+
+box.className=
+"msg "+
+(ok?"ok":"err");
+
+box.style.display=
+"block";
+
+}
+
+/* ======================
+   DELETE PRODUCT
+====================== */
+
+async function deleteProduct(id){
+
+if(
+!confirm(
+"Delete this product?"
+)
+)return;
+
+try{
+
+const r=
+await fetch(
+"/api/admin/products/"+id,
+{
+method:"DELETE",
+headers:authHeaders()
+}
+);
+
+const data=
+await r.json();
+
+if(!r.ok){
+
+throw new Error(
+data.error||
+"Delete failed."
+);
+
+}
+
+await loadProducts();
+
+}catch(e){
+
+alert(e.message);
+
+}
+
+}
+
+/* ======================
+   LOAD ORDERS
+====================== */
+
+async function loadOrders(){
+
+const box=
+document.getElementById(
+"orders"
+);
+
+box.innerHTML=
+"<p>Loading orders...</p>";
+
+try{
+
+const r=
+await fetch(
+"/api/admin/orders?t="+
+Date.now(),
+{
+headers:authHeaders(),
+cache:"no-store"
+}
+);
+
+const data=
+await r.json();
+
+if(!r.ok){
+
+throw new Error(
+data.error||
+"Orders load failed."
+);
+
+}
+
+ORDERS=data;
+
+updateStats();
+
+if(!ORDERS.length){
+
+box.innerHTML=
+"<p>No orders yet.</p>";
+
+return;
+
+}
+
+box.innerHTML=
+
+ORDERS.map(o=>{
+
+const status=
+String(
+o.status||
+"pending"
+).toLowerCase();
+
+return `
+
+<div class="order">
+
+<div class="orderTop">
+
+<div>
+
+<b>
+Order ${esc(o.id)}
+</b>
+
+<br>
+
+<span class="small">
+${
+o.time
+?
+new Date(
+o.time
+).toLocaleString("en-IN")
+:
+""
+}
+</span>
+
+</div>
+
+<span class="tag">
+${esc(
+o.payment||
+"COD"
+)}
+•
+${esc(status.toUpperCase())}
+</span>
+
+</div>
+
+<p>
+
+<b>
+${esc(
+o.customer?.name||
+"Customer"
+)}
+</b>
+
+<br>
+
+📞
+${esc(
+o.customer?.mobile||
+"-"
+)}
+
+<br>
+
+📍
+${esc(
+o.customer?.address||
+"-"
+)}
+
 </p>
 
 <div class="small">
-${(o.items||[]).map(i=>
-`${esc(i.name)} — ${Number(i.qty||0)} × ₹${Number(i.price||0).toLocaleString("en-IN")}`
-).join("<br>")}
+
+${(o.items||[])
+.map(i=>
+
+`${esc(i.name)}
+—
+${Number(i.qty||0)}
+×
+₹${Number(
+i.price||0
+).toLocaleString("en-IN")}`
+
+)
+.join("<br>")}
+
 </div>
 
-<p><b>Total: ₹${Number(o.total||0).toLocaleString("en-IN")}</b></p>
+<p>
 
-<div class="small">
-${o.time?new Date(o.time).toLocaleString("en-IN"):""}
+<b>
+Total:
+₹${Number(
+o.total||0
+).toLocaleString("en-IN")}
+</b>
+
+</p>
+
+<div class="statusArea">
+
+<label>
+<b>Order Status</b>
+</label>
+
+<select
+id="status-${o.id}"
+class="statusSelect"
+>
+
+<option
+value="pending"
+${status==="pending"?"selected":""}
+>
+Pending
+</option>
+
+<option
+value="confirmed"
+${status==="confirmed"?"selected":""}
+>
+Confirmed
+</option>
+
+<option
+value="shipped"
+${status==="shipped"?"selected":""}
+>
+Shipped
+</option>
+
+<option
+value="delivered"
+${status==="delivered"?"selected":""}
+>
+Delivered
+</option>
+
+<option
+value="cancelled"
+${status==="cancelled"?"selected":""}
+>
+Cancelled
+</option>
+
+</select>
+
+<button
+class="btn"
+style="width:100%"
+onclick="updateOrderStatus('${o.id}')"
+>
+UPDATE STATUS
+</button>
+
 </div>
 
 </div>
-`).join("");
+
+`;
+
+}).join("");
 
 }catch(e){
-box.innerHTML='<div class="msg err" style="display:block">'+esc(e.message)+'</div>';
+
+box.innerHTML=
+'<div class="msg err" style="display:block">'+
+esc(e.message)+
+'</div>';
+
 }
+
 }
+
+/* ======================
+   UPDATE STATUS
+====================== */
+
+async function updateOrderStatus(id){
+
+const select=
+document.getElementById(
+"status-"+id
+);
+
+if(!select)return;
+
+const status=
+select.value;
+
+if(
+status==="cancelled"
+){
+
+const yes=
+confirm(
+"Cancel this order?\n\nProduct stock will be returned automatically."
+);
+
+if(!yes){
+
+await loadOrders();
+return;
+
+}
+
+}
+
+try{
+
+const r=
+await fetch(
+"/api/admin/orders/"+
+id+
+"/status",
+{
+method:"PATCH",
+
+headers:{
+...authHeaders(),
+"Content-Type":
+"application/json"
+},
+
+body:
+JSON.stringify({
+status
+})
+}
+);
+
+const data=
+await r.json();
+
+if(!r.ok){
+
+throw new Error(
+data.error||
+"Status update failed."
+);
+
+}
+
+alert(
+"Order status updated to: "+
+status.toUpperCase()
+);
+
+await loadOrders();
+await loadProducts();
+
+}catch(e){
+
+alert(
+"Status update failed: "+
+e.message
+);
+
+await loadOrders();
+
+}
+
+}
+
+/* ======================
+   DASHBOARD STATS
+====================== */
+
+function updateStats(){
+
+document
+.getElementById(
+"statOrders"
+)
+.textContent=
+ORDERS.length;
+
+document
+.getElementById(
+"statPending"
+)
+.textContent=
+ORDERS.filter(
+o=>
+String(
+o.status||
+"pending"
+).toLowerCase()
+==="pending"
+).length;
+
+document
+.getElementById(
+"statDelivered"
+)
+.textContent=
+ORDERS.filter(
+o=>
+String(
+o.status||
+""
+).toLowerCase()
+==="delivered"
+).length;
+
+}
+
 </script>
 
 </body>
