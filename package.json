@@ -6,6 +6,8 @@
   },
   "dependencies": {
     "express": "^4.21.2",
-    "razorpay": "^2.9.6"
+    "razorpay": "^2.9.6",
+    "multer": "^2.0.2",
+    "cloudinary": "^2.7.0"
   }
 }
