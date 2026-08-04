@@ -10,6 +10,7 @@ body{font-family:Arial,sans-serif;background:#f5f7f5;margin:0;padding:20px}
 .box{max-width:1100px;margin:auto;background:#fff;padding:20px;border-radius:12px}
 input{padding:11px;margin:5px;border:1px solid #ccc;border-radius:6px;box-sizing:border-box}
 button{padding:11px 14px;margin:4px;background:#08753f;color:#fff;border:0;border-radius:6px;cursor:pointer}
+button:disabled{opacity:.6}
 table{width:100%;border-collapse:collapse;margin-top:20px}
 td,th{padding:9px;border-bottom:1px solid #ddd;text-align:left}
 #loginBox{max-width:400px;margin:80px auto;background:#fff;padding:25px;border-radius:12px;text-align:center}
@@ -21,10 +22,10 @@ td,th{padding:9px;border-bottom:1px solid #ddd;text-align:left}
 #preview{width:140px;height:140px;object-fit:cover;border-radius:10px;border:1px solid #ddd;display:none;margin:12px 5px}
 #uploadStatus{font-weight:bold;margin:8px 5px}
 @media(max-width:700px){
- body{padding:8px}
- .box{padding:10px}
- table{font-size:11px}
- td,th{padding:6px}
+body{padding:8px}
+.box{padding:10px}
+table{font-size:11px}
+td,th{padding:6px}
 }
 </style>
 </head>
@@ -34,39 +35,49 @@ td,th{padding:9px;border-bottom:1px solid #ddd;text-align:left}
 <div id="loginBox">
 <h2>🔐 VetBeings Admin Login</h2>
 <p>Enter admin password to continue.</p>
+
 <input id="password" type="password" placeholder="Admin Password">
+
 <br>
-<button onclick="login()">Login</button>
+
+<button id="loginBtn" type="button">Login</button>
+
 <p id="error"></p>
 </div>
+
 
 <div class="box" id="dashboard" style="display:none">
 
 <h1>VetBeings Admin Dashboard</h1>
+
 <p>Manage product photos, details, stock and orders.</p>
 
-<button onclick="logout()">Logout</button>
+<button id="logoutBtn" type="button">Logout</button>
 
 <hr>
 
 <h2>Add / Edit Product</h2>
 
-<input id="id" type="hidden">
+<input id="productId" type="hidden">
 
 <div class="form">
-<input id="name" placeholder="Product name">
-<input id="category" placeholder="Category">
-<input id="price" type="number" placeholder="Price">
-<input id="stock" type="number" placeholder="Stock">
+
+<input id="productName" type="text" placeholder="Product name">
+
+<input id="productCategory" type="text" placeholder="Category">
+
+<input id="productPrice" type="number" placeholder="Price">
+
+<input id="productStock" type="number" placeholder="Stock">
+
 </div>
 
 <h3>Product Photo</h3>
 
 <input
- id="imageFile"
- type="file"
- accept="image/jpeg,image/png,image/webp"
- onchange="showPreview()"
+id="imageFile"
+type="file"
+accept="image/jpeg,image/png,image/webp"
 >
 
 <br>
@@ -75,13 +86,17 @@ td,th{padding:9px;border-bottom:1px solid #ddd;text-align:left}
 
 <p id="uploadStatus"></p>
 
-<button id="saveBtn" onclick="save()">Save Product</button>
-<button onclick="clearForm()">Clear</button>
+<button id="saveBtn" type="button">Save Product</button>
+
+<button id="clearBtn" type="button">Clear</button>
+
 
 <h2>Products</h2>
 
 <div style="overflow-x:auto">
+
 <table>
+
 <thead>
 <tr>
 <th>Photo</th>
@@ -92,274 +107,448 @@ td,th{padding:9px;border-bottom:1px solid #ddd;text-align:left}
 <th>Action</th>
 </tr>
 </thead>
-<tbody id="body"></tbody>
+
+<tbody id="productBody"></tbody>
+
 </table>
+
 </div>
+
 
 <h2>Orders</h2>
-<div id="orders"></div>
+
+<div id="ordersBox">No orders yet</div>
 
 </div>
+
 
 <script>
 
-let P=[];
-let adminPassword="";
-let oldImage="";
+let products = [];
+let adminPassword = "";
 
-function authHeaders(extra={}){
- return {
-   ...extra,
-   "Authorization":"Bearer "+adminPassword
- };
-}
+const loginBox = document.getElementById("loginBox");
+const dashboard = document.getElementById("dashboard");
+const passwordInput = document.getElementById("password");
+const errorBox = document.getElementById("error");
+
+const productId = document.getElementById("productId");
+const productName = document.getElementById("productName");
+const productCategory = document.getElementById("productCategory");
+const productPrice = document.getElementById("productPrice");
+const productStock = document.getElementById("productStock");
+
+const imageFile = document.getElementById("imageFile");
+const preview = document.getElementById("preview");
+const uploadStatus = document.getElementById("uploadStatus");
+
+const saveBtn = document.getElementById("saveBtn");
+const productBody = document.getElementById("productBody");
+const ordersBox = document.getElementById("ordersBox");
+
 
 async function login(){
 
- const pass=document.getElementById("password").value;
+  const pass = passwordInput.value.trim();
 
- if(!pass){
-   error.innerText="Please enter password.";
-   return;
- }
+  if(!pass){
+    errorBox.textContent = "Please enter password.";
+    return;
+  }
 
- try{
+  errorBox.textContent = "Checking...";
 
-   const r=await fetch("/api/admin/orders",{
-     headers:{
-       "Authorization":"Bearer "+pass
-     }
-   });
+  try{
 
-   if(!r.ok){
-     error.innerText="❌ Wrong password";
-     return;
-   }
+    const response = await fetch("/api/admin/orders",{
+      headers:{
+        "Authorization":"Bearer " + pass
+      }
+    });
 
-   adminPassword=pass;
+    if(!response.ok){
+      errorBox.textContent = "❌ Wrong password";
+      return;
+    }
 
-   loginBox.style.display="none";
-   dashboard.style.display="block";
-   error.innerText="";
+    adminPassword = pass;
 
-   await load();
+    errorBox.textContent = "";
 
- }catch(e){
-   error.innerText="Server connection error.";
- }
+    loginBox.style.display = "none";
+    dashboard.style.display = "block";
+
+    await loadData();
+
+  }catch(err){
+
+    errorBox.textContent = "Server connection error.";
+
+  }
 }
 
-async function load(){
 
- try{
+async function loadData(){
 
-   P=await fetch("/api/products").then(r=>r.json());
+  try{
 
-   body.innerHTML=P.map(x=>`
-   <tr>
+    const productResponse = await fetch("/api/products");
 
-   <td>
-   ${
-     x.image
-     ? `<img class="product-img" src="${x.image}" alt="">`
-     : "No photo"
-   }
-   </td>
+    products = await productResponse.json();
 
-   <td>${x.name || ""}</td>
-   <td>${x.category || ""}</td>
-   <td>₹${x.price || 0}</td>
-   <td>${x.stock || 0}</td>
+    renderProducts();
 
-   <td>
-   <button onclick="editProduct(${x.id})">Edit</button>
-   <button onclick="delProduct(${x.id})">Delete</button>
-   </td>
 
-   </tr>
-   `).join("");
+    const orderResponse = await fetch("/api/admin/orders",{
+      headers:{
+        "Authorization":"Bearer " + adminPassword
+      }
+    });
 
-   const r=await fetch("/api/admin/orders",{
-     headers:authHeaders()
-   });
+    if(!orderResponse.ok){
+      logout();
+      return;
+    }
 
-   if(!r.ok){
-     logout();
-     return;
-   }
+    const orders = await orderResponse.json();
 
-   const o=await r.json();
+    if(!orders.length){
 
-   orders.innerHTML=o.map(x=>`
-   <p>
-   <b>${x.id}</b> —
-   ${x.status} —
-   ${x.payment} —
-   ₹${x.total || 0} —
-   ${x.customer?.name || ""}
-   </p>
-   `).join("") || "No orders yet";
+      ordersBox.textContent = "No orders yet";
 
- }catch(e){
-   console.error(e);
- }
+    }else{
+
+      ordersBox.innerHTML = orders.map(order => `
+        <p>
+          <b>${escapeHtml(order.id)}</b> —
+          ${escapeHtml(order.status)} —
+          ${escapeHtml(order.payment)} —
+          ₹${Number(order.total || 0)} —
+          ${escapeHtml(order.customer?.name || "")}
+        </p>
+      `).join("");
+
+    }
+
+  }catch(err){
+
+    console.error(err);
+
+  }
 }
+
+
+function renderProducts(){
+
+  productBody.innerHTML = products.map(product => {
+
+    const imageHtml = product.image
+      ? `<img class="product-img" src="${escapeAttribute(product.image)}" alt="Product">`
+      : "No photo";
+
+    return `
+      <tr>
+
+        <td>${imageHtml}</td>
+
+        <td>${escapeHtml(product.name || "")}</td>
+
+        <td>${escapeHtml(product.category || "")}</td>
+
+        <td>₹${Number(product.price || 0)}</td>
+
+        <td>${Number(product.stock || 0)}</td>
+
+        <td>
+          <button type="button" onclick="editProduct('${product.id}')">Edit</button>
+          <button type="button" onclick="deleteProduct('${product.id}')">Delete</button>
+        </td>
+
+      </tr>
+    `;
+
+  }).join("");
+
+}
+
 
 function showPreview(){
 
- const file=imageFile.files[0];
+  const file = imageFile.files[0];
 
- if(!file) return;
+  if(!file){
+    return;
+  }
 
- if(file.size > 5*1024*1024){
-   alert("Photo maximum 5 MB honi chahiye.");
-   imageFile.value="";
-   return;
- }
+  if(file.size > 5 * 1024 * 1024){
 
- preview.src=URL.createObjectURL(file);
- preview.style.display="block";
+    alert("Photo maximum 5 MB honi chahiye.");
+
+    imageFile.value = "";
+
+    preview.removeAttribute("src");
+    preview.style.display = "none";
+
+    return;
+  }
+
+  preview.src = URL.createObjectURL(file);
+  preview.style.display = "block";
+
 }
 
-function editProduct(i){
 
- const x=P.find(v=>v.id==i);
+function editProduct(id){
 
- if(!x) return;
+  const product = products.find(
+    item => String(item.id) === String(id)
+  );
 
- id.value=x.id;
- name.value=x.name || "";
- category.value=x.category || "";
- price.value=x.price || "";
- stock.value=x.stock || "";
+  if(!product){
+    return;
+  }
 
- oldImage=x.image || "";
+  productId.value = product.id;
 
- imageFile.value="";
+  productName.value = product.name || "";
+  productCategory.value = product.category || "";
+  productPrice.value = product.price || "";
+  productStock.value = product.stock || "";
 
- if(oldImage){
-   preview.src=oldImage;
-   preview.style.display="block";
- }else{
-   preview.style.display="none";
- }
+  imageFile.value = "";
 
- window.scrollTo({
-   top:0,
-   behavior:"smooth"
- });
+  if(product.image){
+
+    preview.src = product.image;
+    preview.style.display = "block";
+
+  }else{
+
+    preview.removeAttribute("src");
+    preview.style.display = "none";
+
+  }
+
+  uploadStatus.textContent = "Editing existing product";
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
 }
+
 
 function clearForm(){
 
- id.value="";
- name.value="";
- category.value="";
- price.value="";
- stock.value="";
- imageFile.value="";
- oldImage="";
- preview.removeAttribute("src");
- preview.style.display="none";
- uploadStatus.innerText="";
+  productId.value = "";
+
+  productName.value = "";
+  productCategory.value = "";
+  productPrice.value = "";
+  productStock.value = "";
+
+  imageFile.value = "";
+
+  preview.removeAttribute("src");
+  preview.style.display = "none";
+
+  uploadStatus.textContent = "";
+
 }
 
-async function save(){
 
- const productName=name.value.trim();
+async function saveProduct(){
 
- if(!productName){
-   alert("Product name enter karo.");
-   return;
- }
+  const nameValue = productName.value.trim();
 
- const fd=new FormData();
+  if(!nameValue){
 
- if(id.value){
-   fd.append("id",id.value);
- }
+    alert("Product name enter karo.");
 
- fd.append("name",name.value.trim());
- fd.append("category",category.value.trim());
- fd.append("price",price.value || 0);
- fd.append("stock",stock.value || 0);
+    productName.focus();
 
- if(imageFile.files[0]){
-   fd.append("image",imageFile.files[0]);
- }
+    return;
+  }
 
- saveBtn.disabled=true;
- uploadStatus.innerText="⏳ Saving product / uploading photo...";
+  const formData = new FormData();
 
- try{
+  if(productId.value){
+    formData.append("id",productId.value);
+  }
 
-   const r=await fetch("/api/admin/products",{
-     method:"POST",
-     headers:{
-       "Authorization":"Bearer "+adminPassword
-     },
-     body:fd
-   });
+  formData.append("name",nameValue);
+  formData.append("category",productCategory.value.trim());
+  formData.append("price",productPrice.value || "0");
+  formData.append("stock",productStock.value || "0");
 
-   const result=await r.json();
+  if(imageFile.files && imageFile.files[0]){
+    formData.append("image",imageFile.files[0],"product-image");
+  }
 
-   if(!r.ok){
-     throw new Error(result.error || "Unable to save");
-   }
+  saveBtn.disabled = true;
 
-   uploadStatus.innerText="✅ Product saved successfully";
+  uploadStatus.textContent =
+    "⏳ Product save ho raha hai. Photo upload ho rahi hai...";
 
-   clearForm();
+  try{
 
-   await load();
+    const response = await fetch("/api/admin/products",{
+      method:"POST",
 
- }catch(e){
+      headers:{
+        "Authorization":"Bearer " + adminPassword
+      },
 
-   uploadStatus.innerText="❌ "+e.message;
+      body:formData
+    });
 
- }finally{
 
-   saveBtn.disabled=false;
- }
+    let result;
+
+    try{
+      result = await response.json();
+    }catch{
+      result = {};
+    }
+
+
+    if(!response.ok){
+
+      throw new Error(
+        result.error ||
+        "Product save nahi hua. Server error: " + response.status
+      );
+
+    }
+
+
+    clearForm();
+
+    uploadStatus.textContent = "✅ Product saved successfully";
+
+    await loadData();
+
+
+  }catch(err){
+
+    console.error(err);
+
+    uploadStatus.textContent = "❌ " + err.message;
+
+  }finally{
+
+    saveBtn.disabled = false;
+
+  }
+
 }
 
-async function delProduct(i){
 
- if(!confirm("Delete product?")) return;
+async function deleteProduct(id){
 
- try{
+  if(!confirm("Delete product?")){
+    return;
+  }
 
-   const r=await fetch("/api/admin/products/"+i,{
-     method:"DELETE",
-     headers:authHeaders()
-   });
+  try{
 
-   const result=await r.json();
+    const response = await fetch(
+      "/api/admin/products/" + encodeURIComponent(id),
+      {
+        method:"DELETE",
 
-   if(!r.ok){
-     throw new Error(result.error || "Delete failed");
-   }
+        headers:{
+          "Authorization":"Bearer " + adminPassword
+        }
+      }
+    );
 
-   await load();
 
- }catch(e){
-   alert(e.message);
- }
+    let result;
+
+    try{
+      result = await response.json();
+    }catch{
+      result = {};
+    }
+
+
+    if(!response.ok){
+
+      throw new Error(
+        result.error || "Product delete nahi hua."
+      );
+
+    }
+
+    await loadData();
+
+
+  }catch(err){
+
+    alert(err.message);
+
+  }
+
 }
+
 
 function logout(){
 
- adminPassword="";
+  adminPassword = "";
 
- dashboard.style.display="none";
- loginBox.style.display="block";
+  dashboard.style.display = "none";
+  loginBox.style.display = "block";
 
- password.value="";
- clearForm();
+  passwordInput.value = "";
+
+  clearForm();
+
 }
 
-password.addEventListener("keydown",function(e){
- if(e.key==="Enter") login();
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+function escapeAttribute(value){
+
+  return escapeHtml(value);
+
+}
+
+
+document
+.getElementById("loginBtn")
+.addEventListener("click",login);
+
+document
+.getElementById("logoutBtn")
+.addEventListener("click",logout);
+
+document
+.getElementById("clearBtn")
+.addEventListener("click",clearForm);
+
+saveBtn.addEventListener("click",saveProduct);
+
+imageFile.addEventListener("change",showPreview);
+
+passwordInput.addEventListener("keydown",function(event){
+
+  if(event.key === "Enter"){
+    login();
+  }
+
 });
 
 </script>
