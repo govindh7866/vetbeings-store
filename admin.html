@@ -1,1 +1,271 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>VetBeings Admin</title><style>body{font-family:Arial;background:#f5f7f5;margin:0;padding:25px}.box{max-width:1100px;margin:auto;background:#fff;padding:22px;border-radius:12px}input{padding:10px;margin:4px;border:1px solid #ccc;border-radius:5px}button{padding:10px;background:#08753f;color:white;border:0;border-radius:5px}table{width:100%;border-collapse:collapse;margin-top:20px}td,th{padding:9px;border-bottom:1px solid #ddd;text-align:left}@media(max-width:700px){table{font-size:12px}.box{padding:10px}}</style></head><body><div class="box"><h1>VetBeings Admin Dashboard</h1><p>Add/edit/delete products, price and stock. Demo admin has no login yet — add authentication before public deployment.</p><input id="id" type="hidden"><input id="name" placeholder="Product name"><input id="category" placeholder="Category"><input id="price" type="number" placeholder="Price"><input id="stock" type="number" placeholder="Stock"><button onclick="save()">Save Product</button><h2>Products</h2><table><thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Action</th></tr></thead><tbody id="body"></tbody></table><h2>Orders</h2><div id="orders"></div></div><script>let P=[];async function load(){P=await fetch("/api/products").then(r=>r.json());body.innerHTML=P.map(x=>`<tr><td>${x.name}</td><td>${x.category}</td><td>₹${x.price}</td><td>${x.stock}</td><td><button onclick="edit(${x.id})">Edit</button> <button onclick="del(${x.id})">Delete</button></td></tr>`).join("");let o=await fetch("/api/admin/orders").then(r=>r.json());orders.innerHTML=o.map(x=>`<p><b>${x.id}</b> — ${x.status} — ${x.payment} — ₹${x.total||0} — ${x.customer?.name||""}</p>`).join("")||"No orders yet"}function edit(i){let x=P.find(v=>v.id==i);id.value=x.id;name.value=x.name;category.value=x.category;price.value=x.price;stock.value=x.stock}async function save(){await fetch("/api/admin/products",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:id.value?Number(id.value):undefined,name:name.value,category:category.value,price:Number(price.value),stock:Number(stock.value)})});location.reload()}async function del(i){if(confirm("Delete product?")){await fetch("/api/admin/products/"+i,{method:"DELETE"});location.reload()}}load()</script></body></html>
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VetBeings Admin</title>
+
+<style>
+body{
+  font-family:Arial;
+  background:#f5f7f5;
+  margin:0;
+  padding:25px
+}
+.box{
+  max-width:1100px;
+  margin:auto;
+  background:#fff;
+  padding:22px;
+  border-radius:12px
+}
+input{
+  padding:10px;
+  margin:4px;
+  border:1px solid #ccc;
+  border-radius:5px
+}
+button{
+  padding:10px;
+  background:#08753f;
+  color:white;
+  border:0;
+  border-radius:5px;
+  cursor:pointer
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:20px
+}
+td,th{
+  padding:9px;
+  border-bottom:1px solid #ddd;
+  text-align:left
+}
+#loginBox{
+  max-width:400px;
+  margin:80px auto;
+  background:white;
+  padding:25px;
+  border-radius:12px;
+  text-align:center
+}
+#loginBox input{
+  width:90%;
+  box-sizing:border-box;
+  margin-bottom:12px
+}
+#error{
+  color:#c62828;
+}
+@media(max-width:700px){
+  table{font-size:12px}
+  .box{padding:10px}
+}
+</style>
+</head>
+
+<body>
+
+<div id="loginBox">
+  <h2>🔐 VetBeings Admin Login</h2>
+  <p>Enter admin password to continue.</p>
+  <input id="password" type="password" placeholder="Admin Password">
+  <br>
+  <button onclick="login()">Login</button>
+  <p id="error"></p>
+</div>
+
+<div class="box" id="dashboard" style="display:none">
+
+<h1>VetBeings Admin Dashboard</h1>
+<p>Secure administration panel for products and orders.</p>
+
+<button onclick="logout()">Logout</button>
+
+<hr>
+
+<input id="id" type="hidden">
+<input id="name" placeholder="Product name">
+<input id="category" placeholder="Category">
+<input id="price" type="number" placeholder="Price">
+<input id="stock" type="number" placeholder="Stock">
+
+<button onclick="save()">Save Product</button>
+
+<h2>Products</h2>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Category</th>
+<th>Price</th>
+<th>Stock</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="body"></tbody>
+</table>
+
+<h2>Orders</h2>
+<div id="orders"></div>
+
+</div>
+
+<script>
+
+let P=[];
+let adminPassword="";
+
+function authHeaders(extra={}){
+  return {
+    ...extra,
+    "Authorization":"Bearer "+adminPassword
+  };
+}
+
+async function login(){
+
+  const pass=document.getElementById("password").value;
+
+  if(!pass){
+    document.getElementById("error").innerText="Please enter password.";
+    return;
+  }
+
+  try{
+
+    const r=await fetch("/api/admin/orders",{
+      headers:{
+        "Authorization":"Bearer "+pass
+      }
+    });
+
+    if(!r.ok){
+      document.getElementById("error").innerText="❌ Wrong password";
+      return;
+    }
+
+    adminPassword=pass;
+
+    document.getElementById("loginBox").style.display="none";
+    document.getElementById("dashboard").style.display="block";
+
+    load();
+
+  }catch(e){
+    document.getElementById("error").innerText="Server connection error.";
+  }
+}
+
+async function load(){
+
+  P=await fetch("/api/products").then(r=>r.json());
+
+  document.getElementById("body").innerHTML=P.map(x=>`
+  <tr>
+  <td>${x.name}</td>
+  <td>${x.category}</td>
+  <td>₹${x.price}</td>
+  <td>${x.stock}</td>
+  <td>
+  <button onclick="edit(${x.id})">Edit</button>
+  <button onclick="del(${x.id})">Delete</button>
+  </td>
+  </tr>
+  `).join("");
+
+  const r=await fetch("/api/admin/orders",{
+    headers:authHeaders()
+  });
+
+  if(r.status===401 || r.status===503){
+    logout();
+    return;
+  }
+
+  const o=await r.json();
+
+  document.getElementById("orders").innerHTML=o.map(x=>`
+  <p>
+  <b>${x.id}</b> —
+  ${x.status} —
+  ${x.payment} —
+  ₹${x.total||0} —
+  ${x.customer?.name||""}
+  </p>
+  `).join("") || "No orders yet";
+}
+
+function edit(i){
+
+  let x=P.find(v=>v.id==i);
+
+  document.getElementById("id").value=x.id;
+  document.getElementById("name").value=x.name;
+  document.getElementById("category").value=x.category;
+  document.getElementById("price").value=x.price;
+  document.getElementById("stock").value=x.stock;
+}
+
+async function save(){
+
+  const r=await fetch("/api/admin/products",{
+    method:"POST",
+    headers:authHeaders({
+      "Content-Type":"application/json"
+    }),
+    body:JSON.stringify({
+      id:document.getElementById("id").value
+        ? Number(document.getElementById("id").value)
+        : undefined,
+      name:document.getElementById("name").value,
+      category:document.getElementById("category").value,
+      price:Number(document.getElementById("price").value),
+      stock:Number(document.getElementById("stock").value)
+    })
+  });
+
+  if(!r.ok){
+    alert("Unauthorized or unable to save product.");
+    return;
+  }
+
+  location.reload();
+}
+
+async function del(i){
+
+  if(!confirm("Delete product?")) return;
+
+  const r=await fetch("/api/admin/products/"+i,{
+    method:"DELETE",
+    headers:authHeaders()
+  });
+
+  if(!r.ok){
+    alert("Unauthorized or unable to delete product.");
+    return;
+  }
+
+  location.reload();
+}
+
+function logout(){
+  adminPassword="";
+  document.getElementById("dashboard").style.display="none";
+  document.getElementById("loginBox").style.display="block";
+  document.getElementById("password").value="";
+}
+
+document.getElementById("password").addEventListener("keydown",function(e){
+  if(e.key==="Enter") login();
+});
+
+</script>
+
+</body>
+</html>
