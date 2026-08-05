@@ -1,415 +1,690 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VetBeings Admin Dashboard</title>
+
+<title>VetBeings | Dairy, Farm & Animal Care Store</title>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f3f7f5;color:#173025}
-button,input,textarea,select{font:inherit}
-button{cursor:pointer}
-
-.header{
-background:#063f2b;color:white;padding:16px 5%;
-display:flex;justify-content:space-between;align-items:center
-}
-.header h2{margin:0}
-.logout{
-background:white;color:#075d3a;border:0;
-padding:9px 14px;border-radius:7px;font-weight:bold
+*{
+  box-sizing:border-box;
 }
 
-.wrap{max-width:1200px;margin:auto;padding:25px 15px}
-
-.login{
-max-width:420px;margin:80px auto;background:white;
-padding:28px;border-radius:15px;
-box-shadow:0 8px 30px #0001
+html{
+  scroll-behavior:smooth;
 }
 
-.card{
-background:white;border-radius:14px;padding:20px;
-margin-bottom:20px;box-shadow:0 4px 20px #0000000d
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  color:#173025;
+  background:#f6f8f7;
 }
 
-.field{
-width:100%;padding:12px;border:1px solid #d5dfd9;
-border-radius:8px;margin:6px 0
+button,input,textarea{
+  font:inherit;
 }
 
+button{
+  cursor:pointer;
+}
+
+/* TOP BAR */
+
+.top{
+  background:#063f2b;
+  color:white;
+  padding:9px 5%;
+  text-align:center;
+  font-size:13px;
+}
+
+/* NAVBAR */
+
+nav{
+  background:white;
+  padding:15px 5%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:20;
+  box-shadow:0 2px 15px #0001;
+}
+
+.brand{
+  font-size:25px;
+  font-weight:900;
+  color:#075d3a;
+}
+
+.brand span{
+  color:#e69b18;
+}
+
+.cartbtn,
 .btn{
-border:0;background:#087745;color:white;
-padding:12px 16px;border-radius:8px;font-weight:bold
+  border:0;
+  background:#087745;
+  color:white;
+  border-radius:9px;
+  padding:12px 17px;
+  font-weight:800;
 }
 
-.red{background:#b42318}
-.gray{background:#53665c}
-.blue{background:#1769aa}
-.orange{background:#b86b00}
+/* HERO */
 
-.grid2{
-display:grid;grid-template-columns:1fr 1fr;gap:12px
+.hero{
+  min-height:520px;
+
+  background:
+  linear-gradient(
+    90deg,
+    rgba(2,47,31,.94),
+    rgba(3,65,41,.70)
+  ),
+  url("https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=1800&q=85");
+
+  background-size:cover;
+  background-position:center;
+
+  display:flex;
+  align-items:center;
+
+  color:white;
+
+  padding:55px 7%;
+}
+
+.heroText{
+  max-width:700px;
+}
+
+.pill{
+  display:inline-block;
+  background:#ffffff20;
+  border:1px solid #ffffff55;
+  padding:8px 12px;
+  border-radius:30px;
+  font-size:13px;
+}
+
+.hero h1{
+  font-size:clamp(38px,6vw,72px);
+  line-height:1.02;
+  margin:18px 0;
+}
+
+.hero p{
+  font-size:18px;
+  line-height:1.7;
+  color:#edf7f1;
+}
+
+.hero .btn{
+  background:#f0a31a;
+  color:#173025;
+  padding:15px 22px;
+}
+
+/* TRUST BOX */
+
+.trust{
+  max-width:1180px;
+  margin:-35px auto 35px;
+  background:white;
+  border-radius:16px;
+  box-shadow:0 12px 35px #0002;
+
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+
+  padding:20px;
+  text-align:center;
+
+  position:relative;
+}
+
+.trust b{
+  display:block;
+  color:#075d3a;
+  margin-bottom:5px;
+}
+
+/* PRODUCTS */
+
+.section{
+  max-width:1180px;
+  margin:50px auto;
+  padding:0 15px;
+}
+
+.title{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.title h2{
+  font-size:34px;
+  margin:0 0 8px;
+}
+
+.title p{
+  color:#68776e;
+}
+
+.filters{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin:20px 0;
+}
+
+.filter{
+  border:1px solid #cfdcd5;
+  background:white;
+  padding:9px 13px;
+  border-radius:25px;
+}
+
+.filter.active{
+  background:#075d3a;
+  color:white;
 }
 
 .products{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:13px
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
 }
 
 .product{
-border:1px solid #e0e7e3;
-border-radius:12px;padding:12px
+  background:white;
+  border-radius:15px;
+  overflow:hidden;
+  box-shadow:0 5px 22px #00000012;
+
+  display:flex;
+  flex-direction:column;
+
+  transition:.2s;
 }
 
-.product img{
-width:100%;height:150px;object-fit:contain;
-background:#f5f8f6;border-radius:8px
+.product:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 30px #0000001c;
 }
 
-.noimg{
-height:150px;background:#f5f8f6;border-radius:8px;
-display:flex;align-items:center;justify-content:center;
-font-size:45px
+.pic{
+  height:205px;
+  background:#eef5f1;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  overflow:hidden;
 }
 
-.product h3{margin:9px 0 5px}
-
-.small{
-font-size:12px;color:#68776e;line-height:1.5
+.pic img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
 }
 
-.actions{
-display:flex;gap:6px;margin-top:10px
+.placeholder{
+  font-size:60px;
 }
 
-.actions button{flex:1}
+.info{
+  padding:15px;
 
-.preview{
-width:150px;height:150px;object-fit:contain;
-border:1px solid #ddd;border-radius:10px;
-display:none;margin:10px 0
+  display:flex;
+  flex-direction:column;
+
+  flex:1;
 }
 
-.order{
-border:1px solid #e0e7e3;
-border-radius:12px;padding:16px;margin:12px 0
+.cat{
+  font-size:11px;
+  color:#087745;
+  text-transform:uppercase;
+  font-weight:bold;
 }
 
-.orderTop{
-display:flex;justify-content:space-between;
-align-items:flex-start;gap:10px
+.info h3{
+  font-size:17px;
+  margin:7px 0;
 }
 
-.tag{
-padding:6px 9px;border-radius:20px;
-font-size:11px;font-weight:bold;
-background:#e5f5eb;color:#087745
+.desc{
+  font-size:13px;
+  color:#65736b;
+  line-height:1.5;
+  min-height:40px;
 }
 
-.statusArea{
-background:#f5f8f6;padding:12px;
-border-radius:9px;margin-top:12px
+.price{
+  font-size:21px;
+  font-weight:900;
+  margin:12px 0;
 }
 
-.statusSelect{
-width:100%;padding:11px;border:1px solid #ccd8d1;
-border-radius:7px;background:white;margin-bottom:8px
+.stock{
+  font-size:12px;
+  color:#66756d;
+  margin-bottom:10px;
 }
 
-.hidden{display:none!important}
-
-.msg{
-padding:10px;border-radius:7px;
-margin:8px 0;display:none
+.add{
+  margin-top:auto;
+  width:100%;
 }
 
-.ok{
-background:#e4f6ea;color:#086b38
+.add:disabled{
+  background:#aaa;
+  cursor:not-allowed;
 }
 
-.err{
-background:#ffe8e8;color:#9c1c1c
+.empty{
+  text-align:center;
+  padding:40px;
+  background:white;
+  border-radius:15px;
+  grid-column:1/-1;
 }
 
-.tabs{
-display:flex;gap:8px;margin-bottom:18px
+/* CART */
+
+.drawer{
+  position:fixed;
+  right:-430px;
+  top:0;
+
+  width:min(430px,100%);
+  height:100%;
+
+  background:white;
+
+  z-index:50;
+
+  box-shadow:-10px 0 30px #0003;
+
+  transition:.25s;
+
+  padding:20px;
+
+  overflow:auto;
 }
 
-.tabs button{flex:1}
-
-.statGrid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:10px;margin-bottom:20px
+.drawer.open{
+  right:0;
 }
 
-.stat{
-background:white;padding:15px;border-radius:12px;
-box-shadow:0 3px 15px #0000000d
+.close{
+  float:right;
+  border:0;
+  background:none;
+  font-size:28px;
 }
 
-.stat b{
-display:block;font-size:24px;color:#087745
+.cartrow{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:8px;
+
+  padding:12px 0;
+
+  border-bottom:1px solid #eee;
 }
 
-@media(max-width:800px){
-.products{grid-template-columns:1fr 1fr}
-.grid2{grid-template-columns:1fr}
-.statGrid{grid-template-columns:1fr 1fr}
+.qty button{
+  border:0;
+  padding:5px 9px;
+}
+
+.field{
+  width:100%;
+  padding:12px;
+
+  border:1px solid #ccd8d1;
+
+  border-radius:8px;
+
+  margin:6px 0;
+}
+
+.pay{
+  display:flex;
+  gap:8px;
+  margin:10px 0;
+}
+
+.pay label{
+  flex:1;
+
+  border:1px solid #d4ddd8;
+
+  padding:10px;
+
+  border-radius:8px;
+}
+
+.total{
+  font-size:23px;
+  font-weight:bold;
+  margin:15px 0;
+}
+
+.notice{
+  font-size:12px;
+  color:#66756d;
+}
+
+/* FOOTER */
+
+footer{
+  background:#052f21;
+  color:#dcebe3;
+
+  padding:35px 7%;
+
+  margin-top:60px;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+  .products{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .trust{
+    grid-template-columns:1fr 1fr;
+    margin:-25px 15px 30px;
+  }
+
+  .hero{
+    min-height:470px;
+  }
 }
 
 @media(max-width:520px){
-.products{grid-template-columns:1fr}
-.header{padding:13px}
-.wrap{padding:12px}
-.orderTop{flex-direction:column}
+
+  .products{
+    grid-template-columns:1fr;
+  }
+
+  .hero{
+    padding:45px 22px;
+    min-height:500px;
+  }
+
+  .hero h1{
+    font-size:43px;
+  }
+
+  .trust{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .title h2{
+    font-size:28px;
+  }
 }
 </style>
+
 </head>
 
 <body>
 
-<!-- LOGIN -->
+<div class="top">
+Trusted Dairy Equipment • Farm Essentials • Animal Nutrition
+</div>
 
-<div id="loginBox" class="login">
-<h2>VetBeings Admin</h2>
-<p class="small">Secure Store Management Dashboard</p>
+<nav>
 
-<input
-id="password"
-class="field"
-type="password"
-placeholder="Admin password"
+<div class="brand">
+Vet<span>Beings</span>
+</div>
+
+<button
+class="cartbtn"
+onclick="toggleCart()"
+
 >
+
+Cart (<span id="cartCount">0</span>) </button>
+
+</nav>
+
+<!-- HERO -->
+
+<section class="hero">
+
+<div class="heroText">
+
+<span class="pill">
+FOR MODERN DAIRY & LIVESTOCK FARMERS
+</span>
+
+<h1>
+Better care.<br>
+Better farming.
+</h1>
+
+<p>
+Premium dairy equipment, farm machinery,
+milk-handling essentials and animal nutrition
+products—all in one dependable store.
+</p>
 
 <button
 class="btn"
-style="width:100%;margin-top:8px"
-onclick="login()"
->
-LOGIN
-</button>
+onclick="document.getElementById('shop').scrollIntoView()"
 
-<div id="loginMsg" class="msg err"></div>
+>
+
+SHOP PRODUCTS </button>
+
 </div>
 
-<!-- DASHBOARD -->
+</section>
 
-<div id="dashboard" class="hidden">
+<!-- TRUST -->
 
-<div class="header">
+<div class="trust">
+
 <div>
-<b>VetBeings</b><br>
-<small>Admin Dashboard</small>
+<b>✓ Quality Products</b>
+<small>Farm-ready selection</small>
 </div>
 
-<button class="logout" onclick="logout()">
-Logout
-</button>
+<div>
+<b>🔒 Secure Payment</b>
+<small>COD & online payment</small>
 </div>
 
-<div class="wrap">
-
-<div class="statGrid">
-
-<div class="stat">
-<b id="statProducts">0</b>
-<span class="small">Products</span>
+<div>
+<b>🚚 Order Support</b>
+<small>Easy order management</small>
 </div>
 
-<div class="stat">
-<b id="statOrders">0</b>
-<span class="small">Orders</span>
+<div>
+<b>🐄 Livestock Focused</b>
+<small>Dairy & animal care</small>
 </div>
-
-<div class="stat">
-<b id="statPending">0</b>
-<span class="small">Pending</span>
-</div>
-
-<div class="stat">
-<b id="statDelivered">0</b>
-<span class="small">Delivered</span>
-</div>
-
-</div>
-
-<div class="tabs">
-
-<button
-class="btn"
-onclick="showTab('productsTab')"
->
-PRODUCTS
-</button>
-
-<button
-class="btn gray"
-onclick="showTab('ordersTab')"
->
-ORDERS
-</button>
 
 </div>
 
 <!-- PRODUCTS -->
 
-<div id="productsTab">
-
-<div class="card">
-
-<h2 id="formTitle">Add New Product</h2>
-
-<input type="hidden" id="productId">
-
-<div class="grid2">
-
-<div>
-<label>Product Name</label>
-<input
-id="name"
-class="field"
-placeholder="Product name"
+<section
+class="section"
+id="shop"
 >
+
+<div class="title">
+
+<h2>
+Shop Our Products
+</h2>
+
+<p>
+Equipment and essentials for healthier animals
+and productive farms.
+</p>
+
 </div>
 
-<div>
-<label>Category</label>
-<input
-id="category"
-class="field"
-placeholder="Category"
+<div
+id="filters"
+class="filters"
+></div>
+
+<div
+id="products"
+class="products"
 >
+
+<div class="empty">
+Loading products...
 </div>
 
 </div>
 
-<label>Product Description</label>
+</section>
+
+<!-- FOOTER -->
+
+<footer>
+
+<b style="font-size:22px">
+VetBeings
+</b>
+
+<p>
+Dairy, farm and animal-care solutions
+for modern livestock businesses.
+</p>
+
+</footer>
+
+<!-- CART -->
+
+<div
+id="cart"
+class="drawer"
+>
+
+<button
+class="close"
+onclick="toggleCart()"
+
+>
+
+× </button>
+
+<h2>
+Your Cart
+</h2>
+
+<div id="cartItems"></div>
+
+<div class="total">
+
+Total:
+₹<span id="total">0</span>
+
+</div>
+
+<h3>
+Delivery Details
+</h3>
+
+<input
+id="cname"
+class="field"
+placeholder="Full name"
+
+>
+
+<input
+id="mobile"
+class="field"
+placeholder="Mobile number"
+inputmode="numeric"
+
+>
 
 <textarea
-id="description"
+id="address"
 class="field"
-rows="4"
-placeholder="Product details, benefits, pack information..."
+rows="3"
+placeholder="Complete delivery address"
 ></textarea>
 
-<div class="grid2">
+<div class="pay">
 
-<div>
-<label>Price ₹</label>
-<input
-id="price"
-class="field"
-type="number"
-min="0"
-placeholder="Price"
->
-</div>
-
-<div>
-<label>Stock Quantity</label>
-<input
-id="stock"
-class="field"
-type="number"
-min="0"
-placeholder="Stock"
->
-</div>
-
-</div>
-
-<label><b>Product Photo</b></label>
+<label>
 
 <input
-id="image"
-class="field"
-type="file"
-accept="image/*"
-onchange="previewImage(event)"
+type="radio"
+name="payment"
+value="COD"
+checked
+
 >
 
-<img id="preview" class="preview">
+Cash on Delivery
 
-<div id="saveMsg" class="msg"></div>
+</label>
 
-<button
-id="saveBtn"
-class="btn"
-onclick="saveProduct()"
+<label>
+
+<input
+type="radio"
+name="payment"
+value="ONLINE"
+
 >
-SAVE PRODUCT
-</button>
 
-<button
-id="cancelBtn"
-class="btn gray hidden"
-onclick="clearForm()"
->
-CANCEL EDIT
-</button>
+Pay Online
 
-</div>
+</label>
 
-<div class="card">
-
-<h2>Product Manager</h2>
-
-<p id="productCount" class="small">
-Loading products...
-</p>
-
-<div id="products" class="products"></div>
-
-</div>
-
-</div>
-
-<!-- ORDERS -->
-
-<div id="ordersTab" class="hidden">
-
-<div class="card">
-
-<div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
-
-<div>
-<h2 style="margin-bottom:4px">Customer Orders</h2>
-<p class="small" style="margin-top:0">
-Manage and update order status
-</p>
 </div>
 
 <button
 class="btn"
-onclick="loadOrders()"
+style="width:100%"
+onclick="checkout()"
+
 >
-REFRESH
-</button>
 
-</div>
+PLACE ORDER </button>
 
-<div id="orders"></div>
+<p class="notice">
+Online payment requires Razorpay keys configured
+on the server.
+</p>
 
-</div>
-
-</div>
-
-</div>
 </div>
 
 <script>
 
-let ADMIN_PASSWORD="";
 let PRODUCTS=[];
-let ORDERS=[];
+let CART={};
+let CATEGORY="All";
 
-/* ======================
-   HELPERS
-====================== */
+/* ESCAPE */
 
 function esc(v){
 
@@ -422,141 +697,44 @@ return String(v??"")
 
 }
 
-function authHeaders(){
+/* FALLBACK ANIMAL / CATEGORY ICON */
 
-return {
-"Authorization":
-"Bearer "+ADMIN_PASSWORD
-};
+function fallbackImage(p){
+
+let c=
+String(
+p.category||""
+).toLowerCase();
+
+if(
+c.includes("nutrition")
+){
+return "🌿";
+}
+
+if(
+c.includes("machinery")
+){
+return "⚙️";
+}
+
+if(
+c.includes("milk")
+){
+return "🥛";
+}
+
+if(
+c.includes("dairy")
+){
+return "🐄";
+}
+
+return "🐮";
 
 }
 
-/* ======================
-   LOGIN
-====================== */
-
-async function login(){
-
-const p=
-document
-.getElementById("password")
-.value
-.trim();
-
-if(!p){
-
-showLogin(
-"Admin password enter karo."
-);
-
-return;
-
-}
-
-ADMIN_PASSWORD=p;
-
-try{
-
-const r=
-await fetch(
-"/api/admin/orders",
-{
-headers:authHeaders()
-}
-);
-
-if(!r.ok){
-
-ADMIN_PASSWORD="";
-
-showLogin(
-"Wrong admin password."
-);
-
-return;
-
-}
-
-document
-.getElementById("loginBox")
-.classList.add("hidden");
-
-document
-.getElementById("dashboard")
-.classList.remove("hidden");
-
-await loadProducts();
-await loadOrders();
-
-}catch(e){
-
-showLogin(
-"Server connection failed."
-);
-
-}
-
-}
-
-function showLogin(text){
-
-const x=
-document.getElementById(
-"loginMsg"
-);
-
-x.textContent=text;
-x.style.display="block";
-
-}
-
-function logout(){
-
-ADMIN_PASSWORD="";
-
-document
-.getElementById("password")
-.value="";
-
-document
-.getElementById("dashboard")
-.classList.add("hidden");
-
-document
-.getElementById("loginBox")
-.classList.remove("hidden");
-
-}
-
-/* ======================
-   TABS
-====================== */
-
-function showTab(id){
-
-document
-.getElementById("productsTab")
-.classList.add("hidden");
-
-document
-.getElementById("ordersTab")
-.classList.add("hidden");
-
-document
-.getElementById(id)
-.classList.remove("hidden");
-
-if(id==="ordersTab"){
-
-loadOrders();
-
-}
-
-}
-
-/* ======================
-   PRODUCTS
-====================== */
+/* LOAD PRODUCTS */
 
 async function loadProducts(){
 
@@ -581,55 +759,126 @@ throw new Error(
 PRODUCTS=
 await r.json();
 
+renderFilters();
 renderProducts();
-
-document
-.getElementById("statProducts")
-.textContent=
-PRODUCTS.length;
 
 }catch(e){
 
 document
-.getElementById("productCount")
-.textContent=
-"Products could not load.";
+.getElementById("products")
+.innerHTML=
+'<div class="empty">Products could not load. Please refresh.</div>';
 
 }
 
 }
+
+/* CATEGORY FILTER */
+
+function renderFilters(){
+
+const cats=[
+"All",
+...new Set(
+PRODUCTS
+.map(p=>p.category)
+.filter(Boolean)
+)
+];
+
+document
+.getElementById("filters")
+.innerHTML=
+
+cats.map(c=>`
+
+<button
+class="filter ${c===CATEGORY?"active":""}"
+onclick='setCat(${JSON.stringify(c)})'
+>
+${esc(c)}
+</button>
+
+`).join("");
+
+}
+
+function setCat(c){
+
+CATEGORY=c;
+
+renderFilters();
+renderProducts();
+
+}
+
+/* PRODUCT CARDS */
 
 function renderProducts(){
 
+const arr=
+CATEGORY==="All"
+?
+PRODUCTS
+:
+PRODUCTS.filter(
+p=>p.category===CATEGORY
+);
+
+if(!arr.length){
+
 document
-.getElementById("productCount")
-.textContent=
-PRODUCTS.length+
-" products";
+.getElementById("products")
+.innerHTML=
+'<div class="empty">No products available.</div>';
+
+return;
+
+}
 
 document
 .getElementById("products")
 .innerHTML=
 
-PRODUCTS.map(p=>`
+arr.map(p=>`
 
-<div class="product">
+<article class="product">
+
+<div class="pic">
 
 ${
 p.image
 ?
-`<img
+`
+<img
 src="${esc(p.image)}"
 alt="${esc(p.name)}"
->`
+onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+>
+
+<div
+class="placeholder"
+style="display:none"
+>
+${fallbackImage(p)}
+</div>
+`
 :
-`<div class="noimg">💊</div>`
+`
+<div class="placeholder">
+${fallbackImage(p)}
+</div>
+`
 }
 
-<div class="small">
+</div>
+
+<div class="info">
+
+<div class="cat">
 ${esc(
 p.category||
-"Veterinary Product"
+"Animal Care"
 )}
 </div>
 
@@ -637,813 +886,523 @@ p.category||
 ${esc(p.name)}
 </h3>
 
-<div class="small">
+<div class="desc">
+
 ${esc(
 p.description||
-"No description added."
+"Quality product selected for dairy, livestock and farm use."
 )}
+
 </div>
 
-<p>
+<div class="price">
 
-<b>
 ₹${Number(
 p.price||0
 ).toLocaleString("en-IN")}
-</b>
 
-<br>
+</div>
 
-<span class="small">
-Stock:
-${Number(p.stock||0)}
-</span>
+<div class="stock">
 
-</p>
+${
+Number(p.stock||0)>0
+?
+Number(p.stock)+" in stock"
+:
+"Out of stock"
+}
 
-<div class="actions">
-
-<button
-class="btn blue"
-onclick="editProduct('${p.id}')"
->
-EDIT
-</button>
+</div>
 
 <button
-class="btn red"
-onclick="deleteProduct('${p.id}')"
+class="btn add"
+
+${
+Number(p.stock||0)<=0
+?
+"disabled"
+:
+""
+}
+
+onclick="add(${Number(p.id)})"
 >
-DELETE
+
+ADD TO CART
+
 </button>
 
 </div>
 
-</div>
+</article>
 
 `).join("");
 
 }
 
-/* ======================
-   PHOTO PREVIEW
-====================== */
+/* ADD TO CART */
 
-function previewImage(e){
-
-const file=
-e.target.files[0];
-
-if(!file)return;
-
-const img=
-document.getElementById(
-"preview"
-);
-
-img.src=
-URL.createObjectURL(file);
-
-img.style.display=
-"block";
-
-}
-
-/* ======================
-   EDIT PRODUCT
-====================== */
-
-function editProduct(id){
+function add(id){
 
 const p=
 PRODUCTS.find(
 x=>
-String(x.id)===
-String(id)
+Number(x.id)===
+Number(id)
 );
 
 if(!p)return;
 
-document
-.getElementById("productId")
-.value=p.id;
-
-document
-.getElementById("name")
-.value=p.name||"";
-
-document
-.getElementById("category")
-.value=p.category||"";
-
-document
-.getElementById("description")
-.value=p.description||"";
-
-document
-.getElementById("price")
-.value=p.price||0;
-
-document
-.getElementById("stock")
-.value=p.stock||0;
-
-const preview=
-document.getElementById(
-"preview"
-);
-
-if(p.image){
-
-preview.src=p.image;
-
-preview.style.display=
-"block";
-
-}else{
-
-preview.style.display=
-"none";
-
-}
-
-document
-.getElementById("formTitle")
-.textContent=
-"Edit Product";
-
-document
-.getElementById("saveBtn")
-.textContent=
-"UPDATE PRODUCT";
-
-document
-.getElementById("cancelBtn")
-.classList.remove("hidden");
-
-window.scrollTo({
-top:0,
-behavior:"smooth"
-});
-
-}
-
-/* ======================
-   CLEAR FORM
-====================== */
-
-function clearForm(){
-
-document
-.getElementById("productId")
-.value="";
-
-document
-.getElementById("name")
-.value="";
-
-document
-.getElementById("category")
-.value="";
-
-document
-.getElementById("description")
-.value="";
-
-document
-.getElementById("price")
-.value="";
-
-document
-.getElementById("stock")
-.value="";
-
-document
-.getElementById("image")
-.value="";
-
-document
-.getElementById("preview")
-.style.display="none";
-
-document
-.getElementById("formTitle")
-.textContent=
-"Add New Product";
-
-document
-.getElementById("saveBtn")
-.textContent=
-"SAVE PRODUCT";
-
-document
-.getElementById("cancelBtn")
-.classList.add("hidden");
-
-}
-
-/* ======================
-   SAVE PRODUCT
-====================== */
-
-async function saveProduct(){
-
-const name=
-document
-.getElementById("name")
-.value.trim();
-
-const category=
-document
-.getElementById("category")
-.value.trim();
-
-const description=
-document
-.getElementById("description")
-.value.trim();
-
-const price=
-document
-.getElementById("price")
-.value;
-
-const stock=
-document
-.getElementById("stock")
-.value;
-
-const id=
-document
-.getElementById("productId")
-.value;
-
-const image=
-document
-.getElementById("image")
-.files[0];
-
-if(!name){
-
-saveMessage(
-"Product name required.",
-false
-);
-
-return;
-
-}
-
-if(price===""){
-
-saveMessage(
-"Price required.",
-false
-);
-
-return;
-
-}
-
-if(stock===""){
-
-saveMessage(
-"Stock required.",
-false
-);
-
-return;
-
-}
-
-const fd=
-new FormData();
-
-if(id){
-
-fd.append(
-"id",
-id
-);
-
-}
-
-fd.append(
-"name",
-name
-);
-
-fd.append(
-"category",
-category
-);
-
-fd.append(
-"description",
-description
-);
-
-fd.append(
-"price",
-price
-);
-
-fd.append(
-"stock",
-stock
-);
-
-if(image){
-
-fd.append(
-"image",
-image
-);
-
-}
-
-saveMessage(
-"Saving product...",
-true
-);
-
-try{
-
-const r=
-await fetch(
-"/api/admin/products",
-{
-method:"POST",
-headers:authHeaders(),
-body:fd
-}
-);
-
-const data=
-await r.json();
-
-if(!r.ok){
-
-throw new Error(
-data.error||
-"Save failed."
-);
-
-}
-
-saveMessage(
-id
-?
-"Product updated successfully."
-:
-"Product added successfully.",
-true
-);
-
-clearForm();
-
-await loadProducts();
-
-}catch(e){
-
-saveMessage(
-e.message,
-false
-);
-
-}
-
-}
-
-function saveMessage(
-text,
-ok
-){
-
-const box=
-document.getElementById(
-"saveMsg"
-);
-
-box.textContent=text;
-
-box.className=
-"msg "+
-(ok?"ok":"err");
-
-box.style.display=
-"block";
-
-}
-
-/* ======================
-   DELETE PRODUCT
-====================== */
-
-async function deleteProduct(id){
+const q=
+CART[id]||0;
 
 if(
-!confirm(
-"Delete this product?"
-)
-)return;
+q>=Number(p.stock||0)
+){
 
-try{
-
-const r=
-await fetch(
-"/api/admin/products/"+id,
-{
-method:"DELETE",
-headers:authHeaders()
-}
+alert(
+"Maximum available stock reached."
 );
-
-const data=
-await r.json();
-
-if(!r.ok){
-
-throw new Error(
-data.error||
-"Delete failed."
-);
-
-}
-
-await loadProducts();
-
-}catch(e){
-
-alert(e.message);
-
-}
-
-}
-
-/* ======================
-   LOAD ORDERS
-====================== */
-
-async function loadOrders(){
-
-const box=
-document.getElementById(
-"orders"
-);
-
-box.innerHTML=
-"<p>Loading orders...</p>";
-
-try{
-
-const r=
-await fetch(
-"/api/admin/orders?t="+
-Date.now(),
-{
-headers:authHeaders(),
-cache:"no-store"
-}
-);
-
-const data=
-await r.json();
-
-if(!r.ok){
-
-throw new Error(
-data.error||
-"Orders load failed."
-);
-
-}
-
-ORDERS=data;
-
-updateStats();
-
-if(!ORDERS.length){
-
-box.innerHTML=
-"<p>No orders yet.</p>";
 
 return;
 
 }
 
-box.innerHTML=
+CART[id]=q+1;
 
-ORDERS.map(o=>{
+updateCart();
 
-const status=
-String(
-o.status||
-"pending"
-).toLowerCase();
+document
+.getElementById("cart")
+.classList.add("open");
 
-return `
+}
 
-<div class="order">
+/* QUANTITY */
 
-<div class="orderTop">
+function change(id,d){
+
+CART[id]=
+(CART[id]||0)+d;
+
+if(
+CART[id]<=0
+){
+
+delete CART[id];
+
+}
+
+const p=
+PRODUCTS.find(
+x=>
+Number(x.id)===
+Number(id)
+);
+
+if(
+p &&
+CART[id]>
+Number(p.stock||0)
+){
+
+CART[id]=
+Number(p.stock||0);
+
+}
+
+updateCart();
+
+}
+
+/* CART ITEMS */
+
+function items(){
+
+return Object
+.entries(CART)
+.map(([id,qty])=>{
+
+const p=
+PRODUCTS.find(
+x=>
+Number(x.id)===
+Number(id)
+);
+
+if(!p)return null;
+
+return {
+...p,
+qty
+};
+
+})
+.filter(Boolean);
+
+}
+
+/* UPDATE CART */
+
+function updateCart(){
+
+const a=
+items();
+
+document
+.getElementById("cartCount")
+.textContent=
+
+a.reduce(
+(s,i)=>s+i.qty,
+0
+);
+
+document
+.getElementById("cartItems")
+.innerHTML=
+
+a.length
+?
+a.map(i=>`
+
+<div class="cartrow">
 
 <div>
 
 <b>
-Order ${esc(o.id)}
+${esc(i.name)}
 </b>
 
 <br>
 
-<span class="small">
-${
-o.time
-?
-new Date(
-o.time
-).toLocaleString("en-IN")
-:
-""
-}
-</span>
-
-</div>
-
-<span class="tag">
-${esc(
-o.payment||
-"COD"
-)}
-•
-${esc(status.toUpperCase())}
-</span>
-
-</div>
-
-<p>
-
-<b>
-${esc(
-o.customer?.name||
-"Customer"
-)}
-</b>
-
-<br>
-
-📞
-${esc(
-o.customer?.mobile||
-"-"
-)}
-
-<br>
-
-📍
-${esc(
-o.customer?.address||
-"-"
-)}
-
-</p>
-
-<div class="small">
-
-${(o.items||[])
-.map(i=>
-
-`${esc(i.name)}
-—
-${Number(i.qty||0)}
-×
+<small>
 ₹${Number(
-i.price||0
-).toLocaleString("en-IN")}`
-
-)
-.join("<br>")}
+i.price
+).toLocaleString("en-IN")} each
+</small>
 
 </div>
 
-<p>
-
-<b>
-Total:
-₹${Number(
-o.total||0
-).toLocaleString("en-IN")}
-</b>
-
-</p>
-
-<div class="statusArea">
-
-<label>
-<b>Order Status</b>
-</label>
-
-<select
-id="status-${o.id}"
-class="statusSelect"
->
-
-<option
-value="pending"
-${status==="pending"?"selected":""}
->
-Pending
-</option>
-
-<option
-value="confirmed"
-${status==="confirmed"?"selected":""}
->
-Confirmed
-</option>
-
-<option
-value="shipped"
-${status==="shipped"?"selected":""}
->
-Shipped
-</option>
-
-<option
-value="delivered"
-${status==="delivered"?"selected":""}
->
-Delivered
-</option>
-
-<option
-value="cancelled"
-${status==="cancelled"?"selected":""}
->
-Cancelled
-</option>
-
-</select>
+<div class="qty">
 
 <button
-class="btn"
-style="width:100%"
-onclick="updateOrderStatus('${o.id}')"
+onclick="change(${i.id},-1)"
 >
-UPDATE STATUS
+−
+</button>
+
+${i.qty}
+
+<button
+onclick="change(${i.id},1)"
+>
++
 </button>
 
 </div>
 
 </div>
 
-`;
+`).join("")
+:
+"<p>Your cart is empty.</p>";
 
-}).join("");
+const total=
+a.reduce(
+(s,i)=>
+s+
+Number(i.price||0)*
+Number(i.qty||0),
+0
+);
 
-}catch(e){
-
-box.innerHTML=
-'<div class="msg err" style="display:block">'+
-esc(e.message)+
-'</div>';
+document
+.getElementById("total")
+.textContent=
+total.toLocaleString("en-IN");
 
 }
 
+function toggleCart(){
+
+document
+.getElementById("cart")
+.classList.toggle("open");
+
 }
 
-/* ======================
-   UPDATE STATUS
-====================== */
+/* CHECKOUT */
 
-async function updateOrderStatus(id){
+async function checkout(){
 
-const select=
-document.getElementById(
-"status-"+id
+const a=
+items();
+
+if(!a.length){
+
+alert(
+"Cart is empty."
 );
 
-if(!select)return;
-
-const status=
-select.value;
-
-if(
-status==="cancelled"
-){
-
-const yes=
-confirm(
-"Cancel this order?\n\nProduct stock will be returned automatically."
-);
-
-if(!yes){
-
-await loadOrders();
 return;
 
 }
 
+const customer={
+
+name:
+document
+.getElementById("cname")
+.value.trim(),
+
+mobile:
+document
+.getElementById("mobile")
+.value.trim(),
+
+address:
+document
+.getElementById("address")
+.value.trim()
+
+};
+
+if(
+!customer.name ||
+!customer.mobile ||
+!customer.address
+){
+
+alert(
+"Name, mobile and address enter karo."
+);
+
+return;
+
 }
+
+const payment=
+document.querySelector(
+'input[name="payment"]:checked'
+).value;
+
+const payloadItems=
+a.map(i=>({
+
+id:i.id,
+qty:i.qty
+
+}));
 
 try{
 
+/* COD */
+
+if(
+payment==="COD"
+){
+
 const r=
 await fetch(
-"/api/admin/orders/"+
-id+
-"/status",
+"/api/orders",
 {
-method:"PATCH",
+method:"POST",
 
 headers:{
-...authHeaders(),
 "Content-Type":
 "application/json"
 },
 
 body:
 JSON.stringify({
-status
+customer,
+items:payloadItems
 })
 }
 );
 
-const data=
+const d=
 await r.json();
 
 if(!r.ok){
 
 throw new Error(
-data.error||
-"Status update failed."
+d.error||
+"Order failed."
 );
 
 }
 
 alert(
-"Order status updated to: "+
-status.toUpperCase()
+"Order placed successfully!\n\nOrder ID: "+
+d.id
 );
 
-await loadOrders();
+CART={};
+
+updateCart();
+
+toggleCart();
+
+await loadProducts();
+
+return;
+
+}
+
+/* ONLINE PAYMENT */
+
+const amount=
+a.reduce(
+(s,i)=>
+s+
+Number(i.price||0)*
+Number(i.qty||0),
+0
+);
+
+const r=
+await fetch(
+"/api/payment/order",
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:
+JSON.stringify({
+amount
+})
+}
+);
+
+const d=
+await r.json();
+
+if(!r.ok){
+
+throw new Error(
+d.error||
+"Online payment unavailable."
+);
+
+}
+
+const options={
+
+key:d.key,
+
+amount:d.order.amount,
+
+currency:"INR",
+
+name:"VetBeings",
+
+description:
+"VetBeings Store Order",
+
+order_id:
+d.order.id,
+
+prefill:{
+
+name:
+customer.name,
+
+contact:
+customer.mobile
+
+},
+
+handler:
+async function(resp){
+
+try{
+
+const vr=
+await fetch(
+"/api/payment/verify",
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:
+JSON.stringify({
+
+...resp,
+
+customer,
+
+items:
+payloadItems
+
+})
+}
+);
+
+const vd=
+await vr.json();
+
+if(!vr.ok){
+
+throw new Error(
+vd.error||
+"Payment verification failed."
+);
+
+}
+
+alert(
+"Payment successful!\n\nOrder ID: "+
+vd.order.id
+);
+
+CART={};
+
+updateCart();
+
+toggleCart();
+
 await loadProducts();
 
 }catch(e){
 
 alert(
-"Status update failed: "+
 e.message
 );
 
-await loadOrders();
+}
+
+}
+
+};
+
+const razorpay=
+new Razorpay(options);
+
+razorpay.open();
+
+}catch(e){
+
+alert(
+e.message
+);
 
 }
 
 }
 
-/* ======================
-   DASHBOARD STATS
-====================== */
-
-function updateStats(){
-
-document
-.getElementById(
-"statOrders"
-)
-.textContent=
-ORDERS.length;
-
-document
-.getElementById(
-"statPending"
-)
-.textContent=
-ORDERS.filter(
-o=>
-String(
-o.status||
-"pending"
-).toLowerCase()
-==="pending"
-).length;
-
-document
-.getElementById(
-"statDelivered"
-)
-.textContent=
-ORDERS.filter(
-o=>
-String(
-o.status||
-""
-).toLowerCase()
-==="delivered"
-).length;
-
-}
+loadProducts();
+updateCart();
 
 </script>
 
