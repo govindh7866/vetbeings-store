@@ -1,467 +1,636 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>VetBeings | Dairy, Farm & Animal Care Store</title>
+<title>VetBeings | Dairy, Farm & Animal Care</title>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <style>
-*{
-  box-sizing:border-box;
-}
-
-html{
-  scroll-behavior:smooth;
-}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
 
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  color:#173025;
-  background:#f6f8f7;
+margin:0;
+font-family:Arial,sans-serif;
+background:#f6f8f7;
+color:#17261f;
 }
 
-button,input,textarea{
-  font:inherit;
-}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
 
-button{
-  cursor:pointer;
-}
+/* TOP */
 
-/* TOP BAR */
-
-.top{
-  background:#063f2b;
-  color:white;
-  padding:9px 5%;
-  text-align:center;
-  font-size:13px;
+.topbar{
+background:#45208b;
+color:white;
+text-align:center;
+padding:9px 15px;
+font-size:13px;
+font-weight:600;
 }
 
 /* NAVBAR */
 
 nav{
-  background:white;
-  padding:15px 5%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  position:sticky;
-  top:0;
-  z-index:20;
-  box-shadow:0 2px 15px #0001;
+height:82px;
+padding:8px 5%;
+background:white;
+display:flex;
+align-items:center;
+justify-content:space-between;
+position:sticky;
+top:0;
+z-index:30;
+box-shadow:0 3px 18px #00000012;
 }
 
-.brand{
-  font-size:25px;
-  font-weight:900;
-  color:#075d3a;
+.logo img{
+width:185px;
+height:65px;
+object-fit:contain;
+display:block;
 }
 
-.brand span{
-  color:#e69b18;
+.navRight{
+display:flex;
+align-items:center;
+gap:10px;
 }
 
-.cartbtn,
-.btn{
-  border:0;
-  background:#087745;
-  color:white;
-  border-radius:9px;
-  padding:12px 17px;
-  font-weight:800;
+.cartBtn{
+border:0;
+background:#45208b;
+color:white;
+padding:12px 17px;
+border-radius:9px;
+font-weight:bold;
 }
 
 /* HERO */
 
 .hero{
-  min-height:520px;
+min-height:540px;
 
-  background:
-  linear-gradient(
-    90deg,
-    rgba(2,47,31,.94),
-    rgba(3,65,41,.70)
-  ),
-  url("https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=1800&q=85");
+background:
+linear-gradient(
+90deg,
+rgba(22,45,29,.94),
+rgba(20,70,36,.70),
+rgba(20,70,36,.20)
+),
+url("https://images.unsplash.com/photo-1500595046743-cd271d694d30?auto=format&fit=crop&w=1800&q=88");
 
-  background-size:cover;
-  background-position:center;
+background-size:cover;
+background-position:center;
 
-  display:flex;
-  align-items:center;
+display:flex;
+align-items:center;
 
-  color:white;
+padding:60px 7%;
 
-  padding:55px 7%;
+color:white;
 }
 
-.heroText{
-  max-width:700px;
+.heroContent{
+max-width:720px;
 }
 
-.pill{
-  display:inline-block;
-  background:#ffffff20;
-  border:1px solid #ffffff55;
-  padding:8px 12px;
-  border-radius:30px;
-  font-size:13px;
+.heroBadge{
+display:inline-block;
+padding:8px 13px;
+border-radius:30px;
+background:#ffffff1d;
+border:1px solid #ffffff50;
+font-size:12px;
+font-weight:bold;
+letter-spacing:.7px;
 }
 
 .hero h1{
-  font-size:clamp(38px,6vw,72px);
-  line-height:1.02;
-  margin:18px 0;
+font-size:clamp(42px,6vw,72px);
+line-height:1.02;
+margin:18px 0;
+}
+
+.hero h1 span{
+color:#f2b12d;
 }
 
 .hero p{
-  font-size:18px;
-  line-height:1.7;
-  color:#edf7f1;
+font-size:18px;
+line-height:1.7;
+max-width:650px;
+color:#eef6f0;
 }
 
-.hero .btn{
-  background:#f0a31a;
-  color:#173025;
-  padding:15px 22px;
+.primaryBtn{
+border:0;
+background:#f2ad23;
+color:#15251b;
+padding:15px 23px;
+border-radius:9px;
+font-weight:900;
+margin-top:8px;
 }
 
-/* TRUST BOX */
+/* TRUST */
 
 .trust{
-  max-width:1180px;
-  margin:-35px auto 35px;
-  background:white;
-  border-radius:16px;
-  box-shadow:0 12px 35px #0002;
-
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-
-  padding:20px;
-  text-align:center;
-
-  position:relative;
+max-width:1180px;
+margin:-38px auto 40px;
+position:relative;
+background:white;
+border-radius:17px;
+box-shadow:0 15px 40px #0002;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+overflow:hidden;
 }
 
-.trust b{
-  display:block;
-  color:#075d3a;
-  margin-bottom:5px;
+.trustItem{
+padding:22px 14px;
+text-align:center;
+border-right:1px solid #edf0ee;
+}
+
+.trustItem:last-child{
+border:0;
+}
+
+.trustIcon{
+font-size:25px;
+margin-bottom:7px;
+}
+
+.trustItem b{
+display:block;
+color:#45208b;
+margin-bottom:5px;
+}
+
+.trustItem small{
+color:#68766e;
+}
+
+/* ABOUT */
+
+.about{
+max-width:1180px;
+margin:55px auto;
+padding:0 16px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:40px;
+align-items:center;
+}
+
+.aboutVisual{
+min-height:350px;
+border-radius:20px;
+background:
+url("https://images.unsplash.com/photo-1527153857715-3908f2bae5e8?auto=format&fit=crop&w=1000&q=85")
+center/cover;
+box-shadow:0 10px 30px #0002;
+}
+
+.aboutText h2{
+font-size:38px;
+margin:0 0 15px;
+color:#25134f;
+}
+
+.aboutText p{
+color:#66756d;
+line-height:1.8;
+}
+
+.check{
+margin:12px 0;
+font-weight:bold;
+color:#17742d;
 }
 
 /* PRODUCTS */
 
 .section{
-  max-width:1180px;
-  margin:50px auto;
-  padding:0 15px;
+max-width:1200px;
+margin:65px auto;
+padding:0 16px;
 }
 
-.title{
-  text-align:center;
-  margin-bottom:25px;
+.sectionTitle{
+text-align:center;
+margin-bottom:25px;
 }
 
-.title h2{
-  font-size:34px;
-  margin:0 0 8px;
+.sectionTitle span{
+color:#17742d;
+font-weight:bold;
+font-size:13px;
+letter-spacing:1px;
 }
 
-.title p{
-  color:#68776e;
+.sectionTitle h2{
+font-size:38px;
+margin:8px 0;
+color:#24134e;
 }
+
+.sectionTitle p{
+color:#69776f;
+}
+
+/* FILTERS */
 
 .filters{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  justify-content:center;
-  margin:20px 0;
+display:flex;
+justify-content:center;
+gap:8px;
+flex-wrap:wrap;
+margin:25px 0;
 }
 
 .filter{
-  border:1px solid #cfdcd5;
-  background:white;
-  padding:9px 13px;
-  border-radius:25px;
+border:1px solid #d6ddd9;
+background:white;
+padding:9px 14px;
+border-radius:25px;
 }
 
 .filter.active{
-  background:#075d3a;
-  color:white;
+background:#45208b;
+color:white;
+border-color:#45208b;
 }
 
+/* PRODUCT GRID */
+
 .products{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:18px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:19px;
 }
 
 .product{
-  background:white;
-  border-radius:15px;
-  overflow:hidden;
-  box-shadow:0 5px 22px #00000012;
-
-  display:flex;
-  flex-direction:column;
-
-  transition:.2s;
+background:white;
+border-radius:16px;
+overflow:hidden;
+box-shadow:0 5px 25px #00000012;
+display:flex;
+flex-direction:column;
+transition:.2s;
+border:1px solid #edf0ee;
 }
 
 .product:hover{
-  transform:translateY(-4px);
-  box-shadow:0 12px 30px #0000001c;
+transform:translateY(-5px);
+box-shadow:0 15px 35px #0000001c;
 }
 
-.pic{
-  height:205px;
-  background:#eef5f1;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  overflow:hidden;
+.productImage{
+height:220px;
+background:#f0f5f2;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
 }
 
-.pic img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+.productImage img{
+width:100%;
+height:100%;
+object-fit:contain;
+padding:8px;
+background:white;
 }
 
 .placeholder{
-  font-size:60px;
+width:100%;
+height:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:65px;
+background:linear-gradient(145deg,#eef5f0,#e3eee7);
 }
 
-.info{
-  padding:15px;
-
-  display:flex;
-  flex-direction:column;
-
-  flex:1;
+.productInfo{
+padding:16px;
+display:flex;
+flex-direction:column;
+flex:1;
 }
 
-.cat{
-  font-size:11px;
-  color:#087745;
-  text-transform:uppercase;
-  font-weight:bold;
+.category{
+font-size:11px;
+font-weight:bold;
+color:#17742d;
+text-transform:uppercase;
+letter-spacing:.5px;
 }
 
-.info h3{
-  font-size:17px;
-  margin:7px 0;
+.productInfo h3{
+font-size:17px;
+margin:7px 0;
+line-height:1.35;
 }
 
-.desc{
-  font-size:13px;
-  color:#65736b;
-  line-height:1.5;
-  min-height:40px;
+.description{
+font-size:13px;
+color:#69776f;
+line-height:1.55;
+min-height:42px;
 }
 
 .price{
-  font-size:21px;
-  font-weight:900;
-  margin:12px 0;
+font-size:22px;
+font-weight:900;
+color:#24134e;
+margin:13px 0 4px;
 }
 
 .stock{
-  font-size:12px;
-  color:#66756d;
-  margin-bottom:10px;
+font-size:12px;
+color:#65736b;
+margin-bottom:12px;
 }
 
-.add{
-  margin-top:auto;
-  width:100%;
+.addBtn{
+width:100%;
+margin-top:auto;
+border:0;
+background:#17742d;
+color:white;
+padding:12px;
+border-radius:8px;
+font-weight:bold;
 }
 
-.add:disabled{
-  background:#aaa;
-  cursor:not-allowed;
+.addBtn:disabled{
+background:#aaa;
+cursor:not-allowed;
 }
 
-.empty{
-  text-align:center;
-  padding:40px;
-  background:white;
-  border-radius:15px;
-  grid-column:1/-1;
+/* SUPPORT */
+
+.support{
+background:#45208b;
+color:white;
+padding:55px 20px;
+text-align:center;
+margin-top:70px;
 }
 
-/* CART */
-
-.drawer{
-  position:fixed;
-  right:-430px;
-  top:0;
-
-  width:min(430px,100%);
-  height:100%;
-
-  background:white;
-
-  z-index:50;
-
-  box-shadow:-10px 0 30px #0003;
-
-  transition:.25s;
-
-  padding:20px;
-
-  overflow:auto;
+.support h2{
+font-size:36px;
+margin:0 0 10px;
 }
 
-.drawer.open{
-  right:0;
+.support p{
+color:#e8e1f7;
 }
 
-.close{
-  float:right;
-  border:0;
-  background:none;
-  font-size:28px;
-}
-
-.cartrow{
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:8px;
-
-  padding:12px 0;
-
-  border-bottom:1px solid #eee;
-}
-
-.qty button{
-  border:0;
-  padding:5px 9px;
-}
-
-.field{
-  width:100%;
-  padding:12px;
-
-  border:1px solid #ccd8d1;
-
-  border-radius:8px;
-
-  margin:6px 0;
-}
-
-.pay{
-  display:flex;
-  gap:8px;
-  margin:10px 0;
-}
-
-.pay label{
-  flex:1;
-
-  border:1px solid #d4ddd8;
-
-  padding:10px;
-
-  border-radius:8px;
-}
-
-.total{
-  font-size:23px;
-  font-weight:bold;
-  margin:15px 0;
-}
-
-.notice{
-  font-size:12px;
-  color:#66756d;
+.whatsapp{
+display:inline-block;
+margin-top:10px;
+background:#20a942;
+color:white;
+padding:14px 22px;
+border-radius:9px;
+font-weight:bold;
+text-decoration:none;
 }
 
 /* FOOTER */
 
 footer{
-  background:#052f21;
-  color:#dcebe3;
+background:#171222;
+color:#dcd8e4;
+padding:35px 7%;
+}
 
-  padding:35px 7%;
+footer img{
+width:160px;
+height:65px;
+object-fit:contain;
+background:white;
+border-radius:8px;
+padding:4px;
+}
 
-  margin-top:60px;
+footer p{
+max-width:550px;
+font-size:13px;
+line-height:1.7;
+}
+
+/* CART */
+
+.drawer{
+position:fixed;
+top:0;
+right:-440px;
+height:100%;
+width:min(440px,100%);
+background:white;
+z-index:100;
+padding:20px;
+overflow:auto;
+box-shadow:-10px 0 35px #0004;
+transition:.25s;
+}
+
+.drawer.open{
+right:0;
+}
+
+.close{
+float:right;
+border:0;
+background:none;
+font-size:30px;
+}
+
+.cartRow{
+display:grid;
+grid-template-columns:1fr auto;
+gap:10px;
+padding:13px 0;
+border-bottom:1px solid #eee;
+}
+
+.qty button{
+border:0;
+padding:5px 9px;
+border-radius:4px;
+}
+
+.total{
+font-size:24px;
+font-weight:bold;
+color:#45208b;
+margin:18px 0;
+}
+
+.field{
+width:100%;
+padding:12px;
+border:1px solid #ccd6d0;
+border-radius:8px;
+margin:6px 0;
+}
+
+.payment{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px;
+margin:10px 0;
+}
+
+.payment label{
+border:1px solid #d5ddd8;
+padding:11px;
+border-radius:8px;
+font-size:13px;
+}
+
+.checkout{
+width:100%;
+border:0;
+background:#45208b;
+color:white;
+padding:14px;
+border-radius:8px;
+font-weight:bold;
+}
+
+.empty{
+grid-column:1/-1;
+background:white;
+border-radius:15px;
+padding:45px;
+text-align:center;
+color:#66756d;
 }
 
 /* MOBILE */
 
 @media(max-width:900px){
 
-  .products{
-    grid-template-columns:repeat(2,1fr);
-  }
+.products{
+grid-template-columns:repeat(2,1fr);
+}
 
-  .trust{
-    grid-template-columns:1fr 1fr;
-    margin:-25px 15px 30px;
-  }
+.about{
+grid-template-columns:1fr;
+}
 
-  .hero{
-    min-height:470px;
-  }
+.trust{
+grid-template-columns:1fr 1fr;
+margin:-30px 15px 35px;
+}
+
+.hero{
+min-height:500px;
+}
+
 }
 
 @media(max-width:520px){
 
-  .products{
-    grid-template-columns:1fr;
-  }
-
-  .hero{
-    padding:45px 22px;
-    min-height:500px;
-  }
-
-  .hero h1{
-    font-size:43px;
-  }
-
-  .trust{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .title h2{
-    font-size:28px;
-  }
+.topbar{
+font-size:11px;
 }
-</style>
 
+nav{
+height:72px;
+padding:7px 13px;
+}
+
+.logo img{
+width:140px;
+height:55px;
+}
+
+.cartBtn{
+padding:10px 12px;
+font-size:13px;
+}
+
+.hero{
+min-height:510px;
+padding:45px 22px;
+background-position:60% center;
+}
+
+.hero h1{
+font-size:44px;
+}
+
+.hero p{
+font-size:16px;
+}
+
+.trust{
+grid-template-columns:1fr 1fr;
+}
+
+.trustItem{
+padding:16px 8px;
+}
+
+.products{
+grid-template-columns:1fr;
+}
+
+.productImage{
+height:245px;
+}
+
+.aboutVisual{
+min-height:280px;
+}
+
+.aboutText h2,
+.sectionTitle h2{
+font-size:30px;
+}
+
+.payment{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
 </head>
 
 <body>
 
-<div class="top">
-Trusted Dairy Equipment • Farm Essentials • Animal Nutrition
+<div class="topbar">
+VETBEINGS PRAVITE LIMITED • COMPASSION • CARE • CURE
 </div>
 
 <nav>
 
-<div class="brand">
-Vet<span>Beings</span>
+<div class="logo">
+<img src="/logo.png" alt="VetBeings Pravite Limited">
 </div>
 
+<div class="navRight">
+
 <button
-class="cartbtn"
+class="cartBtn"
 onclick="toggleCart()"
-
 >
+🛒 Cart (<span id="cartCount">0</span>)
+</button>
 
-Cart (<span id="cartCount">0</span>) </button>
+</div>
 
 </nav>
 
@@ -469,30 +638,30 @@ Cart (<span id="cartCount">0</span>) </button>
 
 <section class="hero">
 
-<div class="heroText">
+<div class="heroContent">
 
-<span class="pill">
-FOR MODERN DAIRY & LIVESTOCK FARMERS
+<span class="heroBadge">
+🐄 TRUSTED LIVESTOCK & DAIRY SOLUTIONS
 </span>
 
 <h1>
-Better care.<br>
-Better farming.
+Healthy Animal,<br>
+<span>Happy Life.</span>
 </h1>
 
 <p>
-Premium dairy equipment, farm machinery,
-milk-handling essentials and animal nutrition
-products—all in one dependable store.
+Quality dairy equipment, farm machinery,
+animal nutrition and livestock essentials
+for farmers who care about better health,
+better productivity and better farming.
 </p>
 
 <button
-class="btn"
+class="primaryBtn"
 onclick="document.getElementById('shop').scrollIntoView()"
-
 >
-
-SHOP PRODUCTS </button>
+SHOP NOW →
+</button>
 
 </div>
 
@@ -502,27 +671,76 @@ SHOP PRODUCTS </button>
 
 <div class="trust">
 
-<div>
-<b>✓ Quality Products</b>
+<div class="trustItem">
+<div class="trustIcon">🐄</div>
+<b>Animal Focused</b>
+<small>Livestock care products</small>
+</div>
+
+<div class="trustItem">
+<div class="trustIcon">✓</div>
+<b>Quality Products</b>
 <small>Farm-ready selection</small>
 </div>
 
-<div>
-<b>🔒 Secure Payment</b>
+<div class="trustItem">
+<div class="trustIcon">🔒</div>
+<b>Secure Payment</b>
 <small>COD & online payment</small>
 </div>
 
-<div>
-<b>🚚 Order Support</b>
-<small>Easy order management</small>
-</div>
-
-<div>
-<b>🐄 Livestock Focused</b>
-<small>Dairy & animal care</small>
+<div class="trustItem">
+<div class="trustIcon">📞</div>
+<b>Customer Support</b>
+<small>88290 53040</small>
 </div>
 
 </div>
+
+<!-- ABOUT -->
+
+<section class="about">
+
+<div class="aboutVisual"></div>
+
+<div class="aboutText">
+
+<h2>
+Everything Your Farm Needs
+</h2>
+
+<p>
+VetBeings brings dairy equipment, milk handling
+products, farm machinery and animal nutrition
+solutions together in one professional store.
+</p>
+
+<div class="check">
+✓ Dairy & Milking Equipment
+</div>
+
+<div class="check">
+✓ Animal Nutrition & Supplements
+</div>
+
+<div class="check">
+✓ Farm Machinery & Essentials
+</div>
+
+<div class="check">
+✓ Convenient Ordering & Payment
+</div>
+
+<button
+class="primaryBtn"
+onclick="document.getElementById('shop').scrollIntoView()"
+>
+VIEW PRODUCTS
+</button>
+
+</div>
+
+</section>
 
 <!-- PRODUCTS -->
 
@@ -531,15 +749,19 @@ class="section"
 id="shop"
 >
 
-<div class="title">
+<div class="sectionTitle">
+
+<span>
+VETBEINGS STORE
+</span>
 
 <h2>
-Shop Our Products
+Featured Products
 </h2>
 
 <p>
-Equipment and essentials for healthier animals
-and productive farms.
+Explore products for dairy,
+livestock and modern farm management.
 </p>
 
 </div>
@@ -562,17 +784,45 @@ Loading products...
 
 </section>
 
+<!-- SUPPORT -->
+
+<section class="support">
+
+<h2>
+Need Help Choosing a Product?
+</h2>
+
+<p>
+Talk directly with VetBeings customer support.
+</p>
+
+<a
+class="whatsapp"
+href="https://wa.me/918829053040"
+target="_blank"
+>
+💬 Chat on WhatsApp
+</a>
+
+</section>
+
 <!-- FOOTER -->
 
 <footer>
 
-<b style="font-size:22px">
-VetBeings
-</b>
+<img
+src="/logo.png"
+alt="VetBeings"
+>
 
 <p>
-Dairy, farm and animal-care solutions
-for modern livestock businesses.
+VetBeings Pravite Limited<br>
+Compassion • Care • Cure<br>
+Healthy Animal, Happy Life
+</p>
+
+<p>
+📞 88290 53040
 </p>
 
 </footer>
@@ -587,10 +837,9 @@ class="drawer"
 <button
 class="close"
 onclick="toggleCart()"
-
 >
-
-× </button>
+×
+</button>
 
 <h2>
 Your Cart
@@ -599,10 +848,7 @@ Your Cart
 <div id="cartItems"></div>
 
 <div class="total">
-
-Total:
-₹<span id="total">0</span>
-
+Total ₹<span id="total">0</span>
 </div>
 
 <h3>
@@ -612,16 +858,14 @@ Delivery Details
 <input
 id="cname"
 class="field"
-placeholder="Full name"
-
+placeholder="Customer name"
 >
 
 <input
 id="mobile"
 class="field"
-placeholder="Mobile number"
 inputmode="numeric"
-
+placeholder="Mobile number"
 >
 
 <textarea
@@ -631,50 +875,39 @@ rows="3"
 placeholder="Complete delivery address"
 ></textarea>
 
-<div class="pay">
+<h3>
+Payment Method
+</h3>
+
+<div class="payment">
 
 <label>
-
 <input
 type="radio"
 name="payment"
 value="COD"
 checked
-
 >
-
 Cash on Delivery
-
 </label>
 
 <label>
-
 <input
 type="radio"
 name="payment"
 value="ONLINE"
-
 >
-
 Pay Online
-
 </label>
 
 </div>
 
 <button
-class="btn"
-style="width:100%"
+class="checkout"
 onclick="checkout()"
-
 >
-
-PLACE ORDER </button>
-
-<p class="notice">
-Online payment requires Razorpay keys configured
-on the server.
-</p>
+PLACE ORDER
+</button>
 
 </div>
 
@@ -683,8 +916,6 @@ on the server.
 let PRODUCTS=[];
 let CART={};
 let CATEGORY="All";
-
-/* ESCAPE */
 
 function esc(v){
 
@@ -697,40 +928,36 @@ return String(v??"")
 
 }
 
-/* FALLBACK ANIMAL / CATEGORY ICON */
+/* PRODUCT PLACEHOLDER */
 
-function fallbackImage(p){
+function productIcon(p){
 
-let c=
+const c=
 String(
 p.category||""
 ).toLowerCase();
 
-if(
-c.includes("nutrition")
-){
+if(c.includes("nutrition")){
 return "🌿";
 }
 
-if(
-c.includes("machinery")
-){
+if(c.includes("machinery")){
 return "⚙️";
 }
 
-if(
-c.includes("milk")
-){
+if(c.includes("milk")){
 return "🥛";
 }
 
-if(
-c.includes("dairy")
-){
+if(c.includes("dairy")){
 return "🐄";
 }
 
+if(c.includes("farm")){
 return "🐮";
+}
+
+return "🐄";
 
 }
 
@@ -751,7 +978,7 @@ cache:"no-store"
 if(!r.ok){
 
 throw new Error(
-"Products load failed."
+"Products load failed"
 );
 
 }
@@ -767,17 +994,18 @@ renderProducts();
 document
 .getElementById("products")
 .innerHTML=
-'<div class="empty">Products could not load. Please refresh.</div>';
+
+'<div class="empty">Products could not load. Please refresh the website.</div>';
 
 }
 
 }
 
-/* CATEGORY FILTER */
+/* FILTERS */
 
 function renderFilters(){
 
-const cats=[
+const categories=[
 "All",
 ...new Set(
 PRODUCTS
@@ -790,11 +1018,11 @@ document
 .getElementById("filters")
 .innerHTML=
 
-cats.map(c=>`
+categories.map(c=>`
 
 <button
 class="filter ${c===CATEGORY?"active":""}"
-onclick='setCat(${JSON.stringify(c)})'
+onclick='selectCategory(${JSON.stringify(c)})'
 >
 ${esc(c)}
 </button>
@@ -803,7 +1031,7 @@ ${esc(c)}
 
 }
 
-function setCat(c){
+function selectCategory(c){
 
 CATEGORY=c;
 
@@ -812,11 +1040,11 @@ renderProducts();
 
 }
 
-/* PRODUCT CARDS */
+/* PRODUCTS */
 
 function renderProducts(){
 
-const arr=
+const list=
 CATEGORY==="All"
 ?
 PRODUCTS
@@ -825,7 +1053,7 @@ PRODUCTS.filter(
 p=>p.category===CATEGORY
 );
 
-if(!arr.length){
+if(!list.length){
 
 document
 .getElementById("products")
@@ -840,11 +1068,11 @@ document
 .getElementById("products")
 .innerHTML=
 
-arr.map(p=>`
+list.map(p=>`
 
-<article class="product">
+<div class="product">
 
-<div class="pic">
+<div class="productImage">
 
 ${
 p.image
@@ -853,29 +1081,32 @@ p.image
 <img
 src="${esc(p.image)}"
 alt="${esc(p.name)}"
-onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+onerror="
+this.style.display='none';
+this.nextElementSibling.style.display='flex';
+"
 >
 
 <div
 class="placeholder"
 style="display:none"
 >
-${fallbackImage(p)}
+${productIcon(p)}
 </div>
 `
 :
 `
 <div class="placeholder">
-${fallbackImage(p)}
+${productIcon(p)}
 </div>
 `
 }
 
 </div>
 
-<div class="info">
+<div class="productInfo">
 
-<div class="cat">
+<div class="category">
 ${esc(
 p.category||
 "Animal Care"
@@ -886,11 +1117,11 @@ p.category||
 ${esc(p.name)}
 </h3>
 
-<div class="desc">
+<div class="description">
 
 ${esc(
 p.description||
-"Quality product selected for dairy, livestock and farm use."
+"Quality product for dairy, livestock and farm use."
 )}
 
 </div>
@@ -908,7 +1139,7 @@ p.price||0
 ${
 Number(p.stock||0)>0
 ?
-Number(p.stock)+" in stock"
+"✓ "+Number(p.stock)+" available"
 :
 "Out of stock"
 }
@@ -916,7 +1147,7 @@ Number(p.stock)+" in stock"
 </div>
 
 <button
-class="btn add"
+class="addBtn"
 
 ${
 Number(p.stock||0)<=0
@@ -926,7 +1157,7 @@ Number(p.stock||0)<=0
 ""
 }
 
-onclick="add(${Number(p.id)})"
+onclick="addToCart(${Number(p.id)})"
 >
 
 ADD TO CART
@@ -935,30 +1166,28 @@ ADD TO CART
 
 </div>
 
-</article>
+</div>
 
 `).join("");
 
 }
 
-/* ADD TO CART */
+/* ADD CART */
 
-function add(id){
+function addToCart(id){
 
-const p=
+const product=
 PRODUCTS.find(
-x=>
-Number(x.id)===
-Number(id)
+p=>Number(p.id)===Number(id)
 );
 
-if(!p)return;
+if(!product)return;
 
-const q=
+const current=
 CART[id]||0;
 
 if(
-q>=Number(p.stock||0)
+current>=Number(product.stock||0)
 ){
 
 alert(
@@ -969,7 +1198,7 @@ return;
 
 }
 
-CART[id]=q+1;
+CART[id]=current+1;
 
 updateCart();
 
@@ -981,34 +1210,30 @@ document
 
 /* QUANTITY */
 
-function change(id,d){
+function changeQty(id,amount){
 
 CART[id]=
-(CART[id]||0)+d;
+(CART[id]||0)+amount;
 
-if(
-CART[id]<=0
-){
+if(CART[id]<=0){
 
 delete CART[id];
 
 }
 
-const p=
+const product=
 PRODUCTS.find(
-x=>
-Number(x.id)===
-Number(id)
+p=>Number(p.id)===Number(id)
 );
 
 if(
-p &&
+product &&
 CART[id]>
-Number(p.stock||0)
+Number(product.stock||0)
 ){
 
 CART[id]=
-Number(p.stock||0);
+Number(product.stock||0);
 
 }
 
@@ -1016,25 +1241,23 @@ updateCart();
 
 }
 
-/* CART ITEMS */
+/* GET CART ITEMS */
 
-function items(){
+function getCartItems(){
 
 return Object
 .entries(CART)
 .map(([id,qty])=>{
 
-const p=
+const product=
 PRODUCTS.find(
-x=>
-Number(x.id)===
-Number(id)
+p=>Number(p.id)===Number(id)
 );
 
-if(!p)return null;
+if(!product)return null;
 
 return {
-...p,
+...product,
 qty
 };
 
@@ -1047,40 +1270,43 @@ qty
 
 function updateCart(){
 
-const a=
-items();
+const items=
+getCartItems();
+
+const count=
+items.reduce(
+(total,item)=>
+total+item.qty,
+0
+);
 
 document
 .getElementById("cartCount")
-.textContent=
-
-a.reduce(
-(s,i)=>s+i.qty,
-0
-);
+.textContent=count;
 
 document
 .getElementById("cartItems")
 .innerHTML=
 
-a.length
+items.length
 ?
-a.map(i=>`
+items.map(item=>`
 
-<div class="cartrow">
+<div class="cartRow">
 
 <div>
 
 <b>
-${esc(i.name)}
+${esc(item.name)}
 </b>
 
 <br>
 
 <small>
 ₹${Number(
-i.price
-).toLocaleString("en-IN")} each
+item.price
+).toLocaleString("en-IN")}
+× ${item.qty}
 </small>
 
 </div>
@@ -1088,15 +1314,15 @@ i.price
 <div class="qty">
 
 <button
-onclick="change(${i.id},-1)"
+onclick="changeQty(${item.id},-1)"
 >
 −
 </button>
 
-${i.qty}
+${item.qty}
 
 <button
-onclick="change(${i.id},1)"
+onclick="changeQty(${item.id},1)"
 >
 +
 </button>
@@ -1110,11 +1336,11 @@ onclick="change(${i.id},1)"
 "<p>Your cart is empty.</p>";
 
 const total=
-a.reduce(
-(s,i)=>
-s+
-Number(i.price||0)*
-Number(i.qty||0),
+items.reduce(
+(sum,item)=>
+sum+
+Number(item.price||0)*
+Number(item.qty||0),
 0
 );
 
@@ -1137,10 +1363,10 @@ document
 
 async function checkout(){
 
-const a=
-items();
+const items=
+getCartItems();
 
-if(!a.length){
+if(!items.length){
 
 alert(
 "Cart is empty."
@@ -1176,35 +1402,33 @@ if(
 ){
 
 alert(
-"Name, mobile and address enter karo."
+"Please enter name, mobile number and complete address."
 );
 
 return;
 
 }
 
+const orderItems=
+items.map(item=>({
+
+id:item.id,
+qty:item.qty
+
+}));
+
 const payment=
 document.querySelector(
 'input[name="payment"]:checked'
 ).value;
 
-const payloadItems=
-a.map(i=>({
-
-id:i.id,
-qty:i.qty
-
-}));
-
 try{
 
 /* COD */
 
-if(
-payment==="COD"
-){
+if(payment==="COD"){
 
-const r=
+const response=
 await fetch(
 "/api/orders",
 {
@@ -1217,27 +1441,29 @@ headers:{
 
 body:
 JSON.stringify({
+
 customer,
-items:payloadItems
+items:orderItems
+
 })
 }
 );
 
-const d=
-await r.json();
+const data=
+await response.json();
 
-if(!r.ok){
+if(!response.ok){
 
 throw new Error(
-d.error||
-"Order failed."
+data.error||
+"Order could not be placed."
 );
 
 }
 
 alert(
 "Order placed successfully!\n\nOrder ID: "+
-d.id
+data.id
 );
 
 CART={};
@@ -1255,15 +1481,15 @@ return;
 /* ONLINE PAYMENT */
 
 const amount=
-a.reduce(
-(s,i)=>
-s+
-Number(i.price||0)*
-Number(i.qty||0),
+items.reduce(
+(sum,item)=>
+sum+
+Number(item.price||0)*
+Number(item.qty||0),
 0
 );
 
-const r=
+const response=
 await fetch(
 "/api/payment/order",
 {
@@ -1281,33 +1507,36 @@ amount
 }
 );
 
-const d=
-await r.json();
+const paymentData=
+await response.json();
 
-if(!r.ok){
+if(!response.ok){
 
 throw new Error(
-d.error||
-"Online payment unavailable."
+paymentData.error||
+"Online payment is currently unavailable."
 );
 
 }
 
 const options={
 
-key:d.key,
+key:
+paymentData.key,
 
-amount:d.order.amount,
+amount:
+paymentData.order.amount,
 
 currency:"INR",
 
-name:"VetBeings",
+name:
+"VetBeings Pravite Limited",
 
 description:
 "VetBeings Store Order",
 
 order_id:
-d.order.id,
+paymentData.order.id,
 
 prefill:{
 
@@ -1320,11 +1549,11 @@ customer.mobile
 },
 
 handler:
-async function(resp){
+async function(result){
 
 try{
 
-const vr=
+const verify=
 await fetch(
 "/api/payment/verify",
 {
@@ -1338,24 +1567,24 @@ headers:{
 body:
 JSON.stringify({
 
-...resp,
+...result,
 
 customer,
 
 items:
-payloadItems
+orderItems
 
 })
 }
 );
 
-const vd=
-await vr.json();
+const verifyData=
+await verify.json();
 
-if(!vr.ok){
+if(!verify.ok){
 
 throw new Error(
-vd.error||
+verifyData.error||
 "Payment verification failed."
 );
 
@@ -1363,7 +1592,7 @@ vd.error||
 
 alert(
 "Payment successful!\n\nOrder ID: "+
-vd.order.id
+verifyData.order.id
 );
 
 CART={};
@@ -1374,10 +1603,10 @@ toggleCart();
 
 await loadProducts();
 
-}catch(e){
+}catch(error){
 
 alert(
-e.message
+error.message
 );
 
 }
@@ -1391,10 +1620,10 @@ new Razorpay(options);
 
 razorpay.open();
 
-}catch(e){
+}catch(error){
 
 alert(
-e.message
+error.message
 );
 
 }
